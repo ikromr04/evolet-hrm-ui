@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getToken } from './token';
 
-const BACKEND_URL = '/api';
+const BACKEND_URL = 'https://evolet-hrm-restapi.test/api';
 const REQUEST_TIMEOUT = 5000;
 
 export const createAPI = (): AxiosInstance => {
@@ -12,6 +12,9 @@ export const createAPI = (): AxiosInstance => {
 
   api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     const token = getToken();
+    config.headers['Content-Type'] = 'application/vnd.api+json';
+    config.headers['Accept'] = 'application/vnd.api+json';
+
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
