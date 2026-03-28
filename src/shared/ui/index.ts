@@ -24,3 +24,4 @@ export {
 } from './field';
 export { Input } from './input';
 export { PageLoader } from './page-loader';
+export { Logo } from './logo';

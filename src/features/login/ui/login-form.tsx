@@ -5,11 +5,11 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  Input
+  Input,
+  Logo
 } from '@/shared/ui';
 import { ComponentProps } from 'react';
 import { Link } from 'react-router-dom';
-import Logo from '@/shared/assets/logo.svg';
 
 function LoginForm({
   className,
@@ -22,7 +22,7 @@ function LoginForm({
           <div className="flex flex-col items-center gap-2 text-center">
             <div className="flex flex-col items-center gap-2 font-medium">
               <div className="flex items-center justify-center rounded-md">
-                <img className="flex w-40 h-auto" src={Logo} width={120} height={30} alt="Evolet Healthcare" />
+                <Logo />
               </div>
             </div>
 
