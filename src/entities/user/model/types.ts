@@ -1,3 +1,9 @@
+export enum AuthStatus {
+  AUTH = 'AUTH',
+  NO_AUTH = 'NO_AUTH',
+  UNKNOWN = 'UNKNOWN'
+};
+
 export type UserResource = {
   type: 'users';
   id: string;

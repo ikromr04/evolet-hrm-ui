@@ -1,4 +1,4 @@
-const AUTH_TOKEN_KEY_NAME = 'evolet-hrm-ui-auth-token';
+const AUTH_TOKEN_KEY_NAME = 'jClMxgDvHYXPDKILnXwrHSpJNlWrka2Qaux7SnnEdP8=';
 
 export type Token = string;
 

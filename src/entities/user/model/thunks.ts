@@ -1,15 +1,13 @@
-import { ApiRoute } from '@/const/route';
-import { UserResource } from '@/types/user';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { UserResource } from './types';
 import { AxiosInstance } from 'axios';
+import { fetchAuthUser } from '../api/user-api';
 
 export const checkAuthAction = createAsyncThunk<UserResource, undefined, {
   extra: AxiosInstance;
 }>(
-  'auth/check',
+  'user/checkAuth',
   async (_arg, { extra: api }) => {
-    const { data } = await api.get<UserResource>(ApiRoute.Auth.Check);
-
-    return data;
+    return await fetchAuthUser(api);
   },
 );
