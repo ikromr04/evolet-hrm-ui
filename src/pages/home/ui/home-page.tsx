@@ -2,7 +2,7 @@ import { useTheme } from '@/shared/lib';
 import { Button } from '@/shared/ui';
 import { JSX } from 'react';
 
-export function HomePage(): JSX.Element {
+function HomePage(): JSX.Element {
   const { setTheme } = useTheme();
 
   return (
@@ -20,3 +20,5 @@ export function HomePage(): JSX.Element {
     </main>
   );
 }
+
+export { HomePage };

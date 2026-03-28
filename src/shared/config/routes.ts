@@ -1,3 +1,6 @@
-export const ROUTES = {
-  HOME: '/'
+const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
 };
+
+export { ROUTES };

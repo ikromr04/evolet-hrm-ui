@@ -1,7 +1,7 @@
 import { JSX, PropsWithChildren } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-export function RouterProvider({
+function RouterProvider({
   children
 }: PropsWithChildren): JSX.Element {
 
@@ -11,3 +11,5 @@ export function RouterProvider({
     </BrowserRouter>
   );
 };
+
+export { RouterProvider };

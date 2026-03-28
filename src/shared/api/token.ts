@@ -1,12 +1,12 @@
 const AUTH_TOKEN_KEY_NAME = 'jClMxgDvHYXPDKILnXwrHSpJNlWrka2Qaux7SnnEdP8=';
 
-export type Token = string;
-
-export const getToken = (): Token =>
+const getToken = (): string =>
   localStorage.getItem(AUTH_TOKEN_KEY_NAME) ?? '';
 
-export const saveToken = (token: Token): void =>
+const saveToken = (token: string): void =>
   localStorage.setItem(AUTH_TOKEN_KEY_NAME, token);
 
-export const dropToken = (): void =>
+const dropToken = (): void =>
   localStorage.removeItem(AUTH_TOKEN_KEY_NAME);
+
+export { getToken, saveToken, dropToken };

@@ -3,7 +3,7 @@ import { UserResource } from './types';
 import { AxiosInstance } from 'axios';
 import { fetchAuthUser } from '../api/user-api';
 
-export const checkAuthAction = createAsyncThunk<UserResource, undefined, {
+const checkAuthAction = createAsyncThunk<UserResource, undefined, {
   extra: AxiosInstance;
 }>(
   'user/checkAuth',
@@ -11,3 +11,5 @@ export const checkAuthAction = createAsyncThunk<UserResource, undefined, {
     return await fetchAuthUser(api);
   },
 );
+
+export { checkAuthAction };

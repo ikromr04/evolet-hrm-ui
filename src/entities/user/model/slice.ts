@@ -11,7 +11,7 @@ const initialState: UserSlice = {
   status: AuthStatus.UNKNOWN
 };
 
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
@@ -27,3 +27,5 @@ export const userSlice = createSlice({
       });
   }
 });
+
+export { userSlice };

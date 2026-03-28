@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-export type Theme = 'dark' | 'light' | 'system';
+type Theme = 'dark' | 'light' | 'system';
 
 type ThemeProviderState = {
   theme: Theme
@@ -12,9 +12,9 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
 };
 
-export const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
-export const useTheme = () => {
+const useTheme = () => {
   const context = useContext(ThemeProviderContext);
 
   if (context === undefined) {
@@ -23,3 +23,7 @@ export const useTheme = () => {
 
   return context;
 };
+
+export { useTheme, ThemeProviderContext };
+
+export type { Theme };

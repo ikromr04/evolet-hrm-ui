@@ -1,3 +1,5 @@
-export const getAuthStatus = (state: RootState) => state.user.status;
+const getAuthStatus = (state: RootState) => state.user.status;
 
-export const getAuthUser = (state: RootState) => state.user.me;
+const getAuthUser = (state: RootState) => state.user.me;
+
+export { getAuthStatus, getAuthUser };

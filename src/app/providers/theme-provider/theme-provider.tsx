@@ -6,7 +6,7 @@ type ThemeProviderProps = {
   defaultTheme?: Theme;
   storageKey?: string;
 }
-export function ThemeProvider({
+function ThemeProvider({
   children,
   defaultTheme = 'system',
   storageKey = 'vite-ui-theme',
@@ -48,3 +48,5 @@ export function ThemeProvider({
     </ThemeProviderContext.Provider>
   );
 }
+
+export { ThemeProvider };

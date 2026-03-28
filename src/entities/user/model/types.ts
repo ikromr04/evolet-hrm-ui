@@ -1,10 +1,10 @@
-export enum AuthStatus {
+enum AuthStatus {
   AUTH = 'AUTH',
   NO_AUTH = 'NO_AUTH',
   UNKNOWN = 'UNKNOWN'
 };
 
-export type UserResource = {
+type UserResource = {
   type: 'users';
   id: string;
   attributes: {
@@ -20,3 +20,5 @@ export type UserResource = {
     updatedAt?: string;
   };
 };
+
+export { AuthStatus, UserResource };

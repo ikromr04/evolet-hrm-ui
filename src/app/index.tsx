@@ -1,8 +1,8 @@
 import { JSX } from 'react';
 import { StoreProvider } from './providers/store-provider';
 import { RouterProvider } from './providers/router-provider';
-import { AppRouter } from './app-router';
-import { ThemeProvider } from './providers';
+import { ThemeProvider } from './providers/theme-provider';
+import { AppRouter } from './routes';
 
 function App(): JSX.Element {
   return (
@@ -16,4 +16,4 @@ function App(): JSX.Element {
   );
 }
 
-export default App;
+export { App };

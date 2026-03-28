@@ -4,7 +4,7 @@ import { createAPI } from '@/shared/api';
 
 const api = createAPI();
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     user: userSlice.reducer
   },
@@ -15,3 +15,5 @@ export const store = configureStore({
     serializableCheck: false,
   })
 });
+
+export { store };
