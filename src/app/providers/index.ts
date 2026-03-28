@@ -1,2 +1,1 @@
-export { RouterProvider } from './router-provider';
-export { StoreProvider } from './store-provider';
+export { ThemeProvider } from './theme-provider';

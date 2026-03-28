@@ -1,13 +1,17 @@
 import { JSX } from 'react';
-import { RouterProvider, StoreProvider } from './providers';
-import { AppRouter } from './routers';
+import { StoreProvider } from './providers/store-provider';
+import { RouterProvider } from './providers/router-provider';
+import { AppRouter } from './app-router';
+import { ThemeProvider } from './providers';
 
 function App(): JSX.Element {
   return (
     <StoreProvider>
-      <RouterProvider>
-        <AppRouter />
-      </RouterProvider>
+      <ThemeProvider>
+        <RouterProvider>
+          <AppRouter />
+        </RouterProvider>
+      </ThemeProvider>
     </StoreProvider>
   );
 }

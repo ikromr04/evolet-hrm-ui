@@ -1,6 +1,6 @@
+import { configureStore } from '@reduxjs/toolkit';
 import { userSlice } from '@/entities/user';
 import { createAPI } from '@/shared/api';
-import { configureStore } from '@reduxjs/toolkit';
 
 const api = createAPI();
 

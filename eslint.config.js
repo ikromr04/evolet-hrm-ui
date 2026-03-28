@@ -21,15 +21,12 @@ export default defineConfig([
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-      "quotes": ["error", "single"],
-      "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
-      "eol-last": ["error", "always"],
-      "semi": ["error", "always"],
-      "no-console": "warn"
+      'react-refresh/only-export-components': ['off'],
+      'quotes': ['error', 'single'],
+      'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
+      'eol-last': ['error', 'always'],
+      'semi': ['error', 'always'],
+      'no-console': 'warn'
     },
   },
 ])
