@@ -23,3 +23,4 @@ export {
   FieldTitle,
 } from './field';
 export { Input } from './input';
+export { PageLoader } from './page-loader';

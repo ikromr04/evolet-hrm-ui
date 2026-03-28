@@ -1,11 +1,6 @@
 import { cn } from '@/shared/lib';
 import {
   Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
   Field,
   FieldDescription,
   FieldGroup,
@@ -13,58 +8,62 @@ import {
   Input
 } from '@/shared/ui';
 import { ComponentProps } from 'react';
+import { Link } from 'react-router-dom';
+import Logo from '@/shared/assets/logo.svg';
 
 function LoginForm({
   className,
   ...props
 }: ComponentProps<'div'>) {
   return (
-    <div className={cn('flex flex-col gap-6', className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-              </Field>
-              <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input id="password" type="password" required />
-              </Field>
-              <Field>
-                <Button type="submit">Login</Button>
-                <Button variant="outline" type="button">
-                  Login with Google
-                </Button>
-                <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <div className={cn('flex flex-col gap-6 mb-[10vh]', className)} {...props}>
+      <form>
+        <FieldGroup>
+          <div className="flex flex-col items-center gap-2 text-center">
+            <div className="flex flex-col items-center gap-2 font-medium">
+              <div className="flex items-center justify-center rounded-md">
+                <img className="flex w-40 h-auto" src={Logo} width={120} height={30} alt="Evolet Healthcare" />
+              </div>
+            </div>
+
+            <h1 className="text-xl font-bold mb-4 mt-2">Добро пожаловать в Evolet</h1>
+
+            <FieldDescription>
+              Введите свои учетные данные
+            </FieldDescription>
+          </div>
+
+          <Field>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <Input
+              id="email"
+              type="email"
+              placeholder="user123@example.com"
+              required
+            />
+          </Field>
+
+          <Field>
+            <div className="flex items-center">
+              <FieldLabel htmlFor="password">Пароль</FieldLabel>
+              <Link to="#" className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+                Забыли пароль?
+              </Link>
+            </div>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              required
+            />
+          </Field>
+
+          <Field>
+            <Button type="submit">Login</Button>
+          </Field>
+        </FieldGroup>
+      </form>
+    </div >
   );
 }
 
