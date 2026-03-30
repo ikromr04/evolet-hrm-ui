@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import { PrivateRoute } from './private-route';
 import { GuestRoute } from './guest-route';
 import { PageLoader } from '@/shared/ui';
+import { AppLayout } from '@/widgets/app-layout';
 
 const LoginPage = lazy(() => import('@/pages/login').then((m) => ({ default: m.LoginPage })));
 const HomePage = lazy(() => import('@/pages/home').then((m) => ({ default: m.HomePage })));
@@ -30,7 +31,9 @@ function AppRouter(): JSX.Element {
         </Route>
 
         <Route element={<PrivateRoute />}>
-          <Route path={ROUTES.HOME} element={<HomePage />} />
+          <Route element={<AppLayout />}>
+            <Route path={ROUTES.HOME} element={<HomePage />} />
+          </Route>
         </Route>
       </Routes>
     </Suspense>

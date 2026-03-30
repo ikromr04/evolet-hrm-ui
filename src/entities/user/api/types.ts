@@ -7,8 +7,8 @@ type UserResponse = {
       surname: string;
       patronymic: string;
       login: string;
-      avatar: string | null;
-      avatarThumb: string | null;
+      avatar: string;
+      avatarThumb: string;
       email?: string | null;
       emailVerifiedAt?: string | null;
       createdAt?: string;
