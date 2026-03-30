@@ -1,7 +1,6 @@
 import {
   Bell,
   ChevronsUpDown,
-  LogOut,
   Send,
   User,
 } from 'lucide-react';
@@ -25,6 +24,7 @@ import {
 import { ReactNode, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store';
 import { checkAuthAction, getAuthUser } from '@/entities/user';
+import { LogoutButton } from '@/features/logout-button';
 
 function NavUser(): ReactNode {
   const user = useAppSelector(getAuthUser);
@@ -99,8 +99,7 @@ function NavUser(): ReactNode {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem>
-              <LogOut size={16} />
-              Выйти из аккаунта
+              <LogoutButton />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

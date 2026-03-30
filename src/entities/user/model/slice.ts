@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthStatus, User } from './types';
-import { checkAuthAction, loginAction } from './thunks';
+import { checkAuthAction, loginAction, logoutAction } from './thunks';
 import { saveToken, Token } from '@/shared/lib';
 
 type UserSlice = {
@@ -32,6 +32,10 @@ const userSlice = createSlice({
       })
       .addCase(loginAction.rejected, (state) => {
         state.status = AuthStatus.NO_AUTH;
+      })
+      .addCase(logoutAction.fulfilled, (state) => {
+        state.status = AuthStatus.NO_AUTH;
+        state.me = undefined;
       });
   }
 });

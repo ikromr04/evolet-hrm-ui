@@ -17,4 +17,12 @@ const loginUser = async (api: AxiosInstance, payload: LoginRequest): Promise<Tok
   return data.data.attributes.token;
 };
 
-export { fetchAuthUser, loginUser };
+const logoutUser = async (api: AxiosInstance): Promise<void> => {
+  await api.delete<TokenResponse>(UserApiRoutes.Logout);
+};
+
+export {
+  fetchAuthUser,
+  loginUser,
+  logoutUser
+};

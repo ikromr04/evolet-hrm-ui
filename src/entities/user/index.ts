@@ -6,4 +6,8 @@ export { getAuthStatus, getAuthUser } from './model/selectors';
 
 export { loginSchema, type LoginSchema } from './model/schemas';
 
-export { checkAuthAction, loginAction } from './model/thunks';
+export {
+  checkAuthAction,
+  loginAction,
+  logoutAction
+} from './model/thunks';

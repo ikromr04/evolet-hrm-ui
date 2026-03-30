@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { fetchAuthUser, loginUser } from '../api/user-api';
+import { fetchAuthUser, loginUser, logoutUser } from '../api/user-api';
 import { User } from './types';
 import { LoginSchema } from './schemas';
 import { Token } from '@/shared/lib';
@@ -34,4 +34,13 @@ const loginAction = createAsyncThunk<Token, {
   }
 );
 
-export { checkAuthAction, loginAction };
+const logoutAction = createAsyncThunk<void, undefined, {
+  extra: AxiosInstance;
+}>(
+  'user/logoutUser',
+  async (_arg, { extra: api }) => {
+    await logoutUser(api);
+  }
+);
+
+export { checkAuthAction, loginAction, logoutAction };
