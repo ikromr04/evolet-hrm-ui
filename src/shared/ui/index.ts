@@ -139,3 +139,4 @@ export {
   TableCaption,
 } from './table';
 export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants } from './tabs';
+export { ScrollArea, ScrollBar } from './scroll-area';
