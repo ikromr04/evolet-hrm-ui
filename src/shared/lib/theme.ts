@@ -24,6 +24,4 @@ const useTheme = () => {
   return context;
 };
 
-export { useTheme, ThemeProviderContext };
-
-export type { Theme };
+export { type Theme, useTheme, ThemeProviderContext };

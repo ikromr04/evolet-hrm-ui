@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import { getToken } from './token';
+import { getToken } from '../lib/token';
 
 const BACKEND_URL = 'https://evolet-hrm-restapi.test/api';
 const REQUEST_TIMEOUT = 5000;

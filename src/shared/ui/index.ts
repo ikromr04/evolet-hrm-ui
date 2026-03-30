@@ -25,3 +25,5 @@ export {
 export { Input } from './input';
 export { PageLoader } from './page-loader';
 export { Logo } from './logo';
+export { Spinner } from './spinner';
+export { Toaster } from './sonner';

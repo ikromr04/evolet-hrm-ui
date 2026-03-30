@@ -1,5 +1,6 @@
 const UserApiRoutes = {
-  Check: '/me'
+  Check: '/me',
+  Login: '/login'
 };
 
 export { UserApiRoutes };

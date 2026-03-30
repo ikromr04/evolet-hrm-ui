@@ -4,21 +4,18 @@ enum AuthStatus {
   UNKNOWN = 'UNKNOWN'
 };
 
-type UserResource = {
-  type: 'users';
+type User = {
   id: string;
-  attributes: {
-    name: string;
-    surname: string;
-    patronymic: string;
-    login: string;
-    avatar: string | null;
-    avatarThumb: string | null;
-    email?: string | null;
-    emailVerifiedAt?: string | null;
-    createdAt?: string;
-    updatedAt?: string;
-  };
+  name: string;
+  surname: string;
+  patronymic: string;
+  login: string;
+  avatar: string | null;
+  avatarThumb: string | null;
+  email?: string | null;
+  emailVerifiedAt?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
-export { AuthStatus, UserResource };
+export { AuthStatus, type User };

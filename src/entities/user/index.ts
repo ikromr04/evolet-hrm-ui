@@ -1,7 +1,9 @@
-export { AuthStatus } from './model/types';
-export { userSlice } from './model/slice';
-export { checkAuthAction } from './model/thunks';
-export { getAuthStatus, getAuthUser } from './model/selectors';
-export { fetchAuthUser } from './api/user-api';
+export { AuthStatus, type User } from './model/types';
 
-export type { UserResource } from './model/types';
+export { userSlice } from './model/slice';
+
+export { getAuthStatus, getAuthUser } from './model/selectors';
+
+export { loginSchema, type LoginSchema } from './model/schemas';
+
+export { checkAuthAction, loginAction } from './model/thunks';

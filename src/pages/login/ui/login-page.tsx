@@ -1,5 +1,5 @@
-import { LoginForm } from '@/features/login';
 import { JSX } from 'react';
+import { LoginForm } from './login-form';
 
 function LoginPage(): JSX.Element {
   return (
