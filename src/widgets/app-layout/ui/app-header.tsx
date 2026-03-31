@@ -2,6 +2,7 @@ import { Separator, SidebarTrigger } from '@/shared/ui';
 import { JSX } from 'react';
 import { ModeToggle } from './mode-toggle';
 import { useHeader } from '@/shared/lib';
+import { AddButton } from './add-button';
 
 function AppHeader(): JSX.Element {
   const { title } = useHeader();
@@ -17,6 +18,7 @@ function AppHeader(): JSX.Element {
 
         <div className="ml-auto flex items-center gap-2">
           <ModeToggle />
+          <AddButton />
         </div>
       </div>
     </header>
