@@ -19,7 +19,7 @@ function AppLayout() {
       <SidebarInset>
         <AppHeader />
 
-        <div className="flex flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <div className="flex flex-col gap-4 m-4 lg:gap-6 lg:m-6">
           <Outlet />
         </div>
       </SidebarInset>

@@ -1,5 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -10,13 +13,19 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@/shared/ui';
 import { Favicon } from '@/shared/ui';
 import { ROUTES } from '@/shared/config';
 import { MAIN_NAV_ITEMS, REF_NAV_ITEMS } from '../model/const';
 import { NavUser } from './nav-user';
+import { ChevronRight } from 'lucide-react';
 
 function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const location = useLocation();
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -36,12 +45,49 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-2">
             <SidebarMenu>
-              {MAIN_NAV_ITEMS.map(({ label, icon, route }) => {
+              {MAIN_NAV_ITEMS.map(({ label, icon, route, submenus }) => {
                 const Icon = icon;
+
+                if (submenus) {
+                  const isOpen = route.startsWith(location.pathname) && (location.pathname !== '/');
+                  
+                  return (
+                    <Collapsible
+                      className="group/collapsible"
+                      asChild
+                      defaultOpen={isOpen}
+                      key={label}
+                    >
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton tooltip={label}>
+                            <Icon />
+                            <span>{label}</span>
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {submenus?.map(({ label, route }) => (
+                              <SidebarMenuSubItem key={route}>
+                                <SidebarMenuSubButton isActive={location.pathname.startsWith(route)} asChild>
+                                  <Link to={route}>
+                                    <span>{label}</span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  );
+                }
 
                 return (
                   <SidebarMenuItem key={route}>
-                    <SidebarMenuButton isActive={window.location.pathname === route} asChild>
+                    <SidebarMenuButton isActive={location.pathname === route} asChild>
                       <Link className="group" to={route}>
                         <Icon className="group-data-[active='true']:text-[#a8cf45]" />
                         <span>{label}</span>
@@ -62,7 +108,7 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             {REF_NAV_ITEMS.map(({ label, route }) => (
               <SidebarMenuItem key={route}>
-                <SidebarMenuButton isActive={window.location.pathname === route} asChild>
+                <SidebarMenuButton isActive={location.pathname === route} asChild>
                   <Link className="group" to={route}>
                     <span>{label}</span>
                   </Link>

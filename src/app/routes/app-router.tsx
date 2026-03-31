@@ -7,6 +7,7 @@ import { PrivateRoute } from './private-route';
 import { GuestRoute } from './guest-route';
 import { PageLoader } from '@/shared/ui';
 import { AppLayout } from '@/widgets/app-layout';
+import { EmployeeListPage } from '@/pages/employee-list';
 
 const LoginPage = lazy(() => import('@/pages/login').then((m) => ({ default: m.LoginPage })));
 const HomePage = lazy(() => import('@/pages/home').then((m) => ({ default: m.HomePage })));
@@ -33,6 +34,7 @@ function AppRouter(): JSX.Element {
         <Route element={<PrivateRoute />}>
           <Route element={<AppLayout />}>
             <Route path={ROUTES.HOME} element={<HomePage />} />
+            <Route path={ROUTES.EMPLOYEES} element={<EmployeeListPage />} />
           </Route>
         </Route>
       </Routes>
