@@ -19,7 +19,7 @@ import {
 } from '@/shared/ui';
 import { Favicon } from '@/shared/ui';
 import { ROUTES } from '@/shared/config';
-import { MAIN_NAV_ITEMS, REF_NAV_ITEMS } from '../model/const';
+import { MAIN_NAV_ITEMS, REF_NAV_ITEMS } from './const';
 import { NavUser } from './nav-user';
 import { ChevronRight } from 'lucide-react';
 
@@ -50,7 +50,7 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
                 if (submenus) {
                   const isOpen = route.startsWith(location.pathname) && (location.pathname !== '/');
-                  
+
                   return (
                     <Collapsible
                       className="group/collapsible"

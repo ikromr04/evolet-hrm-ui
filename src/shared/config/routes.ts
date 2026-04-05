@@ -2,10 +2,11 @@ const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
 
-  EMPLOYEES: '/employees',
-  EMPLOYEES_FORMER: '/employees/former',
-  EMPLOYEES_TRANSFERRED: '/employees/transferred',
-  EMPLOYEES_STRUCTURE: '/employees/org-structure',
+  USER_LIST: '/employees',
+  USER_READ: '/employees/:id',
+  USER_FORMER: '/employees/former',
+  USER_TRANSFERRED: '/employees/transferred',
+  USER_STRUCTURE: '/employees/org-structure',
 
   EQUIPMENTS: '/equipments',
   VACATIONS: '/vacations',

@@ -6,7 +6,6 @@ type UserResponse = {
       name: string;
       surname: string;
       patronymic: string;
-      login: string;
       avatar: string;
       avatarThumb: string;
       email?: string | null;
@@ -37,8 +36,23 @@ type LoginRequest = {
   };
 };
 
+type UserStoreRequest = {
+  data: {
+    type: 'users';
+    attributes: {
+      name: string;
+      surname: string;
+      patronymic?: string;
+      email: string;
+      password?: string;
+      password_confirmation?: string;
+    };
+  };
+};
+
 export type {
   UserResponse,
   TokenResponse,
-  LoginRequest
+  LoginRequest,
+  UserStoreRequest,
 };

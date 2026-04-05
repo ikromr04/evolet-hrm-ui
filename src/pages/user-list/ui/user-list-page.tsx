@@ -1,7 +1,7 @@
 import { useHeader } from '@/shared/lib';
 import { JSX, useEffect } from 'react';
 
-function EmployeeListPage(): JSX.Element {
+function UserListPage(): JSX.Element {
   const { setTitle } = useHeader();
 
   useEffect(() => {
@@ -10,9 +10,9 @@ function EmployeeListPage(): JSX.Element {
 
   return (
     <main>
-      Employees page
+      Users page
     </main>
   );
 }
 
-export { EmployeeListPage };
+export { UserListPage };

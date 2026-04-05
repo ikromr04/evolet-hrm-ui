@@ -9,7 +9,6 @@ type User = {
   name: string;
   surname: string;
   patronymic: string;
-  login: string;
   avatar: string;
   avatarThumb: string;
   email?: string | null;
@@ -18,4 +17,10 @@ type User = {
   updatedAt?: string;
 };
 
-export { AuthStatus, type User };
+type Users = User[];
+
+export {
+  AuthStatus,
+  type User,
+  type Users,
+};

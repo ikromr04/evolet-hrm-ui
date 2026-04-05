@@ -4,10 +4,19 @@ export { userSlice } from './model/slice';
 
 export { getAuthStatus, getAuthUser } from './model/selectors';
 
-export { loginSchema, type LoginSchema } from './model/schemas';
+export {
+  loginSchema,
+  userStoreSchema,
+  avatarUploadSchema,
+  type LoginSchema,
+  type UserStoreSchema,
+  type AvatarUploadSchema,
+} from './model/schemas';
 
 export {
   checkAuthAction,
   loginAction,
-  logoutAction
+  logoutAction,
+  storeUserAction,
+  uploadUserAvatarAction,
 } from './model/thunks';

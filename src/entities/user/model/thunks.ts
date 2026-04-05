@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { fetchAuthUser, loginUser, logoutUser } from '../api/user-api';
+import { fetchAuthUser, loginUser, logoutUser, storeUser, uploadUserAvatar } from '../api/user-api';
 import { User } from './types';
-import { LoginSchema } from './schemas';
+import { AvatarUploadSchema, LoginSchema, UserStoreSchema } from './schemas';
 import { Token } from '@/shared/lib';
-import { mapLogin } from './mappers';
+import { mapLogin, mapUserStore } from './mappers';
 import { ApiErrors, ErrorResponse } from '@/shared/api';
 
 const checkAuthAction = createAsyncThunk<User, undefined, {
@@ -16,14 +16,12 @@ const checkAuthAction = createAsyncThunk<User, undefined, {
   },
 );
 
-const loginAction = createAsyncThunk<Token, {
-  payload: LoginSchema;
-}, {
+const loginAction = createAsyncThunk<Token, LoginSchema, {
   extra: AxiosInstance;
   rejectWithValue: ApiErrors;
 }>(
   'user/loginUser',
-  async ({ payload }, { extra: api, rejectWithValue }) => {
+  async (payload, { extra: api, rejectWithValue }) => {
     try {
       const token = await loginUser(api, mapLogin(payload));
       return token;
@@ -43,4 +41,52 @@ const logoutAction = createAsyncThunk<void, undefined, {
   }
 );
 
-export { checkAuthAction, loginAction, logoutAction };
+const storeUserAction = createAsyncThunk<User, UserStoreSchema, {
+  extra: AxiosInstance;
+  rejectWithValue: ApiErrors;
+}>(
+  'user/storeUser',
+  async (payload, { extra: api, rejectWithValue }) => {
+    try {
+      const user = await storeUser(api, mapUserStore(payload));
+
+      return user;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+
+      return rejectWithValue(error.response?.data.errors);
+    }
+  }
+);
+
+const uploadUserAvatarAction = createAsyncThunk<User, {
+  id: string;
+  payload: AvatarUploadSchema;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ApiErrors;
+}>(
+  'user/uploadUserAvatar',
+  async ({ id, payload }, { extra: api, rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', payload.image);
+
+      const user = await uploadUserAvatar(api, id, formData);
+
+      return user;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+
+      return rejectWithValue(error.response?.data.errors);
+    }
+  }
+);
+
+export {
+  checkAuthAction,
+  loginAction,
+  logoutAction,
+  storeUserAction,
+  uploadUserAvatarAction,
+};

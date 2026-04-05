@@ -24,17 +24,14 @@ function LoginForm({
   const dispatch = useAppDispatch();
 
   const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: ''
-    }
+    resolver: zodResolver(loginSchema)
   });
 
-  const onSubmit = async (data: LoginSchema, evt?: BaseSyntheticEvent) => {
+  const onSubmit = async (credentials: LoginSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(loginAction({ payload: data })).unwrap()
+    await dispatch(loginAction(credentials))
+      .unwrap()
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
           if (error.source?.pointer) {
@@ -50,7 +47,7 @@ function LoginForm({
 
   return (
     <div className={cn('flex flex-col gap-6 mb-[10vh]', className)} {...props}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
             <div className="flex flex-col items-center gap-2 font-medium">
@@ -69,6 +66,7 @@ function LoginForm({
           <Controller
             name="email"
             control={form.control}
+            defaultValue=""
             render={({ field, fieldState }) => (
               <Field>
                 <label className="sr-only" htmlFor="email">
@@ -81,6 +79,7 @@ function LoginForm({
                   aria-invalid={fieldState.invalid}
                   placeholder="Email"
                   autoComplete="off"
+                  required
                 />
                 <FieldError errors={[fieldState.error]} />
               </Field>
@@ -90,6 +89,7 @@ function LoginForm({
           <Controller
             name="password"
             control={form.control}
+            defaultValue=""
             render={({ field, fieldState }) => (
               <Field>
                 <label className="sr-only" htmlFor="password">
@@ -102,6 +102,7 @@ function LoginForm({
                   aria-invalid={fieldState.invalid}
                   placeholder="Пароль"
                   autoComplete="off"
+                  required
                 />
                 <FieldError errors={[fieldState.error]} />
               </Field>
@@ -110,7 +111,8 @@ function LoginForm({
 
           <Field>
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? <Spinner /> : 'Войти'}
+              {form.formState.isSubmitting && <Spinner />}
+              Войти
             </Button>
           </Field>
         </FieldGroup>

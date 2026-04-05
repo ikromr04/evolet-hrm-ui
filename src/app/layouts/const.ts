@@ -10,23 +10,23 @@ const MAIN_NAV_ITEMS = [
   {
     label: 'Сотрудники',
     icon: Users,
-    route: ROUTES.EMPLOYEES,
+    route: ROUTES.USER_LIST,
     submenus: [
       {
         label: 'Справочник',
-        route: ROUTES.EMPLOYEES
+        route: ROUTES.USER_LIST
       },
       {
         label: 'Орг. структура',
-        route: ROUTES.EMPLOYEES_STRUCTURE
+        route: ROUTES.USER_STRUCTURE
       },
       {
         label: 'Уволенные',
-        route: ROUTES.EMPLOYEES_FORMER
+        route: ROUTES.USER_FORMER
       },
       {
         label: 'Переведённые',
-        route: ROUTES.EMPLOYEES_TRANSFERRED
+        route: ROUTES.USER_TRANSFERRED
       },
     ]
   },

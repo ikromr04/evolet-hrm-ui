@@ -7,20 +7,24 @@ import {
   DropdownMenuTrigger
 } from '@/shared/ui';
 import { Plus } from 'lucide-react';
+import { UserCreateDialog } from '@/features/user-create-dialog';
 
 function AddButton(): JSX.Element {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button>
+      <DropdownMenuTrigger asChild>
+        <Button type="button">
           <Plus size={16} />
           Новый
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-max" align="end">
-        <DropdownMenuItem>
-          Сотрудник
-        </DropdownMenuItem>
+        <UserCreateDialog trigger={
+          <DropdownMenuItem onSelect={(evt) => evt.preventDefault()}>
+            Сотрудник
+          </DropdownMenuItem>
+        } />
+
         <DropdownMenuItem>
           Отдел/Департамент
         </DropdownMenuItem>

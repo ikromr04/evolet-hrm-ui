@@ -141,3 +141,15 @@ export {
 export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants } from './tabs';
 export { ScrollArea, ScrollBar } from './scroll-area';
 export { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible';
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from './dialog';

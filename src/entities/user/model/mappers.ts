@@ -1,14 +1,26 @@
-import { LoginRequest } from '../api/types';
-import { LoginSchema } from './schemas';
+import { LoginRequest, UserStoreRequest } from '../api/types';
+import { LoginSchema, UserStoreSchema } from './schemas';
 
-const mapLogin = (schema: LoginSchema): LoginRequest => ({
+const mapLogin = (data: LoginSchema): LoginRequest => ({
   data: {
     type: 'tokens',
     attributes: {
-      email: schema.email,
-      password: schema.password
+      email: data.email,
+      password: data.password
     }
   }
 });
 
-export { mapLogin };
+const mapUserStore = (data: UserStoreSchema): UserStoreRequest => ({
+  data: {
+    type: 'users',
+    attributes: {
+      ...data
+    }
+  }
+});
+
+export {
+  mapLogin,
+  mapUserStore,
+};

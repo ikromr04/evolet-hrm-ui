@@ -6,4 +6,6 @@ const mapUser = (resource: UserResponse): User => ({
   ...resource.data.attributes
 });
 
-export { mapUser };
+export {
+  mapUser,
+};

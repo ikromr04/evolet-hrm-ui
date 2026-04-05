@@ -1,15 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthStatus, User } from './types';
-import { checkAuthAction, loginAction, logoutAction } from './thunks';
+import { AuthStatus, User, Users } from './types';
+import { checkAuthAction, loginAction, logoutAction, storeUserAction, uploadUserAvatarAction } from './thunks';
 import { saveToken, Token } from '@/shared/lib';
+import { AsyncStatus } from '@/shared/store';
 
 type UserSlice = {
   status: AuthStatus;
   me?: User;
+  users: {
+    data?: Users;
+    status: AsyncStatus;
+  };
 }
 
 const initialState: UserSlice = {
-  status: AuthStatus.UNKNOWN
+  status: AuthStatus.UNKNOWN,
+  users: {
+    status: AsyncStatus.IDLE,
+  },
 };
 
 const userSlice = createSlice({
@@ -36,6 +44,20 @@ const userSlice = createSlice({
       .addCase(logoutAction.fulfilled, (state) => {
         state.status = AuthStatus.NO_AUTH;
         state.me = undefined;
+      })
+      .addCase(storeUserAction.fulfilled, (state, action: PayloadAction<User>) => {
+        if (state.users.data) {
+          state.users.data = [action.payload, ...state.users.data];
+        }
+      })
+      .addCase(uploadUserAvatarAction.fulfilled, (state, action: PayloadAction<User>) => {
+        if (state.users.data) {
+          const userIndex = state.users.data.findIndex((user) => user.id === action.payload.id);
+
+          if (userIndex !== -1) {
+            state.users.data[userIndex] = action.payload;
+          }
+        }
       });
   }
 });
