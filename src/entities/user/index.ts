@@ -7,10 +7,8 @@ export { getAuthStatus, getAuthUser } from './model/selectors';
 export {
   loginSchema,
   userStoreSchema,
-  avatarUploadSchema,
   type LoginSchema,
   type UserStoreSchema,
-  type AvatarUploadSchema,
 } from './model/schemas';
 
 export {
@@ -18,5 +16,4 @@ export {
   loginAction,
   logoutAction,
   storeUserAction,
-  uploadUserAvatarAction,
 } from './model/thunks';

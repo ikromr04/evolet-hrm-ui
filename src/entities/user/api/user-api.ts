@@ -22,13 +22,21 @@ const logoutUser = async (api: AxiosInstance): Promise<void> => {
 };
 
 const storeUser = async (api: AxiosInstance, payload: UserStoreRequest): Promise<User> => {
-  const { data } = await api.post<UserResponse>(UserApiRoutes.Users, payload);
+  const formData = new FormData();
+  formData.append('data[type]', payload.data.type);
+  formData.append('data[attributes][name]', payload.data.attributes.name);
+  formData.append('data[attributes][surname]', payload.data.attributes.surname);
+  formData.append('data[attributes][email]', payload.data.attributes.email);
 
-  return mapUser(data);
-};
+  if (payload.data.attributes.patronymic) {
+    formData.append('data[attributes][patronymic]', payload.data.attributes.patronymic);
+  }
 
-const uploadUserAvatar = async (api: AxiosInstance, id: string, payload: FormData): Promise<User> => {
-  const { data } = await api.post<UserResponse>(UserApiRoutes.Avatar(id), payload);
+  if (payload.data.attributes.avatar) {
+    formData.append('data[attributes][avatar]', payload.data.attributes.avatar);
+  }
+
+  const { data } = await api.post<UserResponse>(UserApiRoutes.Users, formData);
 
   return mapUser(data);
 };
@@ -38,5 +46,4 @@ export {
   loginUser,
   logoutUser,
   storeUser,
-  uploadUserAvatar,
 };

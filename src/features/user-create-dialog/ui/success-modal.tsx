@@ -31,7 +31,7 @@ function SuccessModal({
             Профиль сотрудника
           </Link>
         </Button>
-        <Button type="button" onClick={() => setStep('user-base-info')}>
+        <Button type="button" onClick={() => setStep('user')}>
           Добавить ещё
         </Button>
       </DialogFooter>

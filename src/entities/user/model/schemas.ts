@@ -25,44 +25,36 @@ const userStoreSchema = z.object({
     .nonempty('Фамилия обязателен.')
     .max(50, 'Фамилия должно быть не больше 50 символов.'),
   patronymic: z
-    .string('Пароль должен быть строкой.')
+    .string('Отчество должен быть строкой.')
     .max(50, 'Отчество должно быть не больше 50 символов.')
     .optional(),
   email: z
-    .string('Пароль должен быть строкой.')
-    .nonempty('Пароль обязателен.')
+    .string('Email должен быть строкой.')
+    .nonempty('Email обязателен.')
     .email('Неверный адрес электронной почты.')
     .max(150, 'Email не должно превышать 150 символов.'),
-});
-
-type UserStoreSchema = z.infer<typeof userStoreSchema>;
-
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-const ACCEPTED_AVATAR_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-const avatarUploadSchema = z.object({
-  image: z
+  avatar: z
     .any()
     .refine(
       (file) => !file || file instanceof File,
       'Файл должен быть изображением.'
     )
     .refine(
-      (file) => !file || file.size <= MAX_FILE_SIZE,
+      (file) => !file || file.size <= 2 * 1024 * 1024,
       'Максимальный размер файла 2Мб.'
     )
     .refine(
-      (file) => !file || ACCEPTED_AVATAR_TYPES.includes(file.type),
+      (file) => !file || ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file.type),
       'Только JPG, PNG или WEBP.'
     )
+    .optional()
 });
 
-type AvatarUploadSchema = z.infer<typeof avatarUploadSchema>;
+type UserStoreSchema = z.infer<typeof userStoreSchema>;
 
 export {
   loginSchema,
   userStoreSchema,
-  avatarUploadSchema,
   type LoginSchema,
   type UserStoreSchema,
-  type AvatarUploadSchema,
 };

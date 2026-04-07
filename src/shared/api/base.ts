@@ -2,7 +2,7 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getToken } from '../lib/token';
 
 const BACKEND_URL = 'https://evolet-hrm-restapi.test/api/v1';
-const REQUEST_TIMEOUT = 5000;
+const REQUEST_TIMEOUT = 10000;
 
 const createAPI = (): AxiosInstance => {
   const api = axios.create({

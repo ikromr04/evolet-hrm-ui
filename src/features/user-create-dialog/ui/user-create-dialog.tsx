@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogTrigger,
 } from '@/shared/ui';
-import { AvatarUpload } from './avatar-upload';
 import { User } from '@/entities/user';
 import SuccessModal from './success-modal';
 import UserCreate from './user-create';
@@ -13,20 +12,20 @@ type UserCreateDialogProps = {
   trigger: JSX.Element;
 }
 
-type Step = 'user-base-info' | 'avatar-upload' | 'success';
+type Step = 'user' | 'user-details' | 'success';
 
 function UserCreateDialog({
   trigger
 }: UserCreateDialogProps): JSX.Element {
-  const [step, setStep] = useState<Step>('user-base-info');
+  const [step, setStep] = useState<Step>('user');
   const [user, setUser] = useState<User>();
 
   const renderStep = (step: Step) => {
     switch (step) {
-      case 'user-base-info':
+      case 'user':
         return <UserCreate setStep={setStep} setUser={setUser} />;
-      case 'avatar-upload':
-        return user ? <AvatarUpload setStep={setStep} user={user} /> : null;
+      case 'user-details':
+        return <UserCreate setStep={setStep} setUser={setUser} />;
       case 'success':
         return user ? <SuccessModal setStep={setStep} user={user} /> : null;
     }

@@ -44,6 +44,7 @@ type UserStoreRequest = {
       surname: string;
       patronymic?: string;
       email: string;
+      avatar?: File;
       password?: string;
       password_confirmation?: string;
     };

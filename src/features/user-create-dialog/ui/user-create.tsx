@@ -1,6 +1,9 @@
 import { BaseSyntheticEvent, Dispatch, JSX, SetStateAction } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   Button,
   DialogClose,
   DialogDescription,
@@ -39,11 +42,11 @@ function UserCreate({
   const onSubmit = async (data: UserStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(storeUserAction(data))
+    await dispatch(storeUserAction({ payload: data }))
       .unwrap()
       .then((user) => {
         toast.success('Сотрудник успешно добавлен.');
-        setStep('avatar-upload');
+        setStep('user-details');
         setUser(user);
       })
       .catch((errors: ApiErrors) => {
@@ -155,6 +158,56 @@ function UserCreate({
                 required
               />
               <FieldError errors={[fieldState.error]} />
+            </Field>
+          )}
+        />
+        <Controller
+          name="avatar"
+          control={form.control}
+          defaultValue={null}
+          render={({ field, fieldState }) => (
+            <Field>
+              <Label asChild>
+                <span>
+                  Фото профиля
+                </span>
+              </Label>
+
+              <div className="flex gap-x-4 items-end">
+                {field.value && (
+                  <Avatar className="size-24 max-w-24">
+                    <AvatarImage src={field.value && URL.createObjectURL(field.value)} />
+                    <AvatarFallback>ФП</AvatarFallback>
+                  </Avatar>
+                )}
+
+                <div className="flex flex-col gap-2 grow">
+                  {field.value && (
+                    <span className="col-span-2 text-muted-foreground">
+                      {field.value.name}
+                    </span>
+                  )}
+                  <Button variant="outline" asChild>
+                    <label>
+                      <input
+                        type="file"
+                        accept=".jpg, .jpeg, .png, .webp"
+                        className="hidden"
+                        onChange={(e) => field.onChange(e.target.files?.[0] || null)}
+                      />
+                      {field.value ? 'Выбрать другой файл' : 'Выбрать файл'}
+                    </label>
+                  </Button>
+
+                  <FieldError errors={[fieldState.error]} />
+
+                  {field.value && (
+                    <Button variant="secondary" onClick={() => field.onChange(null)}>
+                      Удалить
+                    </Button>
+                  )}
+                </div>
+              </div>
             </Field>
           )}
         />

@@ -1,8 +1,9 @@
 import { Separator, SidebarTrigger } from '@/shared/ui';
-import { JSX } from 'react';
+import { JSX, lazy, Suspense } from 'react';
 import { ModeToggle } from './mode-toggle';
 import { useHeader } from '@/shared/lib';
-import { AddButton } from './add-button';
+
+const AddButton = lazy(() => import('./add-button').then((m) => ({ default: m.AddButton })));
 
 function AppHeader(): JSX.Element {
   const { title } = useHeader();
@@ -18,7 +19,10 @@ function AppHeader(): JSX.Element {
 
         <div className="ml-auto flex items-center gap-2">
           <ModeToggle />
-          <AddButton />
+
+          <Suspense fallback={<></>}>
+            <AddButton />
+          </Suspense>
         </div>
       </div>
     </header>
