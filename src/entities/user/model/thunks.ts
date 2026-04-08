@@ -42,7 +42,7 @@ const logoutAction = createAsyncThunk<void, undefined, {
 );
 
 const storeUserAction = createAsyncThunk<User, {
-  payload: UserStoreSchema
+  payload: UserStoreSchema;
 }, {
   extra: AxiosInstance;
   rejectWithValue: ApiErrors;

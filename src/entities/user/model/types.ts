@@ -8,9 +8,9 @@ type User = {
   id: string;
   name: string;
   surname: string;
-  patronymic: string;
-  avatar: string;
-  avatarThumb: string;
+  patronymic: string | null;
+  avatar: string | null;
+  avatarThumb: string | null;
   email?: string | null;
   emailVerifiedAt?: string | null;
   createdAt?: string;

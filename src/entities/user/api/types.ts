@@ -8,10 +8,10 @@ type UserResponse = {
       patronymic: string;
       avatar: string;
       avatarThumb: string;
-      email?: string | null;
-      emailVerifiedAt?: string | null;
-      createdAt?: string;
-      updatedAt?: string;
+      email: string | null;
+      emailVerifiedAt: string | null;
+      createdAt: string;
+      updatedAt: string;
     };
   };
 };

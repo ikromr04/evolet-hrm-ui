@@ -36,7 +36,7 @@ const storeUser = async (api: AxiosInstance, payload: UserStoreRequest): Promise
     formData.append('data[attributes][avatar]', payload.data.attributes.avatar);
   }
 
-  const { data } = await api.post<UserResponse>(UserApiRoutes.Users, formData);
+  const { data } = await api.post<UserResponse>(UserApiRoutes.Index, formData);
 
   return mapUser(data);
 };
