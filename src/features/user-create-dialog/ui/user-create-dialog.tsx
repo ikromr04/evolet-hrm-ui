@@ -38,7 +38,7 @@ function UserCreateDialog({
         {trigger}
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="max-h-[calc(100vh-2rem)] overflow-auto">
         {renderStep(step)}
       </DialogContent>
     </Dialog>

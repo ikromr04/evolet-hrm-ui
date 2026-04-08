@@ -11,8 +11,8 @@ type User = {
   patronymic: string | null;
   avatar: string | null;
   avatarThumb: string | null;
-  email?: string | null;
-  emailVerifiedAt?: string | null;
+  email: string | null;
+  emailVerifiedAt: string | null;
   createdAt?: string;
   updatedAt?: string;
 };

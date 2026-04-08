@@ -2,7 +2,6 @@ import { BaseSyntheticEvent, Dispatch, JSX, SetStateAction } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Button,
-  DialogClose,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -12,7 +11,6 @@ import {
   FieldGroup,
   FieldLabel,
   Input,
-  Label,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -31,7 +29,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Step } from './user-create-dialog';
 import { storeUserDetailAction, userDetailStoreSchema, UserDetailStoreSchema } from '@/entities/user-detail';
 import { cn } from '@/shared/lib';
-import { Calendar, ChevronsUpDown } from 'lucide-react';
+import { ArrowRight, Calendar, ChevronsUpDown } from 'lucide-react';
 import { User } from '@/entities/user';
 import dayjs from 'dayjs';
 import { ru } from 'date-fns/locale';
@@ -59,7 +57,7 @@ function UserDetailCreate({
 
   const onSubmit = async (data: UserDetailStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
-    
+
     await dispatch(storeUserDetailAction({ payload: data }))
       .unwrap()
       .then(() => {
@@ -86,7 +84,7 @@ function UserDetailCreate({
       noValidate
     >
       <DialogHeader>
-        <DialogTitle>
+        <DialogTitle className="pr-10 leading-[1.2]">
           Данные сотрудника ({user.surname} {user.name})
         </DialogTitle>
         <DialogDescription>
@@ -95,111 +93,115 @@ function UserDetailCreate({
       </DialogHeader>
 
       <FieldGroup>
-        <Controller
-          name="birthDate"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Popover>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Controller
+            name="birthDate"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Popover>
+                <Field>
+                  <FieldLabel asChild>
+                    <div>Дата рождения</div>
+                  </FieldLabel>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        'w-full justify-start text-left',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      <Calendar className="mr-2 h-4 w-4" />
+                      {field.value ? dayjs(field.value).format('DD MMM YYYY') : 'Выберите дату'}
+                    </Button>
+                  </PopoverTrigger>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+
+                <PopoverContent className="w-max p-0 border-none">
+                  <UiCalendar
+                    locale={ru}
+                    mode="single"
+                    selected={field.value ? dayjs(field.value).toDate() : undefined}
+                    onSelect={(value) => field.onChange(dayjs(value).format('YYYY-MM-DD'))}
+                    className="rounded-lg border"
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
+          />
+          <Controller
+            name="sex"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
               <Field>
                 <FieldLabel asChild>
-                  <div>Дата рождения</div>
+                  <div>Пол</div>
                 </FieldLabel>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      'w-full justify-start text-left',
-                      !field.value && 'text-muted-foreground'
-                    )}
-                  >
-                    <Calendar className="mr-2 h-4 w-4" />
-                    {field.value ? dayjs(field.value).format('DD MMM YYYY') : 'Выберите дату'}
-                  </Button>
-                </PopoverTrigger>
+                <Select
+                  value={field.value || ''}
+                  onValueChange={(value) => field.onChange(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите пол" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="male">Мужской</SelectItem>
+                      <SelectItem value="female">Женский</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
                 <FieldError errors={[fieldState.error]} />
               </Field>
-
-              <PopoverContent className="w-max p-0 border-none">
-                <UiCalendar
-                  locale={ru}
-                  mode="single"
-                  selected={field.value ? dayjs(field.value).toDate() : undefined}
-                  onSelect={(value) => field.onChange(dayjs(value).format('YYYY-MM-DD'))}
-                  className="rounded-lg border"
-                  captionLayout="dropdown"
+            )}
+          />
+        </div>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Controller
+            name="nationality"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="nationality">
+                  Национальность
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="nationality"
+                  type="text"
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
                 />
-              </PopoverContent>
-            </Popover>
-          )}
-        />
-        <Controller
-          name="sex"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel asChild>
-                <div>Пол</div>
-              </FieldLabel>
-              <Select
-                value={field.value || ''}
-                onValueChange={(value) => field.onChange(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Выберите пол" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="male">Мужской</SelectItem>
-                    <SelectItem value="female">Женский</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <FieldError errors={[fieldState.error]} />
-            </Field>
-          )}
-        />
-        <Controller
-          name="nationality"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel htmlFor="nationality">
-                Национальность
-              </FieldLabel>
-              <Input
-                {...field}
-                id="nationality"
-                type="text"
-                aria-invalid={fieldState.invalid}
-                autoComplete="off"
-              />
-              <FieldError errors={[fieldState.error]} />
-            </Field>
-          )}
-        />
-        <Controller
-          name="citizenship"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel htmlFor="citizenship">
-                Гражданство
-              </FieldLabel>
-              <Input
-                {...field}
-                id="citizenship"
-                type="text"
-                aria-invalid={fieldState.invalid}
-                autoComplete="off"
-              />
-              <FieldError errors={[fieldState.error]} />
-            </Field>
-          )}
-        />
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
+          <Controller
+            name="citizenship"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="citizenship">
+                  Гражданство
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="citizenship"
+                  type="text"
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                />
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
+        </div>
         <Controller
           name="address"
           control={form.control}
@@ -220,75 +222,117 @@ function UserDetailCreate({
             </Field>
           )}
         />
-        <Controller
-          name="tel1"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel htmlFor="tel1">
-                Тел 1
-              </FieldLabel>
-              <Input
-                {...field}
-                id="tel1"
-                type="text"
-                aria-invalid={fieldState.invalid}
-                autoComplete="off"
-              />
-              <FieldError errors={[fieldState.error]} />
-            </Field>
-          )}
-        />
-        <Controller
-          name="tel2"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel htmlFor="tel2">
-                Тел 2
-              </FieldLabel>
-              <Input
-                {...field}
-                id="tel2"
-                type="text"
-                aria-invalid={fieldState.invalid}
-                autoComplete="off"
-              />
-              <FieldError errors={[fieldState.error]} />
-            </Field>
-          )}
-        />
-        <Controller
-          name="familyStatus"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel asChild>
-                <div>Семейное положение</div>
-              </FieldLabel>
-              <Select
-                value={field.value || ''}
-                onValueChange={(value) => field.onChange(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Выберите семейное положение" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="single_man">Не женат</SelectItem>
-                    <SelectItem value="single_woman">Не замужем</SelectItem>
-                    <SelectItem value="married_man">Женат</SelectItem>
-                    <SelectItem value="married_woman">Замужем</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <FieldError errors={[fieldState.error]} />
-            </Field>
-          )}
-        />
+        <div className="grid md:grid-cols-2 gap-4">
+          <Controller
+            name="tel1"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="tel1">
+                  Тел 1
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="tel1"
+                  type="text"
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                />
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
+          <Controller
+            name="tel2"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="tel2">
+                  Тел 2
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="tel2"
+                  type="text"
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                />
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
+        </div>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Controller
+            name="startedWorkAt"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Popover>
+                <Field>
+                  <FieldLabel asChild>
+                    <div>Начало работы</div>
+                  </FieldLabel>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        'w-full justify-start text-left',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      <Calendar className="mr-2 h-4 w-4" />
+                      {field.value ? dayjs(field.value).format('DD.MM.YYYY') : 'Выберите дату'}
+                    </Button>
+                  </PopoverTrigger>
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+
+                <PopoverContent className="w-max p-0 border-none">
+                  <UiCalendar
+                    locale={ru}
+                    mode="single"
+                    selected={field.value ? dayjs(field.value).toDate() : undefined}
+                    onSelect={(value) => field.onChange(value?.toString())}
+                    className="rounded-lg border"
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
+            )}
+          />
+          <Controller
+            name="familyStatus"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel asChild>
+                  <div>Семейное положение</div>
+                </FieldLabel>
+                <Select
+                  value={field.value || ''}
+                  onValueChange={(value) => field.onChange(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите семейное положение" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="single_man">Не женат</SelectItem>
+                      <SelectItem value="single_woman">Не замужем</SelectItem>
+                      <SelectItem value="married_man">Женат</SelectItem>
+                      <SelectItem value="married_woman">Замужем</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
+        </div>
         <Controller
           control={form.control}
           name="children"
@@ -312,9 +356,9 @@ function UserDetailCreate({
             return (
               <Popover>
                 <Field>
-                  <Label asChild>
+                  <FieldLabel asChild>
                     <div>Дети</div>
-                  </Label>
+                  </FieldLabel>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="w-full justify-between pr-2!">
                       {!values && (
@@ -367,52 +411,17 @@ function UserDetailCreate({
             );
           }}
         />
-        <Controller
-          name="startedWorkAt"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Popover>
-              <Field>
-                <Label asChild>
-                  <div>Начало работы</div>
-                </Label>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      'w-full justify-start text-left',
-                      !field.value && 'text-muted-foreground'
-                    )}
-                  >
-                    <Calendar className="mr-2 h-4 w-4" />
-                    {field.value ? dayjs(field.value).format('DD.MM.YYYY') : 'Выберите дату'}
-                  </Button>
-                </PopoverTrigger>
-                <FieldError errors={[fieldState.error]} />
-              </Field>
-
-              <PopoverContent className="w-max p-0 border-none">
-                <UiCalendar
-                  locale={ru}
-                  mode="single"
-                  selected={field.value ? dayjs(field.value).toDate() : undefined}
-                  onSelect={(value) => field.onChange(value?.toString())}
-                  className="rounded-lg border"
-                  captionLayout="dropdown"
-                />
-              </PopoverContent>
-            </Popover>
-          )}
-        />
       </FieldGroup>
 
       <DialogFooter>
-        <DialogClose asChild>
-          <Button type="button" variant="outline">
-            Отмена
-          </Button>
-        </DialogClose>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setStep('success')}
+        >
+          Пропустить
+          <ArrowRight size={16} />
+        </Button>
         <Button type="submit" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting && <Spinner />}
           Сохранить
