@@ -284,7 +284,7 @@ function UserDetailCreate({
                       )}
                     >
                       <Calendar className="mr-2 h-4 w-4" />
-                      {field.value ? dayjs(field.value).format('DD.MM.YYYY') : 'Выберите дату'}
+                      {field.value ? dayjs(field.value).format('DD MMM YYYY') : 'Выберите дату'}
                     </Button>
                   </PopoverTrigger>
                   <FieldError errors={[fieldState.error]} />
@@ -295,7 +295,7 @@ function UserDetailCreate({
                     locale={ru}
                     mode="single"
                     selected={field.value ? dayjs(field.value).toDate() : undefined}
-                    onSelect={(value) => field.onChange(value?.toString())}
+                    onSelect={(value) => field.onChange(dayjs(value).format('YYYY-MM-DD'))}
                     className="rounded-lg border"
                     captionLayout="dropdown"
                   />

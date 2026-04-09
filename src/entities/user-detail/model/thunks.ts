@@ -16,7 +16,7 @@ const storeUserDetailAction = createAsyncThunk<UserDetail, {
   async ({ payload }, { extra: api, rejectWithValue }) => {
     try {
       const userDetail = await storeUserDetail(api, mapUserDetailStore(payload));
-
+      
       return userDetail;
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
