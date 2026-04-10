@@ -7,8 +7,10 @@ export { getAuthStatus, getAuthUser } from './model/selectors';
 export {
   loginSchema,
   userStoreSchema,
+  userUpdateSchema,
   type LoginSchema,
   type UserStoreSchema,
+  type UserUpdateSchema,
 } from './model/schemas';
 
 export {

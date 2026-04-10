@@ -1,7 +1,12 @@
 import { BaseSyntheticEvent, Dispatch, JSX, SetStateAction } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
+  Badge,
   Button,
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -14,7 +19,6 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  ScrollArea,
   Select,
   SelectContent,
   SelectGroup,
@@ -29,7 +33,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Step } from './user-create-dialog';
 import { storeUserDetailAction, userDetailStoreSchema, UserDetailStoreSchema } from '@/entities/user-detail';
 import { cn } from '@/shared/lib';
-import { ArrowRight, Calendar, ChevronsUpDown } from 'lucide-react';
+import { ArrowRight, Calendar, ChevronsUpDown, X } from 'lucide-react';
 import { User } from '@/entities/user';
 import dayjs from 'dayjs';
 import { ru } from 'date-fns/locale';
@@ -62,7 +66,7 @@ function UserDetailCreate({
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
-        setStep('success');
+        setStep('user-relationships');
       })
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
@@ -101,8 +105,8 @@ function UserDetailCreate({
             render={({ field, fieldState }) => (
               <Popover>
                 <Field>
-                  <FieldLabel asChild>
-                    <div>Дата рождения</div>
+                  <FieldLabel>
+                    Дата рождения
                   </FieldLabel>
                   <PopoverTrigger asChild>
                     <Button
@@ -119,13 +123,12 @@ function UserDetailCreate({
                   <FieldError errors={[fieldState.error]} />
                 </Field>
 
-                <PopoverContent className="w-max p-0 border-none">
+                <PopoverContent className="p-0 w-max" align="start">
                   <UiCalendar
                     locale={ru}
                     mode="single"
                     selected={field.value ? dayjs(field.value).toDate() : undefined}
                     onSelect={(value) => field.onChange(dayjs(value).format('YYYY-MM-DD'))}
-                    className="rounded-lg border"
                     captionLayout="dropdown"
                   />
                 </PopoverContent>
@@ -138,8 +141,8 @@ function UserDetailCreate({
             defaultValue=""
             render={({ field, fieldState }) => (
               <Field>
-                <FieldLabel asChild>
-                  <div>Пол</div>
+                <FieldLabel>
+                  Пол
                 </FieldLabel>
                 <Select
                   value={field.value || ''}
@@ -148,7 +151,7 @@ function UserDetailCreate({
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите пол" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     <SelectGroup>
                       <SelectItem value="male">Мужской</SelectItem>
                       <SelectItem value="female">Женский</SelectItem>
@@ -272,8 +275,8 @@ function UserDetailCreate({
             render={({ field, fieldState }) => (
               <Popover>
                 <Field>
-                  <FieldLabel asChild>
-                    <div>Начало работы</div>
+                  <FieldLabel>
+                    Начало работы
                   </FieldLabel>
                   <PopoverTrigger asChild>
                     <Button
@@ -290,13 +293,12 @@ function UserDetailCreate({
                   <FieldError errors={[fieldState.error]} />
                 </Field>
 
-                <PopoverContent className="w-max p-0 border-none">
+                <PopoverContent className="p-0 w-max" align="start">
                   <UiCalendar
                     locale={ru}
                     mode="single"
                     selected={field.value ? dayjs(field.value).toDate() : undefined}
                     onSelect={(value) => field.onChange(dayjs(value).format('YYYY-MM-DD'))}
-                    className="rounded-lg border"
                     captionLayout="dropdown"
                   />
                 </PopoverContent>
@@ -309,8 +311,8 @@ function UserDetailCreate({
             defaultValue=""
             render={({ field, fieldState }) => (
               <Field>
-                <FieldLabel asChild>
-                  <div>Семейное положение</div>
+                <FieldLabel>
+                  Семейное положение
                 </FieldLabel>
                 <Select
                   value={field.value || ''}
@@ -319,7 +321,7 @@ function UserDetailCreate({
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите семейное положение" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     <SelectGroup>
                       <SelectItem value="single_man">Не женат</SelectItem>
                       <SelectItem value="single_woman">Не замужем</SelectItem>
@@ -356,18 +358,34 @@ function UserDetailCreate({
             return (
               <Popover>
                 <Field>
-                  <FieldLabel asChild>
-                    <div>Дети</div>
+                  <FieldLabel>
+                    Дети
                   </FieldLabel>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-between pr-2!">
+                    <Button
+                      variant="outline"
+                      className="pr-2! py-1.25 min-h-8 h-max text-start whitespace-normal"
+                    >
                       {!values && (
                         <span className="text-muted-foreground">
                           Выберите возраст детей
                         </span>
                       )}
-                      {values && values.length === 0 && 'Нет детей'}
-                      {values && values.length > 0 && values.join(', ')}
+                      <span className="grow flex flex-wrap gap-1">
+                        {values && values.length === 0 && 'Нет детей'}
+                        {values && values.length > 0 && values.map((year) => (
+                          <Badge
+                            variant="outline"
+                            onClick={(evt) => {
+                              toggleValue(year);
+                              evt.stopPropagation();
+                            }}
+                          >
+                            {year}
+                            <X size={8} />
+                          </Badge>
+                        ))}
+                      </span>
                       <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -375,37 +393,66 @@ function UserDetailCreate({
                   <FieldError errors={[fieldState.error]} />
                 </Field>
 
-                <PopoverContent className="p-0">
-                  <ScrollArea className="h-58 p-2">
-                    <div className="grid grid-cols-4 gap-1">
-                      <Button
-                        className="col-span-2"
-                        type="button"
-                        onClick={() => toggleValue('')}
-                        variant={!values ? 'outline' : 'ghost'}
-                      >
-                        Не указать
-                      </Button>
-                      <Button
-                        className="col-span-2"
-                        type="button"
-                        onClick={() => toggleValue('none')}
-                        variant={values?.length === 0 ? 'outline' : 'ghost'}
-                      >
-                        Нет детей
-                      </Button>
-                      {getChildrenYears().map((year) => (
-                        <Button
-                          key={year}
-                          type="button"
-                          onClick={() => toggleValue(year)}
-                          variant={values?.includes(year) ? 'outline' : 'ghost'}
+                <PopoverContent
+                  className="w-44 h-64 p-0"
+                  align="start"
+                  onWheel={(e) => e.stopPropagation()}
+                >
+                  <Command>
+                    <CommandList>
+                      <CommandGroup>
+                        <CommandItem
+                          data-checked={!values}
+                          onSelect={() => toggleValue('')}
                         >
-                          {year}
-                        </Button>
-                      ))}
-                    </div>
-                  </ScrollArea>
+                          Не указать
+                        </CommandItem>
+                        <CommandItem
+                          data-checked={values?.length === 0}
+                          onSelect={() => toggleValue('none')}
+                        >
+                          Нет детей
+                        </CommandItem>
+                        {getChildrenYears().map((year) => (
+                          <CommandItem
+                            key={year}
+                            data-checked={values?.includes(year)}
+                            onSelect={() => toggleValue(year)}
+                          >
+                            {year}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                  {/* <div className="grid gap-1">
+                    <Button
+                      className="col-span-2"
+                      type="button"
+                      onClick={() => toggleValue('')}
+                      variant={!values ? 'outline' : 'ghost'}
+                    >
+                      Не указать
+                    </Button>
+                    <Button
+                      className="col-span-2"
+                      type="button"
+                      onClick={() => toggleValue('none')}
+                      variant={values?.length === 0 ? 'outline' : 'ghost'}
+                    >
+                      Нет детей
+                    </Button>
+                    {getChildrenYears().map((year) => (
+                      <Button
+                        key={year}
+                        type="button"
+                        onClick={() => toggleValue(year)}
+                        variant={values?.includes(year) ? 'outline' : 'ghost'}
+                      >
+                        {year}
+                      </Button>
+                    ))}
+                  </div> */}
                 </PopoverContent>
               </Popover>
             );
@@ -417,7 +464,7 @@ function UserDetailCreate({
         <Button
           type="button"
           variant="outline"
-          onClick={() => setStep('success')}
+          onClick={() => setStep('user-relationships')}
         >
           Пропустить
           <ArrowRight size={16} />
@@ -431,4 +478,4 @@ function UserDetailCreate({
   );
 }
 
-export default UserDetailCreate;
+export { UserDetailCreate };

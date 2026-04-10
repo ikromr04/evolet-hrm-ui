@@ -228,4 +228,4 @@ function UserCreate({
   );
 }
 
-export default UserCreate;
+export { UserCreate };

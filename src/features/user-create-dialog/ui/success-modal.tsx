@@ -39,4 +39,4 @@ function SuccessModal({
   );
 }
 
-export default SuccessModal;
+export { SuccessModal };

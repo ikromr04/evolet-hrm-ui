@@ -1,24 +1,23 @@
 import { AxiosInstance } from 'axios';
-import { UserApiRoutes } from './routes';
 import { LoginRequest, TokenResponse, UserResponse, UserStoreRequest } from './types';
 import { Token } from '@/shared/lib';
 import { User } from '../model/types';
 import { mapUser } from './mappers';
 
 const fetchAuthUser = async (api: AxiosInstance): Promise<User> => {
-  const { data } = await api.get<UserResponse>(UserApiRoutes.Check);
+  const { data } = await api.get<UserResponse>('/me');
 
   return mapUser(data);
 };
 
 const loginUser = async (api: AxiosInstance, payload: LoginRequest): Promise<Token> => {
-  const { data } = await api.post<TokenResponse>(UserApiRoutes.Login, payload);
+  const { data } = await api.post<TokenResponse>('/login', payload);
 
   return data.data.attributes.token;
 };
 
 const logoutUser = async (api: AxiosInstance): Promise<void> => {
-  await api.delete(UserApiRoutes.Logout);
+  await api.delete('/logout');
 };
 
 const storeUser = async (api: AxiosInstance, payload: UserStoreRequest): Promise<User> => {
@@ -36,7 +35,7 @@ const storeUser = async (api: AxiosInstance, payload: UserStoreRequest): Promise
     formData.append('data[attributes][avatar]', payload.data.attributes.avatar);
   }
 
-  const { data } = await api.post<UserResponse>(UserApiRoutes.Index, formData);
+  const { data } = await api.post<UserResponse>('/users', formData);
 
   return mapUser(data);
 };

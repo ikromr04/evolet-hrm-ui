@@ -24,6 +24,7 @@ const roleSlice = createSlice({
     builder
       .addCase(fetchRolesAction.fulfilled, (state, action: PayloadAction<Roles>) => {
         state.roles.data = action.payload;
+        state.roles.status = AsyncStatus.SUCCEEDED;
       });
   }
 });
