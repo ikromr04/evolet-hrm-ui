@@ -79,27 +79,6 @@ function UserCreate({
 
       <FieldGroup>
         <Controller
-          name="name"
-          control={form.control}
-          defaultValue=""
-          render={({ field, fieldState }) => (
-            <Field>
-              <Label htmlFor="name">
-                Имя <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                {...field}
-                id="name"
-                type="text"
-                aria-invalid={fieldState.invalid}
-                autoComplete="off"
-                required
-              />
-              <FieldError errors={[fieldState.error]} />
-            </Field>
-          )}
-        />
-        <Controller
           name="surname"
           control={form.control}
           defaultValue=""
@@ -111,6 +90,27 @@ function UserCreate({
               <Input
                 {...field}
                 id="surname"
+                type="text"
+                aria-invalid={fieldState.invalid}
+                autoComplete="off"
+                required
+              />
+              <FieldError errors={[fieldState.error]} />
+            </Field>
+          )}
+        />
+        <Controller
+          name="name"
+          control={form.control}
+          defaultValue=""
+          render={({ field, fieldState }) => (
+            <Field>
+              <Label htmlFor="name">
+                Имя <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                {...field}
+                id="name"
                 type="text"
                 aria-invalid={fieldState.invalid}
                 autoComplete="off"

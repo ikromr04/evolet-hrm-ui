@@ -11,6 +11,8 @@ type UserDetail = {
   familyStatus: string | null;
   children: number[] | null;
   startedWorkAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type UserDetails = UserDetail[];

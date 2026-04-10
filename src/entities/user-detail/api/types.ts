@@ -23,7 +23,7 @@ type UserDetailStoreRequest = {
 
 type UserDetailResponse = {
   data: {
-    type: 'user-detailss';
+    type: 'user-details';
     id: string;
     attributes: {
       birthDate: string | null;

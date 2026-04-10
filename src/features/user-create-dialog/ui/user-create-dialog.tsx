@@ -9,13 +9,13 @@ import { SuccessModal } from './success-modal';
 import { UserCreate } from './user-create';
 import { UserDetailCreate } from './user-detail-create';
 import { UserRelationshipsCreate } from './user-relationships-create';
+import { UserEquipmentsCreate } from './user-equipments-create';
 
 type UserCreateDialogProps = {
   trigger: JSX.Element;
 }
 
-type Step =
-  'user'
+type Step = 'user'
   | 'user-details'
   | 'user-relationships'
   | 'user-equipments'
@@ -26,17 +26,8 @@ type Step =
 function UserCreateDialog({
   trigger
 }: UserCreateDialogProps): JSX.Element {
-  const [step, setStep] = useState<Step>('user-relationships');
-  const [user, setUser] = useState<User>({
-    id: '1',
-    name: 'ikrom',
-    surname: 'rahimove',
-    patronymic: null,
-    avatar: null,
-    avatarThumb: null,
-    email: null,
-    emailVerifiedAt: null,
-  });
+  const [step, setStep] = useState<Step>('user');
+  const [user, setUser] = useState<User>();
 
   const renderStep = (step: Step) => {
     switch (step) {
@@ -46,6 +37,8 @@ function UserCreateDialog({
         return user ? <UserDetailCreate setStep={setStep} user={user} /> : null;
       case 'user-relationships':
         return user ? <UserRelationshipsCreate setStep={setStep} user={user} /> : null;
+      case 'user-equipments':
+        return user ? <UserEquipmentsCreate setStep={setStep} user={user} /> : null;
       case 'success':
         return user ? <SuccessModal setStep={setStep} user={user} /> : null;
     }
