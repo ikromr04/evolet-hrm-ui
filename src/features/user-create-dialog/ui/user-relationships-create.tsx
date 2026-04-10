@@ -20,9 +20,9 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  ScrollArea,
   Spinner,
 } from '@/shared/ui';
+import { cn } from '@/shared/lib';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Step } from './user-create-dialog';
@@ -30,8 +30,8 @@ import { ArrowRight, ChevronsUpDown, X } from 'lucide-react';
 import { User, userUpdateSchema, UserUpdateSchema } from '@/entities/user';
 import { getRoles, getRolesStatus } from '@/entities/role';
 import { fetchRolesAction } from '@/entities/role';
-import { cn } from '@/shared/lib';
 import { fetchPositionsAction, getPositions, getPositionsStatus } from '@/entities/position';
+import { fetchDepartmentsAction, getDepartments, getDepartmentsStatus } from '@/entities/department';
 
 type UserRelationshipsCreateProps = {
   setStep: Dispatch<SetStateAction<Step>>;
@@ -45,13 +45,16 @@ function UserRelationshipsCreate({
   const dispatch = useAppDispatch();
   const rolesStatus = useAppSelector(getRolesStatus);
   const positionsStatus = useAppSelector(getPositionsStatus);
+  const departmentsStatus = useAppSelector(getDepartmentsStatus);
   const roles = useAppSelector(getRoles);
   const positions = useAppSelector(getPositions);
+  const departments = useAppSelector(getDepartments);
 
   useEffect(() => {
     if (rolesStatus === AsyncStatus.IDLE) dispatch(fetchRolesAction());
     if (positionsStatus === AsyncStatus.IDLE) dispatch(fetchPositionsAction());
-  }, [dispatch, positionsStatus, rolesStatus]);
+    if (departmentsStatus === AsyncStatus.IDLE) dispatch(fetchDepartmentsAction());
+  }, [departmentsStatus, dispatch, positionsStatus, rolesStatus]);
 
   const form = useForm<UserUpdateSchema>({
     resolver: zodResolver(userUpdateSchema),
@@ -132,7 +135,7 @@ function UserRelationshipsCreate({
                     >
                       <span className={cn('grow flex flex-wrap gap-1', !values?.length && 'text-muted-foreground')}>
                         {!values?.length
-                          ? 'Выберите'
+                          ? 'Выберите позицию'
                           : roles?.filter((role) => values.includes(role.id))
                             .map((role) => (
                               <Badge
@@ -217,7 +220,7 @@ function UserRelationshipsCreate({
                     >
                       <span className={cn('grow flex flex-wrap gap-1', !values?.length && 'text-muted-foreground')}>
                         {!values?.length
-                          ? 'Выберите'
+                          ? 'Выберите должность'
                           : positions?.filter((position) => values.includes(position.id))
                             .map((position) => (
                               <Badge
@@ -259,6 +262,91 @@ function UserRelationshipsCreate({
                             onSelect={() => toggleValue(position.id)}
                           >
                             {position.name}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            );
+          }}
+        />
+        <Controller
+          name="departments"
+          control={form.control}
+          defaultValue={undefined}
+          render={({ field, fieldState }) => {
+            const values: string[] | undefined = field.value;
+
+            const toggleValue = (value: string) => {
+              if (value === 'none') return field.onChange(undefined);
+
+              let current = values ?? [];
+              current = current.includes(value)
+                ? current.filter(v => v !== value)
+                : [...current, value];
+
+              field.onChange(
+                current.length === 0 ? undefined : current
+              );
+            };
+
+            return (
+              <Popover>
+                <Field>
+                  <FieldLabel>
+                    Отдел/Департамент
+                  </FieldLabel>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="pr-2! py-1.25 min-h-8 h-max text-start whitespace-normal"
+                    >
+                      <span className={cn('grow flex flex-wrap gap-1', !values?.length && 'text-muted-foreground')}>
+                        {!values?.length
+                          ? 'Выберите отдел'
+                          : departments?.filter((department) => values.includes(department.id))
+                            .map((department) => (
+                              <Badge
+                                variant="outline"
+                                onClick={(evt) => {
+                                  toggleValue(department.id);
+                                  evt.stopPropagation();
+                                }}
+                              >
+                                {department.name}
+                                <X size={8} />
+                              </Badge>
+                            ))
+                        }
+                      </span>
+                      <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+
+                <PopoverContent
+                  className="w-88 p-0"
+                  onWheel={(evt) => evt.stopPropagation()}
+                >
+                  <Command>
+                    <CommandInput placeholder="Поиск..." />
+
+                    <CommandList>
+                      <CommandEmpty>
+                        Отдел не найдена
+                      </CommandEmpty>
+                      <CommandGroup>
+                        {departments?.map((department) => (
+                          <CommandItem
+                            key={department.id}
+                            data-checked={field.value?.includes(department.id)}
+                            onSelect={() => toggleValue(department.id)}
+                          >
+                            {department.name}
                           </CommandItem>
                         ))}
                       </CommandGroup>

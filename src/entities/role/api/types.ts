@@ -5,6 +5,8 @@ type RoleResponse = {
     attributes: {
       name: string;
       displayName: string;
+      createdAt: string;
+      updatedAt: string;
     };
   };
 };
@@ -16,6 +18,8 @@ type RolesResponse = {
     attributes: {
       name: string;
       displayName: string;
+      createdAt: string;
+      updatedAt: string;
     };
   }[];
 }

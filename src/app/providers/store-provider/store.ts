@@ -4,6 +4,7 @@ import { createAPI } from '@/shared/api';
 import { userDetailSlice } from '@/entities/user-detail';
 import { roleSlice } from '@/entities/role';
 import { positionSlice } from '@/entities/position';
+import { departmentSlice } from '@/entities/department';
 
 const api = createAPI();
 
@@ -13,6 +14,7 @@ const store = configureStore({
     userDetail: userDetailSlice.reducer,
     role: roleSlice.reducer,
     position: positionSlice.reducer,
+    department: departmentSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     thunk: {

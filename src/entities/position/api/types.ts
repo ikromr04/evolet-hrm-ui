@@ -4,6 +4,8 @@ type PositionResponse = {
     id: string;
     attributes: {
       name: string;
+      createdAt: string;
+      updatedAt: string;
     };
   };
 };
@@ -14,6 +16,8 @@ type PositionsResponse = {
     id: string;
     attributes: {
       name: string;
+      createdAt: string;
+      updatedAt: string;
     };
   }[];
 }
