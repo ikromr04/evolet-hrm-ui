@@ -1,6 +1,6 @@
 import { Button, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui';
 import { Dispatch, JSX, SetStateAction } from 'react';
-import { Step } from './user-create-dialog';
+import { Step } from './employee-create-dialog';
 import { generatePath, Link } from 'react-router-dom';
 import { ROUTES } from '@/shared/config';
 import { User } from '@/entities/user';

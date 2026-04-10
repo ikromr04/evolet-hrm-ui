@@ -1,23 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { storeUserDetail } from '../api/user-detail-api';
+import { storeProfile } from '../api/profile-api';
 import { ApiErrors, ErrorResponse } from '@/shared/api';
-import { UserDetailStoreSchema } from './schemas';
-import { UserDetail } from './types';
-import { mapUserDetailStore } from './mappers';
+import { ProfileStoreSchema } from './schemas';
+import { Profile } from './types';
+import { mapProfileStore } from './mappers';
 
-const storeUserDetailAction = createAsyncThunk<UserDetail, {
-  payload: UserDetailStoreSchema;
+const storeProfileAction = createAsyncThunk<Profile, {
+  payload: ProfileStoreSchema;
 }, {
   extra: AxiosInstance;
   rejectWithValue: ApiErrors;
 }>(
-  'user-detail/store',
+  'profiles/store',
   async ({ payload }, { extra: api, rejectWithValue }) => {
     try {
-      const userDetail = await storeUserDetail(api, mapUserDetailStore(payload));
+      const profile = await storeProfile(api, mapProfileStore(payload));
       
-      return userDetail;
+      return profile;
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
 
@@ -27,5 +27,5 @@ const storeUserDetailAction = createAsyncThunk<UserDetail, {
 );
 
 export {
-  storeUserDetailAction,
+  storeProfileAction,
 };

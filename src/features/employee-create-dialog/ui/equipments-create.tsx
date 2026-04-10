@@ -1,4 +1,8 @@
 import { Dispatch, JSX, SetStateAction, useState } from 'react';
+import { Step } from './employee-create-dialog';
+import { ArrowRight, Plus } from 'lucide-react';
+import { User } from '@/entities/user';
+import { EquipmentCreateForm } from './equipment-create-form';
 import {
   Button,
   DialogDescription,
@@ -6,20 +10,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui';
-import { Step } from './user-create-dialog';
-import { ArrowRight, Plus } from 'lucide-react';
-import { User } from '@/entities/user';
-import { UserEquipmentCreateForm } from './user-equipment-create-form';
 
-type UserEquipmentsCreateProps = {
+type EquipmentsCreateProps = {
   setStep: Dispatch<SetStateAction<Step>>;
   user: User;
 }
 
-function UserEquipmentsCreate({
+function EquipmentsCreate({
   setStep,
   user,
-}: UserEquipmentsCreateProps): JSX.Element {
+}: EquipmentsCreateProps): JSX.Element {
   const [formIds, setFormIds] = useState([1]);
   const [hasSaved, setHasSaved] = useState(false);
 
@@ -38,7 +38,7 @@ function UserEquipmentsCreate({
         <div key={formId}>
           <div className="ml-1">Оборудование {index + 1}</div>
           <div className="border rounded-xl p-2 -m-2 mt-1">
-            <UserEquipmentCreateForm
+            <EquipmentCreateForm
               user={user}
               removable={formIds.length !== 1 ? true : false}
               onRemove={() => setFormIds((prev) => prev.filter((id) => id !== formId))}
@@ -62,7 +62,7 @@ function UserEquipmentsCreate({
         <Button
           type="button"
           variant="outline"
-          onClick={() => setStep('user-experiences')}
+          onClick={() => setStep('experiences')}
         >
           {!hasSaved ? 'Пропустить' : 'Далее'}
           <ArrowRight size={16} />
@@ -73,5 +73,5 @@ function UserEquipmentsCreate({
 }
 
 export {
-  UserEquipmentsCreate,
+  EquipmentsCreate,
 };

@@ -1,6 +1,6 @@
-type UserDetailStoreRequest = {
+type ProfileStoreRequest = {
   data: {
-    type: 'user-details';
+    type: 'profiles';
     attributes: {
       birthDate?: string;
       sex?: string;
@@ -21,9 +21,9 @@ type UserDetailStoreRequest = {
   };
 };
 
-type UserDetailResponse = {
+type ProfileResponse = {
   data: {
-    type: 'user-details';
+    type: 'profiles';
     id: string;
     attributes: {
       birthDate: string | null;
@@ -48,6 +48,6 @@ type UserDetailResponse = {
 };
 
 export type {
-  UserDetailStoreRequest,
-  UserDetailResponse,
+  ProfileStoreRequest,
+  ProfileResponse,
 };

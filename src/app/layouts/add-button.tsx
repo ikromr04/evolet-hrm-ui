@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger
 } from '@/shared/ui';
 import { Plus } from 'lucide-react';
-import { UserCreateDialog } from '@/features/user-create-dialog';
+import { EmployeeCreateDialog } from '@/features/employee-create-dialog';
 
 function AddButton(): JSX.Element {
   return (
@@ -19,7 +19,7 @@ function AddButton(): JSX.Element {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-max" align="end">
-        <UserCreateDialog trigger={
+        <EmployeeCreateDialog trigger={
           <DropdownMenuItem onSelect={(evt) => evt.preventDefault()}>
             Сотрудник
           </DropdownMenuItem>

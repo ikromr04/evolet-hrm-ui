@@ -1,4 +1,4 @@
-type UserDetail = {
+type Profile = {
   id: string;
   userId: string;
   birthDate: string | null;
@@ -15,9 +15,9 @@ type UserDetail = {
   updatedAt: string;
 };
 
-type UserDetails = UserDetail[];
+type Profiles = Profile[];
 
 export type {
-  UserDetail,
-  UserDetails,
+  Profile,
+  Profiles,
 };

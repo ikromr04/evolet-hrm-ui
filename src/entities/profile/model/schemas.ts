@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import z from 'zod';
 
-const userDetailStoreSchema = z.object({
+const profileStoreSchema = z.object({
   birthDate: z
     .string('Дата начала работы должна быть строкой.')
     .optional()
@@ -57,9 +57,9 @@ const userDetailStoreSchema = z.object({
   userId: z.string('ID пользователя обязателен.'),
 });
 
-type UserDetailStoreSchema = z.infer<typeof userDetailStoreSchema>;
+type ProfileStoreSchema = z.infer<typeof profileStoreSchema>;
 
 export {
-  userDetailStoreSchema,
-  type UserDetailStoreSchema,
+  profileStoreSchema,
+  type ProfileStoreSchema,
 };

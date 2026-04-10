@@ -25,7 +25,7 @@ import {
 import { cn } from '@/shared/lib';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Step } from './user-create-dialog';
+import { Step } from './employee-create-dialog';
 import { ArrowRight, ChevronsUpDown, X } from 'lucide-react';
 import { updateUserAction, User, userUpdateSchema, UserUpdateSchema } from '@/entities/user';
 import { getRoles, getRolesStatus } from '@/entities/role';
@@ -36,15 +36,15 @@ import { fetchLanguagesAction, getLanguages, getLanguagesStatus, LanguageLevel }
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
 
-type UserRelationshipsCreateProps = {
+type RelationshipsCreateProps = {
   setStep: Dispatch<SetStateAction<Step>>;
   user: User;
 }
 
-function UserRelationshipsCreate({
+function RelationshipsCreate({
   setStep,
   user,
-}: UserRelationshipsCreateProps): JSX.Element {
+}: RelationshipsCreateProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const rolesStatus = useAppSelector(getRolesStatus);
@@ -78,7 +78,7 @@ function UserRelationshipsCreate({
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
-        setStep('success');
+        setStep('equipments');
       })
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
@@ -453,7 +453,7 @@ function UserRelationshipsCreate({
         <Button
           type="button"
           variant="outline"
-          onClick={() => setStep('success')}
+          onClick={() => setStep('equipments')}
         >
           Пропустить
           <ArrowRight size={16} />
@@ -470,4 +470,4 @@ function UserRelationshipsCreate({
   );
 }
 
-export { UserRelationshipsCreate };
+export { RelationshipsCreate };

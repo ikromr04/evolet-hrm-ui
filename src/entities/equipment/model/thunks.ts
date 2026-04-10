@@ -15,9 +15,9 @@ const storeEquipmentAction = createAsyncThunk<Equipment, {
   'equipments/store',
   async ({ payload }, { extra: api, rejectWithValue }) => {
     try {
-      const userDetail = await storeEquipment(api, mapEquipmentStore(payload));
+      const profile = await storeEquipment(api, mapEquipmentStore(payload));
       
-      return userDetail;
+      return profile;
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
 

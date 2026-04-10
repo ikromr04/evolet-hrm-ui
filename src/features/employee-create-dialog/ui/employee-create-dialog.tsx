@@ -1,31 +1,27 @@
 import { JSX, useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from '@/shared/ui';
+import { Dialog, DialogContent, DialogTrigger } from '@/shared/ui';
 import { User } from '@/entities/user';
 import { SuccessModal } from './success-modal';
 import { UserCreate } from './user-create';
-import { UserDetailCreate } from './user-detail-create';
-import { UserRelationshipsCreate } from './user-relationships-create';
-import { UserEquipmentsCreate } from './user-equipments-create';
+import { ProfileCreate } from './profile-create';
+import { RelationshipsCreate } from './relationships-create';
+import { EquipmentsCreate } from './equipments-create';
 
-type UserCreateDialogProps = {
+type EmployeeCreateDialogProps = {
   trigger: JSX.Element;
 }
 
 type Step = 'user'
-  | 'user-details'
-  | 'user-relationships'
-  | 'user-equipments'
-  | 'user-experiences'
-  | 'user-educations'
+  | 'profile'
+  | 'relationships'
+  | 'equipments'
+  | 'experiences'
+  | 'educations'
   | 'success';
 
-function UserCreateDialog({
+function EmployeeCreateDialog({
   trigger
-}: UserCreateDialogProps): JSX.Element {
+}: EmployeeCreateDialogProps): JSX.Element {
   const [step, setStep] = useState<Step>('user');
   const [user, setUser] = useState<User>();
 
@@ -33,12 +29,12 @@ function UserCreateDialog({
     switch (step) {
       case 'user':
         return <UserCreate setStep={setStep} setUser={setUser} />;
-      case 'user-details':
-        return user ? <UserDetailCreate setStep={setStep} user={user} /> : null;
-      case 'user-relationships':
-        return user ? <UserRelationshipsCreate setStep={setStep} user={user} /> : null;
-      case 'user-equipments':
-        return user ? <UserEquipmentsCreate setStep={setStep} user={user} /> : null;
+      case 'profile':
+        return user ? <ProfileCreate setStep={setStep} user={user} /> : null;
+      case 'relationships':
+        return user ? <RelationshipsCreate setStep={setStep} user={user} /> : null;
+      case 'equipments':
+        return user ? <EquipmentsCreate setStep={setStep} user={user} /> : null;
       case 'success':
         return user ? <SuccessModal setStep={setStep} user={user} /> : null;
     }
@@ -59,5 +55,5 @@ function UserCreateDialog({
 
 export {
   type Step,
-  UserCreateDialog,
+  EmployeeCreateDialog,
 };

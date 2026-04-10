@@ -15,19 +15,19 @@ import { equipmentStoreSchema, EquipmentStoreSchema, storeEquipmentAction } from
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
 
-type UserEquipmentCreateFormProps = {
+type EquipmentCreateFormProps = {
   onRemove?: () => void;
   removable?: boolean;
   onSave: () => void;
   user: User;
 }
 
-function UserEquipmentCreateForm({
+function EquipmentCreateForm({
   onRemove,
   removable,
   onSave,
   user,
-}: UserEquipmentCreateFormProps): JSX.Element {
+}: EquipmentCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [isSaved, setIsSaved] = useState(false);
 
@@ -130,4 +130,4 @@ function UserEquipmentCreateForm({
   );
 }
 
-export { UserEquipmentCreateForm };
+export { EquipmentCreateForm };

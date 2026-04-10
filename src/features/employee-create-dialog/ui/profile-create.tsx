@@ -1,5 +1,17 @@
 import { BaseSyntheticEvent, Dispatch, JSX, SetStateAction } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useAppDispatch } from '@/shared/store';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Step } from './employee-create-dialog';
+import { storeProfileAction, profileStoreSchema, ProfileStoreSchema } from '@/entities/profile';
+import { cn } from '@/shared/lib';
+import { ArrowRight, Calendar, ChevronsUpDown, X } from 'lucide-react';
+import { User } from '@/entities/user';
+import dayjs from 'dayjs';
+import { ru } from 'date-fns/locale';
+import { getChildrenYears } from '../lib/utils';
+import { toast } from 'sonner';
+import { ApiErrors } from '@/shared/api';
 import {
   Badge,
   Button,
@@ -28,50 +40,38 @@ import {
   Spinner,
   Calendar as UiCalendar,
 } from '@/shared/ui';
-import { useAppDispatch } from '@/shared/store';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Step } from './user-create-dialog';
-import { storeUserDetailAction, userDetailStoreSchema, UserDetailStoreSchema } from '@/entities/user-detail';
-import { cn } from '@/shared/lib';
-import { ArrowRight, Calendar, ChevronsUpDown, X } from 'lucide-react';
-import { User } from '@/entities/user';
-import dayjs from 'dayjs';
-import { ru } from 'date-fns/locale';
-import { getChildrenYears } from '../lib/utils';
-import { toast } from 'sonner';
-import { ApiErrors } from '@/shared/api';
 
-type UserDetailCreateProps = {
+type ProfileCreateProps = {
   setStep: Dispatch<SetStateAction<Step>>;
   user: User;
 }
 
-function UserDetailCreate({
+function ProfileCreate({
   setStep,
   user,
-}: UserDetailCreateProps): JSX.Element {
+}: ProfileCreateProps): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const form = useForm<UserDetailStoreSchema>({
-    resolver: zodResolver(userDetailStoreSchema),
+  const form = useForm<ProfileStoreSchema>({
+    resolver: zodResolver(profileStoreSchema),
     defaultValues: {
       userId: user.id,
     },
   });
 
-  const onSubmit = async (data: UserDetailStoreSchema, evt?: BaseSyntheticEvent) => {
+  const onSubmit = async (data: ProfileStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(storeUserDetailAction({ payload: data }))
+    await dispatch(storeProfileAction({ payload: data }))
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
-        setStep('user-relationships');
+        setStep('relationships');
       })
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
           if (error.source?.pointer) {
-            form.setError(error.source.pointer.split('/').pop() as keyof UserDetailStoreSchema, {
+            form.setError(error.source.pointer.split('/').pop() as keyof ProfileStoreSchema, {
               message: error.detail
             });
           } else {
@@ -425,34 +425,6 @@ function UserDetailCreate({
                       </CommandGroup>
                     </CommandList>
                   </Command>
-                  {/* <div className="grid gap-1">
-                    <Button
-                      className="col-span-2"
-                      type="button"
-                      onClick={() => toggleValue('')}
-                      variant={!values ? 'outline' : 'ghost'}
-                    >
-                      Не указать
-                    </Button>
-                    <Button
-                      className="col-span-2"
-                      type="button"
-                      onClick={() => toggleValue('none')}
-                      variant={values?.length === 0 ? 'outline' : 'ghost'}
-                    >
-                      Нет детей
-                    </Button>
-                    {getChildrenYears().map((year) => (
-                      <Button
-                        key={year}
-                        type="button"
-                        onClick={() => toggleValue(year)}
-                        variant={values?.includes(year) ? 'outline' : 'ghost'}
-                      >
-                        {year}
-                      </Button>
-                    ))}
-                  </div> */}
                 </PopoverContent>
               </Popover>
             );
@@ -464,7 +436,7 @@ function UserDetailCreate({
         <Button
           type="button"
           variant="outline"
-          onClick={() => setStep('user-relationships')}
+          onClick={() => setStep('relationships')}
         >
           Пропустить
           <ArrowRight size={16} />
@@ -478,4 +450,4 @@ function UserDetailCreate({
   );
 }
 
-export { UserDetailCreate };
+export { ProfileCreate };

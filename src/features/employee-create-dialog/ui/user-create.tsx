@@ -22,7 +22,7 @@ import { storeUserAction, User, userStoreSchema, UserStoreSchema } from '@/entit
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
-import { Step } from './user-create-dialog';
+import { Step } from './employee-create-dialog';
 
 type UserCreateProps = {
   setStep: Dispatch<SetStateAction<Step>>;
@@ -46,7 +46,7 @@ function UserCreate({
       .unwrap()
       .then((user) => {
         toast.success('Сотрудник успешно добавлен.');
-        setStep('user-details');
+        setStep('profile');
         setUser(user);
       })
       .catch((errors: ApiErrors) => {
