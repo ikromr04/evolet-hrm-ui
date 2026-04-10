@@ -51,9 +51,40 @@ type UserStoreRequest = {
   };
 };
 
+type UserUpdateRequest = {
+  data: {
+    type: 'users';
+    id: string;
+    attributes?: {
+      name?: string;
+      surname?: string;
+      patronymic?: string;
+      email?: string;
+      avatar?: File;
+      password?: string;
+      password_confirmation?: string;
+    };
+    relationships?: {
+      roles?: {
+        data: { type: 'roles'; id: string; }[];
+      };
+      positions?: {
+        data: { type: 'positions'; id: string; }[];
+      };
+      departments?: {
+        data: { type: 'departments'; id: string; }[];
+      };
+      languages?: {
+        data: { type: 'languages'; id: string; }[];
+      };
+    }
+  };
+};
+
 export type {
   UserResponse,
   TokenResponse,
   LoginRequest,
   UserStoreRequest,
+  UserUpdateRequest,
 };

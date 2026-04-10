@@ -27,11 +27,14 @@ import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Step } from './user-create-dialog';
 import { ArrowRight, ChevronsUpDown, X } from 'lucide-react';
-import { User, userUpdateSchema, UserUpdateSchema } from '@/entities/user';
+import { updateUserAction, User, userUpdateSchema, UserUpdateSchema } from '@/entities/user';
 import { getRoles, getRolesStatus } from '@/entities/role';
 import { fetchRolesAction } from '@/entities/role';
 import { fetchPositionsAction, getPositions, getPositionsStatus } from '@/entities/position';
 import { fetchDepartmentsAction, getDepartments, getDepartmentsStatus } from '@/entities/department';
+import { fetchLanguagesAction, getLanguages, getLanguagesStatus, LanguageLevel } from '@/entities/language';
+import { toast } from 'sonner';
+import { ApiErrors } from '@/shared/api';
 
 type UserRelationshipsCreateProps = {
   setStep: Dispatch<SetStateAction<Step>>;
@@ -43,47 +46,51 @@ function UserRelationshipsCreate({
   user,
 }: UserRelationshipsCreateProps): JSX.Element {
   const dispatch = useAppDispatch();
+
   const rolesStatus = useAppSelector(getRolesStatus);
   const positionsStatus = useAppSelector(getPositionsStatus);
   const departmentsStatus = useAppSelector(getDepartmentsStatus);
+  const languagesStatus = useAppSelector(getLanguagesStatus);
+
   const roles = useAppSelector(getRoles);
   const positions = useAppSelector(getPositions);
   const departments = useAppSelector(getDepartments);
+  const languages = useAppSelector(getLanguages);
 
   useEffect(() => {
     if (rolesStatus === AsyncStatus.IDLE) dispatch(fetchRolesAction());
     if (positionsStatus === AsyncStatus.IDLE) dispatch(fetchPositionsAction());
     if (departmentsStatus === AsyncStatus.IDLE) dispatch(fetchDepartmentsAction());
-  }, [departmentsStatus, dispatch, positionsStatus, rolesStatus]);
+    if (languagesStatus === AsyncStatus.IDLE) dispatch(fetchLanguagesAction());
+  }, [departmentsStatus, dispatch, languagesStatus, positionsStatus, rolesStatus]);
 
   const form = useForm<UserUpdateSchema>({
     resolver: zodResolver(userUpdateSchema),
     defaultValues: {
-      userId: user.id,
+      id: user.id,
     },
   });
 
   const onSubmit = async (data: UserUpdateSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
-    console.log(data);
 
-    // await dispatch(storeUserDetailAction({ payload: data }))
-    //   .unwrap()
-    //   .then(() => {
-    //     toast.success('Данные успешно сохранены.');
-    //     setStep('success');
-    //   })
-    //   .catch((errors: ApiErrors) => {
-    //     errors.forEach((error) => {
-    //       if (error.source?.pointer) {
-    //         form.setError(error.source.pointer.split('/').pop() as keyof UserDetailStoreSchema, {
-    //           message: error.detail
-    //         });
-    //       } else {
-    //         toast.error(error.detail);
-    //       }
-    //     });
-    //   });
+    await dispatch(updateUserAction({ payload: data }))
+      .unwrap()
+      .then(() => {
+        toast.success('Данные успешно сохранены.');
+        setStep('success');
+      })
+      .catch((errors: ApiErrors) => {
+        errors.forEach((error) => {
+          if (error.source?.pointer) {
+            form.setError(error.source.pointer.split('/').pop() as keyof UserUpdateSchema, {
+              message: error.detail
+            });
+          } else {
+            toast.error(error.detail);
+          }
+        });
+      });
   };
 
   return (
@@ -110,8 +117,6 @@ function UserRelationshipsCreate({
             const values: string[] | undefined = field.value;
 
             const toggleValue = (value: string) => {
-              if (value === 'none') return field.onChange(undefined);
-
               let current = values ?? [];
               current = current.includes(value)
                 ? current.filter(v => v !== value)
@@ -139,6 +144,7 @@ function UserRelationshipsCreate({
                           : roles?.filter((role) => values.includes(role.id))
                             .map((role) => (
                               <Badge
+                                key={role.id}
                                 variant="outline"
                                 onClick={(evt) => {
                                   toggleValue(role.id);
@@ -195,8 +201,6 @@ function UserRelationshipsCreate({
             const values: string[] | undefined = field.value;
 
             const toggleValue = (value: string) => {
-              if (value === 'none') return field.onChange(undefined);
-
               let current = values ?? [];
               current = current.includes(value)
                 ? current.filter(v => v !== value)
@@ -224,6 +228,7 @@ function UserRelationshipsCreate({
                           : positions?.filter((position) => values.includes(position.id))
                             .map((position) => (
                               <Badge
+                                key={position.id}
                                 variant="outline"
                                 onClick={(evt) => {
                                   toggleValue(position.id);
@@ -309,6 +314,7 @@ function UserRelationshipsCreate({
                           : departments?.filter((department) => values.includes(department.id))
                             .map((department) => (
                               <Badge
+                                key={department.id}
                                 variant="outline"
                                 onClick={(evt) => {
                                   toggleValue(department.id);
@@ -357,6 +363,90 @@ function UserRelationshipsCreate({
             );
           }}
         />
+        <Controller
+          name="languages"
+          control={form.control}
+          defaultValue={undefined}
+          render={({ field, fieldState }) => {
+            const values: string[] | undefined = field.value;
+
+            const toggleValue = (value: string) => {
+              let current = values ?? [];
+              current = current.includes(value)
+                ? current.filter(v => v !== value)
+                : [...current, value];
+
+              field.onChange(
+                current.length === 0 ? undefined : current
+              );
+            };
+
+            return (
+              <Popover>
+                <Field>
+                  <FieldLabel>
+                    Знание языков
+                  </FieldLabel>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="pr-2! py-1.25 min-h-8 h-max text-start whitespace-normal"
+                    >
+                      <span className={cn('grow flex flex-wrap gap-1', !values?.length && 'text-muted-foreground')}>
+                        {!values?.length
+                          ? 'Выберите язык'
+                          : languages?.filter((language) => values.includes(language.id))
+                            .map((language) => (
+                              <Badge
+                                key={language.id}
+                                variant="outline"
+                                onClick={(evt) => {
+                                  toggleValue(language.id);
+                                  evt.stopPropagation();
+                                }}
+                              >
+                                {language.name} - {language.level}
+                                <X size={8} />
+                              </Badge>
+                            ))
+                        }
+                      </span>
+                      <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+
+                <PopoverContent
+                  className="w-88 p-0"
+                  onWheel={(evt) => evt.stopPropagation()}
+                >
+                  <Command>
+                    <CommandInput placeholder="Поиск..." />
+
+                    <CommandList>
+                      <CommandEmpty>
+                        Язык не найдена
+                      </CommandEmpty>
+                      <CommandGroup>
+                        {languages?.map((language) => (
+                          <CommandItem
+                            key={language.id}
+                            data-checked={field.value?.includes(language.id)}
+                            onSelect={() => toggleValue(language.id)}
+                          >
+                            {language.name} ({language.level}) - {LanguageLevel[language.level]}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            );
+          }}
+        />
       </FieldGroup>
 
       <DialogFooter>
@@ -368,7 +458,10 @@ function UserRelationshipsCreate({
           Пропустить
           <ArrowRight size={16} />
         </Button>
-        <Button type="submit" disabled={form.formState.isSubmitting}>
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting}
+        >
           {form.formState.isSubmitting && <Spinner />}
           Сохранить
         </Button>

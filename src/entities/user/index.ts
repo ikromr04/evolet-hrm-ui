@@ -18,4 +18,5 @@ export {
   loginAction,
   logoutAction,
   storeUserAction,
+  updateUserAction,
 } from './model/thunks';

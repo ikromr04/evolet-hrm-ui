@@ -14,7 +14,14 @@ type UserCreateDialogProps = {
   trigger: JSX.Element;
 }
 
-type Step = 'user' | 'user-details' | 'user-relationships' | 'success';
+type Step =
+  'user'
+  | 'user-details'
+  | 'user-relationships'
+  | 'user-equipments'
+  | 'user-experiences'
+  | 'user-educations'
+  | 'success';
 
 function UserCreateDialog({
   trigger

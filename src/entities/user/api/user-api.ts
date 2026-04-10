@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { LoginRequest, TokenResponse, UserResponse, UserStoreRequest } from './types';
+import { LoginRequest, TokenResponse, UserResponse, UserStoreRequest, UserUpdateRequest } from './types';
 import { Token } from '@/shared/lib';
 import { User } from '../model/types';
 import { mapUser } from './mappers';
@@ -40,9 +40,16 @@ const storeUser = async (api: AxiosInstance, payload: UserStoreRequest): Promise
   return mapUser(data);
 };
 
+const updateUser = async (api: AxiosInstance, payload: UserUpdateRequest): Promise<User> => {
+  const { data } = await api.patch<UserResponse>(`/users/${payload.data.id}`, payload);
+
+  return mapUser(data);
+};
+
 export {
   fetchAuthUser,
   loginUser,
   logoutUser,
   storeUser,
+  updateUser,
 };

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthStatus, User, Users } from './types';
-import { checkAuthAction, loginAction, logoutAction, storeUserAction } from './thunks';
+import { checkAuthAction, loginAction, logoutAction, storeUserAction, updateUserAction } from './thunks';
 import { saveToken, Token } from '@/shared/lib';
 import { AsyncStatus } from '@/shared/store';
 
@@ -48,6 +48,16 @@ const userSlice = createSlice({
       .addCase(storeUserAction.fulfilled, (state, action: PayloadAction<User>) => {
         if (state.users.data) {
           state.users.data = [action.payload, ...state.users.data];
+        }
+      })
+      .addCase(updateUserAction.fulfilled, (state, action: PayloadAction<User>) => {
+        if (state.users.data) {
+          state.users.data = state.users.data.map((user) => {
+            if (user.id === action.payload.id) {
+              return action.payload;
+            }
+            return user;
+          });
         }
       });
   }

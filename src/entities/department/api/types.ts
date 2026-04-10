@@ -1,6 +1,6 @@
 type DepartmentResponse = {
   data: {
-    type: 'deaprtments';
+    type: 'departments';
     id: string;
     attributes: {
       name: string;
@@ -15,7 +15,7 @@ type DepartmentResponse = {
 
 type DepartmentsResponse = {
   data: {
-    type: 'department';
+    type: 'departments';
     id: string;
     attributes: {
       name: string;

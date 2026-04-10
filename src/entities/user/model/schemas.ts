@@ -53,7 +53,7 @@ const userStoreSchema = z.object({
 type UserStoreSchema = z.infer<typeof userStoreSchema>;
 
 const userUpdateSchema = z.object({
-  userId: z.string('ID пользователя обязателен.'),
+  id: z.string('ID пользователя обязателен.'),
   name: z
     .string('Имя должен быть строкой.')
     .max(255, 'Имя должно быть не больше 255 символов.')
@@ -84,7 +84,7 @@ const userUpdateSchema = z.object({
   email: z
     .string('Email должен быть строкой.')
     .email('Неверный адрес электронной почты.')
-    .max(255, 'Email не должно превышать 255 символов.')
+    .max(255, 'Email не должен превышать 255 символов.')
     .optional(),
   roles: z
     .array(
