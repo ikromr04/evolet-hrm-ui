@@ -75,7 +75,7 @@ function EquipmentCreateForm({
           render={({ field, fieldState }) => (
             <Field>
               <FieldLabel htmlFor="name">
-                Название
+                Название <span className="text-destructive">*</span>
               </FieldLabel>
               <Input
                 {...field}

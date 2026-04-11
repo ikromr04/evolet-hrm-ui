@@ -24,17 +24,8 @@ type Step = 'user'
 function EmployeeCreateDialog({
   trigger
 }: EmployeeCreateDialogProps): JSX.Element {
-  const [step, setStep] = useState<Step>('educations');
-  const [user, setUser] = useState<User>({
-    id: 'string;',
-    name: 'string;',
-    surname: 'string;',
-    patronymic: null,
-    avatar: null,
-    avatarThumb: null,
-    email: null,
-    emailVerifiedAt: null,
-  });
+  const [step, setStep] = useState<Step>('user');
+  const [user, setUser] = useState<User>();
 
   const renderStep = (step: Step) => {
     switch (step) {

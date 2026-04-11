@@ -83,7 +83,7 @@ function ExperienceCreateForm({
           render={({ field, fieldState }) => (
             <Field>
               <FieldLabel htmlFor="companyName">
-                Название организации/компании
+                Название организации/компании <span className="text-destructive">*</span>
               </FieldLabel>
               <Input
                 {...field}
@@ -105,7 +105,7 @@ function ExperienceCreateForm({
           render={({ field, fieldState }) => (
             <Field>
               <FieldLabel htmlFor="position">
-                Должность
+                Должность <span className="text-destructive">*</span>
               </FieldLabel>
               <Input
                 {...field}
@@ -129,7 +129,7 @@ function ExperienceCreateForm({
               <Popover>
                 <Field>
                   <FieldLabel>
-                    Начало работы
+                    Начало работы <span className="text-destructive">*</span>
                   </FieldLabel>
                   <PopoverTrigger asChild>
                     <Button
@@ -167,7 +167,7 @@ function ExperienceCreateForm({
               <Popover>
                 <Field>
                   <FieldLabel>
-                    Конец работы
+                    Конец работы <span className="text-destructive">*</span>
                   </FieldLabel>
                   <PopoverTrigger asChild>
                     <Button

@@ -6,7 +6,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
-import { experienceStoreSchema, ExperienceStoreSchema, storeExperienceAction } from '@/entities/experience';
 import { cn } from '@/shared/lib';
 import dayjs from 'dayjs';
 import {
@@ -19,9 +18,16 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Calendar as UiCalendar,
 } from '@/shared/ui';
 import { Calendar } from 'lucide-react';
+import { educationStoreSchema, EducationStoreSchema, storeEducationAction } from '@/entities/education';
 
 type EducationCreateFormProps = {
   onRemove?: () => void;
@@ -39,17 +45,17 @@ function EducationCreateForm({
   const dispatch = useAppDispatch();
   const [isSaved, setIsSaved] = useState(false);
 
-  const form = useForm<ExperienceStoreSchema>({
-    resolver: zodResolver(experienceStoreSchema),
+  const form = useForm<EducationStoreSchema>({
+    resolver: zodResolver(educationStoreSchema),
     defaultValues: {
       userId: user.id,
     },
   });
 
-  const onSubmit = async (data: ExperienceStoreSchema, evt?: BaseSyntheticEvent) => {
+  const onSubmit = async (data: EducationStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(storeExperienceAction({ payload: data }))
+    await dispatch(storeEducationAction({ payload: data }))
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
@@ -59,7 +65,7 @@ function EducationCreateForm({
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
           if (error.source?.pointer) {
-            form.setError(error.source.pointer.split('/').pop() as keyof ExperienceStoreSchema, {
+            form.setError(error.source.pointer.split('/').pop() as keyof EducationStoreSchema, {
               message: error.detail
             });
           } else {
@@ -77,17 +83,17 @@ function EducationCreateForm({
     >
       <FieldGroup className="gap-3">
         <Controller
-          name="companyName"
+          name="institution"
           control={form.control}
           defaultValue=""
           render={({ field, fieldState }) => (
             <Field>
-              <FieldLabel htmlFor="companyName">
-                Название организации/компании
+              <FieldLabel htmlFor="institution">
+                Учебное заведение <span className="text-destructive">*</span>
               </FieldLabel>
               <Input
                 {...field}
-                id="companyName"
+                id="institution"
                 type="text"
                 aria-invalid={fieldState.invalid}
                 autoComplete="off"
@@ -99,17 +105,17 @@ function EducationCreateForm({
           )}
         />
         <Controller
-          name="position"
+          name="faculty"
           control={form.control}
           defaultValue=""
           render={({ field, fieldState }) => (
             <Field>
-              <FieldLabel htmlFor="position">
-                Должность
+              <FieldLabel htmlFor="faculty">
+                Факультет <span className="text-destructive">*</span>
               </FieldLabel>
               <Input
                 {...field}
-                id="position"
+                id="faculty"
                 type="text"
                 aria-invalid={fieldState.invalid}
                 autoComplete="off"
@@ -122,6 +128,58 @@ function EducationCreateForm({
         />
         <div className="grid md:grid-cols-2 gap-4">
           <Controller
+            name="speciality"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="speciality">
+                  Специальность <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="speciality"
+                  type="text"
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  readOnly={isSaved}
+                  disabled={isSaved}
+                />
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
+          <Controller
+            name="form"
+            control={form.control}
+            defaultValue=""
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel>
+                  Форма обучения <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Select
+                  value={field.value || ''}
+                  onValueChange={(value) => field.onChange(value)}
+                  disabled={isSaved}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите форму обучения" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectGroup>
+                      <SelectItem value="Очно">Очно</SelectItem>
+                      <SelectItem value="Заочно">Заочно</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FieldError errors={[fieldState.error]} />
+              </Field>
+            )}
+          />
+        </div>
+        <div className="grid md:grid-cols-2 gap-4">
+          <Controller
             name="startedAt"
             control={form.control}
             defaultValue=""
@@ -129,7 +187,7 @@ function EducationCreateForm({
               <Popover>
                 <Field>
                   <FieldLabel>
-                    Начало работы
+                    Дата поступления <span className="text-destructive">*</span>
                   </FieldLabel>
                   <PopoverTrigger asChild>
                     <Button
@@ -167,7 +225,7 @@ function EducationCreateForm({
               <Popover>
                 <Field>
                   <FieldLabel>
-                    Конец работы
+                    Дата окончания <span className="text-destructive">*</span>
                   </FieldLabel>
                   <PopoverTrigger asChild>
                     <Button
