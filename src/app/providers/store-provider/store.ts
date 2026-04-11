@@ -7,6 +7,7 @@ import { positionSlice } from '@/entities/position';
 import { departmentSlice } from '@/entities/department';
 import { languageSlice } from '@/entities/language';
 import { equipmentSlice } from '@/entities/equipment';
+import { experienceSlice } from '@/entities/experience';
 
 const api = createAPI();
 
@@ -19,6 +20,7 @@ const store = configureStore({
     department: departmentSlice.reducer,
     language: languageSlice.reducer,
     equipment: equipmentSlice.reducer,
+    experience: experienceSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     thunk: {

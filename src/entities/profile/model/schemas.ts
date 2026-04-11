@@ -3,7 +3,7 @@ import z from 'zod';
 
 const profileStoreSchema = z.object({
   birthDate: z
-    .string('Дата начала работы должна быть строкой.')
+    .string('Дата рождения работы должна быть строкой.')
     .optional()
     .refine(
       (date) => !date || dayjs(date).isBefore(dayjs(), 'day'),
@@ -47,11 +47,11 @@ const profileStoreSchema = z.object({
     .optional(),
 
   startedWorkAt: z
-    .string('Дата начала работы должна быть строкой.')
+    .string('Дата начало работы должна быть строкой.')
     .optional()
     .refine(
       (date) => !date || dayjs(date).isBefore(dayjs().add(1, 'day'), 'day'),
-      'Дата начала работы не может быть в будущем.'
+      'Дата начало работы не может быть в будущем.'
     ),
 
   userId: z.string('ID пользователя обязателен.'),

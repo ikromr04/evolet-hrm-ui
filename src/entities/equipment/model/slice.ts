@@ -17,7 +17,7 @@ const initialState: EquipmentSlice = {
 };
 
 const equipmentSlice = createSlice({
-  name: 'equipments',
+  name: 'equipment',
   initialState,
   reducers: {},
   extraReducers(builder) {

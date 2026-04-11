@@ -6,6 +6,7 @@ import { UserCreate } from './user-create';
 import { ProfileCreate } from './profile-create';
 import { RelationshipsCreate } from './relationships-create';
 import { EquipmentsCreate } from './equipments-create';
+import { ExperiencesCreate } from './experiences-create';
 
 type EmployeeCreateDialogProps = {
   trigger: JSX.Element;
@@ -35,6 +36,8 @@ function EmployeeCreateDialog({
         return user ? <RelationshipsCreate setStep={setStep} user={user} /> : null;
       case 'equipments':
         return user ? <EquipmentsCreate setStep={setStep} user={user} /> : null;
+      case 'experiences':
+        return user ? <ExperiencesCreate setStep={setStep} user={user} /> : null;
       case 'success':
         return user ? <SuccessModal setStep={setStep} user={user} /> : null;
     }
