@@ -17,7 +17,7 @@ const initialState: ExperienceSlice = {
 };
 
 const experienceSlice = createSlice({
-  name: 'Experience',
+  name: 'experience',
   initialState,
   reducers: {},
   extraReducers(builder) {

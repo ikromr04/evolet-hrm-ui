@@ -7,6 +7,7 @@ import { ProfileCreate } from './profile-create';
 import { RelationshipsCreate } from './relationships-create';
 import { EquipmentsCreate } from './equipments-create';
 import { ExperiencesCreate } from './experiences-create';
+import { EducationsCreate } from './educations-create';
 
 type EmployeeCreateDialogProps = {
   trigger: JSX.Element;
@@ -23,8 +24,17 @@ type Step = 'user'
 function EmployeeCreateDialog({
   trigger
 }: EmployeeCreateDialogProps): JSX.Element {
-  const [step, setStep] = useState<Step>('user');
-  const [user, setUser] = useState<User>();
+  const [step, setStep] = useState<Step>('educations');
+  const [user, setUser] = useState<User>({
+    id: 'string;',
+    name: 'string;',
+    surname: 'string;',
+    patronymic: null,
+    avatar: null,
+    avatarThumb: null,
+    email: null,
+    emailVerifiedAt: null,
+  });
 
   const renderStep = (step: Step) => {
     switch (step) {
@@ -38,6 +48,8 @@ function EmployeeCreateDialog({
         return user ? <EquipmentsCreate setStep={setStep} user={user} /> : null;
       case 'experiences':
         return user ? <ExperiencesCreate setStep={setStep} user={user} /> : null;
+      case 'educations':
+        return user ? <EducationsCreate setStep={setStep} user={user} /> : null;
       case 'success':
         return user ? <SuccessModal setStep={setStep} user={user} /> : null;
     }
