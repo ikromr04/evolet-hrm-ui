@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { fetchAuthUser, loginUser, logoutUser, storeUser, updateUser } from '../api/user-api';
-import { User } from './types';
+import { fetchAuthUser, fetchUsers, loginUser, logoutUser, storeUser, updateUser } from '../api/user-api';
+import { User, Users } from './types';
 import { LoginSchema, UserStoreSchema, UserUpdateSchema } from './schemas';
 import { Token } from '@/shared/lib';
 import { mapLogin, mapUserStore, mapUserUpdate } from './mappers';
@@ -23,8 +23,7 @@ const loginAction = createAsyncThunk<Token, LoginSchema, {
   'user/login',
   async (payload, { extra: api, rejectWithValue }) => {
     try {
-      const token = await loginUser(api, mapLogin(payload));
-      return token;
+      return await loginUser(api, mapLogin(payload));
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
       return rejectWithValue(error.response?.data.errors);
@@ -50,9 +49,7 @@ const storeUserAction = createAsyncThunk<User, {
   'user/store',
   async ({ payload }, { extra: api, rejectWithValue }) => {
     try {
-      const user = await storeUser(api, mapUserStore(payload));
-
-      return user;
+      return await storeUser(api, mapUserStore(payload));
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
 
@@ -70,9 +67,7 @@ const updateUserAction = createAsyncThunk<User, {
   'user/update',
   async ({ payload }, { extra: api, rejectWithValue }) => {
     try {
-      const user = await updateUser(api, mapUserUpdate(payload));
-
-      return user;
+      return await updateUser(api, mapUserUpdate(payload));
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
 
@@ -81,10 +76,20 @@ const updateUserAction = createAsyncThunk<User, {
   }
 );
 
+const fetchUsersAction = createAsyncThunk<Users, undefined, {
+  extra: AxiosInstance;
+}>(
+  'users/fetch',
+  async (_arg, { extra: api }) => {
+    return await fetchUsers(api);
+  },
+);
+
 export {
   checkAuthAction,
   loginAction,
   logoutAction,
   storeUserAction,
   updateUserAction,
+  fetchUsersAction
 };

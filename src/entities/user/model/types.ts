@@ -11,10 +11,14 @@ type User = {
   patronymic: string | null;
   avatar: string | null;
   avatarThumb: string | null;
-  email: string | null;
+  email: string;
   emailVerifiedAt: string | null;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+
+  roles: string[];
+  positions: string[];
+  departments: string[];
 };
 
 type Users = User[];

@@ -22,6 +22,9 @@ const languageSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(fetchLanguagesAction.pending, (state) => {
+        state.languages.status = AsyncStatus.LOADING;
+      })
       .addCase(fetchLanguagesAction.fulfilled, (state, action: PayloadAction<Languages>) => {
         state.languages.data = action.payload;
         state.languages.status = AsyncStatus.SUCCEEDED;

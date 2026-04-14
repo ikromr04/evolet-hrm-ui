@@ -28,6 +28,7 @@ function HomePage(): JSX.Element {
               <ChartLineInteractive />
             </div>
           </div>
+          
           <DataTable data={data} />
         </div>
       </div>

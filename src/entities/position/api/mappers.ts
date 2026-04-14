@@ -9,7 +9,7 @@ const mapPosition = (resource: PositionResponse): Position => ({
 const mapPositions = (collection: PositionsResponse): Positions =>
   collection.data.map((data) => ({
     id: data.id,
-    ...data.attributes
+    ...data.attributes  
   }));
 
 export {

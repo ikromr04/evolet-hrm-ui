@@ -22,6 +22,9 @@ const roleSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(fetchRolesAction.pending, (state) => {
+        state.roles.status = AsyncStatus.LOADING;
+      })
       .addCase(fetchRolesAction.fulfilled, (state, action: PayloadAction<Roles>) => {
         state.roles.data = action.payload;
         state.roles.status = AsyncStatus.SUCCEEDED;

@@ -22,6 +22,9 @@ const departmentSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(fetchDepartmentsAction.pending, (state) => {
+        state.departments.status = AsyncStatus.LOADING;
+      })
       .addCase(fetchDepartmentsAction.fulfilled, (state, action: PayloadAction<Departments>) => {
         state.departments.data = action.payload;
         state.departments.status = AsyncStatus.SUCCEEDED;

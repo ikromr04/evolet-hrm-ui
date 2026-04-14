@@ -22,6 +22,9 @@ const positionSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(fetchPositionsAction.pending, (state) => {
+        state.positions.status = AsyncStatus.LOADING;
+      })
       .addCase(fetchPositionsAction.fulfilled, (state, action: PayloadAction<Positions>) => {
         state.positions.data = action.payload;
         state.positions.status = AsyncStatus.SUCCEEDED;

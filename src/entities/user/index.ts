@@ -1,8 +1,17 @@
-export { AuthStatus, type User } from './model/types';
+export {
+  AuthStatus,
+  type User,
+  type Users,
+} from './model/types';
 
 export { userSlice } from './model/slice';
 
-export { getAuthStatus, getAuthUser } from './model/selectors';
+export {
+  getAuthStatus,
+  getAuthUser,
+  getUsersStatus,
+  getUsers,
+} from './model/selectors';
 
 export {
   loginSchema,
@@ -19,4 +28,5 @@ export {
   logoutAction,
   storeUserAction,
   updateUserAction,
+  fetchUsersAction,
 } from './model/thunks';

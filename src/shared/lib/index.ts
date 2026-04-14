@@ -1,4 +1,4 @@
-export { cn } from './utils';
+export { cn, debounce } from './utils';
 
 export { type Theme, useTheme, ThemeProviderContext } from './theme';  
 

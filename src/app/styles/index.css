@@ -132,3 +132,19 @@
     @apply font-sans;
   }
 }
+
+.scrollbar::-webkit-scrollbar {
+  @apply size-1.5;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/50 rounded-full;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}

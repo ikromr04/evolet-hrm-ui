@@ -5,15 +5,73 @@ type UserResponse = {
     attributes: {
       name: string;
       surname: string;
-      patronymic: string;
-      avatar: string;
-      avatarThumb: string;
-      email: string | null;
+      patronymic: string | null;
+      avatar: string | null;
+      avatarThumb: string | null;
+      email: string;
       emailVerifiedAt: string | null;
       createdAt: string;
       updatedAt: string;
     };
+    relationships: {
+      roles: {
+        data: {
+          type: 'roles';
+          id: string;
+        }[];
+      };
+      positions: {
+        data: {
+          type: 'positions';
+          id: string;
+        }[];
+      };
+      departments: {
+        data: {
+          type: 'departments';
+          id: string;
+        }[];
+      };
+    };
   };
+};
+
+type UsersResponse = {
+  data: {
+    type: 'users';
+    id: string;
+    attributes: {
+      name: string;
+      surname: string;
+      patronymic: string | null;
+      avatar: string | null;
+      avatarThumb: string | null;
+      email: string;
+      emailVerifiedAt: string | null;
+      createdAt: string;
+      updatedAt: string;
+    };
+    relationships: {
+      roles: {
+        data: {
+          type: 'roles';
+          id: string;
+        }[];
+      };
+      positions: {
+        data: {
+          type: 'positions';
+          id: string;
+        }[];
+      };
+      departments: {
+        data: {
+          type: 'departments';
+          id: string;
+        }[];
+      };
+    };
+  }[];
 };
 
 type TokenResponse = {
@@ -83,6 +141,7 @@ type UserUpdateRequest = {
 
 export type {
   UserResponse,
+  UsersResponse,
   TokenResponse,
   LoginRequest,
   UserStoreRequest,

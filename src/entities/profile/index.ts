@@ -4,12 +4,15 @@ export {
 } from './model/schemas';
 
 export {
+  fetchProfilesAction,
   storeProfileAction,
 } from './model/thunks';
 
-export type {
-  Profile,
-  Profiles,
+export {
+  Sex,
+  FamilyStatus,
+  type Profile,
+  type Profiles,
 } from './model/types';
 
 export { profileSlice } from './model/slice';

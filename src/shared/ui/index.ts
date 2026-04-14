@@ -183,3 +183,4 @@ export {
   CommandShortcut,
   CommandSeparator,
 } from './command';
+export { DataTable } from './data-table';

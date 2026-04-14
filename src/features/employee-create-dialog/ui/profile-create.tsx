@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAppDispatch } from '@/shared/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Step } from './employee-create-dialog';
-import { storeProfileAction, profileStoreSchema, ProfileStoreSchema } from '@/entities/profile';
+import { storeProfileAction, profileStoreSchema, ProfileStoreSchema, FamilyStatus, Sex } from '@/entities/profile';
 import { cn } from '@/shared/lib';
 import { ArrowRight, Calendar, ChevronsUpDown, X } from 'lucide-react';
 import { User } from '@/entities/user';
@@ -153,8 +153,9 @@ function ProfileCreate({
                   </SelectTrigger>
                   <SelectContent position="popper">
                     <SelectGroup>
-                      <SelectItem value="male">Мужской</SelectItem>
-                      <SelectItem value="female">Женский</SelectItem>
+                      {Object.entries(Sex).map(([key, value]) => (
+                        <SelectItem key={key} value={key}>{value}</SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -323,10 +324,9 @@ function ProfileCreate({
                   </SelectTrigger>
                   <SelectContent position="popper">
                     <SelectGroup>
-                      <SelectItem value="single_man">Не женат</SelectItem>
-                      <SelectItem value="single_woman">Не замужем</SelectItem>
-                      <SelectItem value="married_man">Женат</SelectItem>
-                      <SelectItem value="married_woman">Замужем</SelectItem>
+                      {Object.entries(FamilyStatus).map(([key, value]) => (
+                        <SelectItem key={key} value={key}>{value}</SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

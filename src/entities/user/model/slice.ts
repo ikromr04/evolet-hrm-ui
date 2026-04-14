@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthStatus, User, Users } from './types';
-import { checkAuthAction, loginAction, logoutAction, storeUserAction, updateUserAction } from './thunks';
+import { checkAuthAction, fetchUsersAction, loginAction, logoutAction, storeUserAction, updateUserAction } from './thunks';
 import { saveToken, Token } from '@/shared/lib';
 import { AsyncStatus } from '@/shared/store';
 
@@ -59,6 +59,13 @@ const userSlice = createSlice({
             return user;
           });
         }
+      })
+      .addCase(fetchUsersAction.pending, (state) => {
+        state.users.status = AsyncStatus.LOADING;
+      })
+      .addCase(fetchUsersAction.fulfilled, (state, action: PayloadAction<Users>) => {
+        state.users.data = action.payload;
+        state.users.status = AsyncStatus.SUCCEEDED;
       });
   }
 });

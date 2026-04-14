@@ -1,12 +1,12 @@
 import { AxiosInstance } from 'axios';
-import { LoginRequest, TokenResponse, UserResponse, UserStoreRequest, UserUpdateRequest } from './types';
+import { LoginRequest, TokenResponse, UserResponse, UsersResponse, UserStoreRequest, UserUpdateRequest } from './types';
 import { Token } from '@/shared/lib';
-import { User } from '../model/types';
-import { mapUser } from './mappers';
+import { User, Users } from '../model/types';
+import { mapUser, mapUsers } from './mappers';
 
 const fetchAuthUser = async (api: AxiosInstance): Promise<User> => {
-  const { data } = await api.get<UserResponse>('/me');
-
+  const { data } = await api.get<UserResponse>('/me?include=roles,positions,departments');
+  
   return mapUser(data);
 };
 
@@ -46,10 +46,17 @@ const updateUser = async (api: AxiosInstance, payload: UserUpdateRequest): Promi
   return mapUser(data);
 };
 
+const fetchUsers = async (api: AxiosInstance): Promise<Users> => {
+  const { data } = await api.get<UsersResponse>('/users?sort=surname&include=roles,positions,departments');
+  
+  return mapUsers(data);
+};
+
 export {
   fetchAuthUser,
   loginUser,
   logoutUser,
   storeUser,
   updateUser,
+  fetchUsers,
 };
