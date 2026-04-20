@@ -1,8 +1,8 @@
-import { getRoles } from '@/entities/role';
+import { fetchRolesAction, getRoles, getRolesStatus } from '@/entities/role';
 import { cn } from '@/shared/lib';
-import { useAppSelector } from '@/shared/store';
+import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { ChevronsUpDown, X } from 'lucide-react';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import {
   Badge,
   Button,
@@ -23,7 +23,13 @@ type RolesFilterProps = {
 };
 
 const RolesFilter = memo(({ selected, toggle }: RolesFilterProps) => {
+  const dispatch = useAppDispatch();
+  const rolesStatus = useAppSelector(getRolesStatus);
   const roles = useAppSelector(getRoles);
+
+  useEffect(() => {
+    if (rolesStatus === AsyncStatus.IDLE) dispatch(fetchRolesAction());
+  }, [dispatch, rolesStatus]);
 
   return (
     <Popover>

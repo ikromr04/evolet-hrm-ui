@@ -29,4 +29,5 @@ export {
   storeUserAction,
   updateUserAction,
   fetchUsersAction,
+  updateAvatarAction,
 } from './model/thunks';

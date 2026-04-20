@@ -5,8 +5,8 @@ import { User, Users } from '../model/types';
 import { mapUser, mapUsers } from './mappers';
 
 const fetchAuthUser = async (api: AxiosInstance): Promise<User> => {
-  const { data } = await api.get<UserResponse>('/me?include=roles,positions,departments');
-  
+  const { data } = await api.get<UserResponse>('/me?include=profile,roles,positions,departments,languages,equipments,experiences,educations');
+
   return mapUser(data);
 };
 
@@ -41,14 +41,26 @@ const storeUser = async (api: AxiosInstance, payload: UserStoreRequest): Promise
 };
 
 const updateUser = async (api: AxiosInstance, payload: UserUpdateRequest): Promise<User> => {
-  const { data } = await api.patch<UserResponse>(`/users/${payload.data.id}`, payload);
+  const { data } = await api.patch<UserResponse>(`/users/${payload.data.id}?include=profile,roles,positions,departments,languages,equipments,experiences,educations`, payload);
+
+  return mapUser(data);
+};
+
+const updateAvatar = async (api: AxiosInstance, payload: UserUpdateRequest): Promise<User> => {
+  const formData = new FormData();
+
+  formData.append('data[attributes][avatar]', payload.data.attributes?.avatar || '');
+  formData.append('data[type]', payload.data.type);
+  formData.append('data[id]', payload.data.id);
+
+  const { data } = await api.patch<UserResponse>(`/users/${payload.data.id}?include=profile,roles,positions,departments,languages,equipments,experiences,educations`, formData);
 
   return mapUser(data);
 };
 
 const fetchUsers = async (api: AxiosInstance): Promise<Users> => {
-  const { data } = await api.get<UsersResponse>('/users?sort=surname&include=roles,positions,departments');
-  
+  const { data } = await api.get<UsersResponse>('/users?include=profile,roles,positions,departments,languages,equipments,experiences,educations&sort=surname');
+
   return mapUsers(data);
 };
 
@@ -59,4 +71,5 @@ export {
   storeUser,
   updateUser,
   fetchUsers,
+  updateAvatar,
 };

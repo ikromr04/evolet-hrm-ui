@@ -11,6 +11,7 @@ import { AppLayout } from '../layouts';
 const LoginPage = lazy(() => import('@/pages/login').then((m) => ({ default: m.LoginPage })));
 const HomePage = lazy(() => import('@/pages/home').then((m) => ({ default: m.HomePage })));
 const UserListPage = lazy(() => import('@/pages/user-list').then((m) => ({ default: m.UserListPage })));
+const UserReadPage = lazy(() => import('@/pages/user-read').then((m) => ({ default: m.UserReadPage })));
 
 function AppRouter(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -35,6 +36,7 @@ function AppRouter(): JSX.Element {
           <Route element={<AppLayout />}>
             <Route path={ROUTES.HOME} element={<HomePage />} />
             <Route path={ROUTES.USER_LIST} element={<UserListPage />} />
+            <Route path={ROUTES.USER_READ} element={<UserReadPage />} />
           </Route>
         </Route>
       </Routes>

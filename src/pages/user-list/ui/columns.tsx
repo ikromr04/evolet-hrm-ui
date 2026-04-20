@@ -1,4 +1,4 @@
-import { FamilyStatus, Profile, Sex } from '@/entities/profile';
+import { FamilyStatus, Sex } from '@/entities/profile';
 import { User } from '@/entities/user';
 import { ROUTES } from '@/shared/config';
 import {
@@ -24,27 +24,17 @@ import { generatePath, Link } from 'react-router-dom';
 import { type Filter } from '../model/types';
 import { Dispatch, memo, SetStateAction, useCallback, useMemo } from 'react';
 import { debounce } from '@/shared/lib';
-import { Roles } from '@/entities/role';
 import { RolesFilter } from './roles-filter';
 import { PositionsFilter } from './positions-filter';
-import { Positions } from '@/entities/position';
-import { Departments } from '@/entities/department';
 import { DepartmentsFilter } from './departments-filter';
-
-type Row = Omit<User, 'roles' | 'positions' | 'departments'> & {
-  profile: Profile | null;
-  roles: Roles;
-  positions: Positions;
-  departments: Departments;
-};
 
 type Props = {
   filter: Filter;
   setFilter: Dispatch<SetStateAction<Filter>>;
 };
 
-const AvatarCell = memo(({ row }: CellContext<Row, unknown>) => {
-  const user = row.original as Row;
+const AvatarCell = memo(({ row }: CellContext<User, unknown>) => {
+  const user = row.original as User;
 
   return (
     <Avatar className="size-12">
@@ -60,8 +50,8 @@ const AvatarCell = memo(({ row }: CellContext<Row, unknown>) => {
   );
 });
 
-const NameCell = memo(({ row }: CellContext<Row, unknown>) => {
-  const user = row.original as Row;
+const NameCell = memo(({ row }: CellContext<User, unknown>) => {
+  const user = row.original as User;
 
   return (
     <Button variant="link" asChild>
@@ -75,8 +65,8 @@ const NameCell = memo(({ row }: CellContext<Row, unknown>) => {
   );
 });
 
-const RolesCell = memo(({ row }: CellContext<Row, unknown>) => {
-  const user = row.original as Row;
+const RolesCell = memo(({ row }: CellContext<User, unknown>) => {
+  const user = row.original as User;
 
   return (
     <div className="flex flex-wrap gap-1">
@@ -89,8 +79,8 @@ const RolesCell = memo(({ row }: CellContext<Row, unknown>) => {
   );
 });
 
-const PositionsCell = memo(({ row }: CellContext<Row, unknown>) => {
-  const user = row.original as Row;
+const PositionsCell = memo(({ row }: CellContext<User, unknown>) => {
+  const user = row.original as User;
 
   return (
     <div className="flex flex-wrap gap-1">
@@ -103,8 +93,8 @@ const PositionsCell = memo(({ row }: CellContext<Row, unknown>) => {
   );
 });
 
-const DepartmentsCell = memo(({ row }: CellContext<Row, unknown>) => {
-  const user = row.original as Row;
+const DepartmentsCell = memo(({ row }: CellContext<User, unknown>) => {
+  const user = row.original as User;
 
   return (
     <div className="flex flex-wrap gap-1">
@@ -117,8 +107,8 @@ const DepartmentsCell = memo(({ row }: CellContext<Row, unknown>) => {
   );
 });
 
-const EmailCell = memo(({ row }: CellContext<Row, unknown>) => {
-  const user = row.original as Row;
+const EmailCell = memo(({ row }: CellContext<User, unknown>) => {
+  const user = row.original as User;
 
   return (
     <Button variant="link" asChild>
@@ -132,8 +122,8 @@ const EmailCell = memo(({ row }: CellContext<Row, unknown>) => {
   );
 });
 
-const PhoneCell = memo(({ row }: CellContext<Row, unknown>) => {
-  const user = row.original as Row;
+const PhoneCell = memo(({ row }: CellContext<User, unknown>) => {
+  const user = row.original as User;
 
   return (
     <div className="flex flex-col">
@@ -221,15 +211,17 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     />
   ), [filter.departments, toggleDepartments]);
 
-  const columns = useMemo<ColumnDef<Row>[]>(() => [
+  const columns = useMemo<ColumnDef<User>[]>(() => [
     {
       id: 'Фото',
+      accessorKey: 'user.avatarThumb',
       header: 'Фото',
       size: 83,
       cell: AvatarCell,
     },
     {
       id: 'ФИО',
+      accessorKey: 'user.name',
       header: () => <div className="px-3">ФИО</div>,
       size: 220,
       cell: NameCell,
@@ -248,6 +240,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Позиция',
+      accessorKey: 'user.roles',
       header: 'Позиция',
       size: 220,
       cell: RolesCell,
@@ -258,6 +251,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Отдел/Департамент',
+      accessorKey: 'user.departments',
       header: 'Отдел/Департамент',
       size: 220,
       cell: DepartmentsCell,
@@ -268,6 +262,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Должность',
+      accessorKey: 'user.positions',
       header: 'Должность',
       size: 220,
       cell: PositionsCell,
@@ -278,42 +273,38 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Email',
+      accessorKey: 'user.email',
       header: () => <div className="px-3">Email</div>,
       size: 240,
       cell: EmailCell,
-      sortingFn: (a, b) =>
-        (a.original.email || '').localeCompare(b.original.email || ''),
+      sortingFn: (a, b) => (a.original.email || '').localeCompare(b.original.email || ''),
       enableColumnFilter: filter.email ? true : false,
       meta: {
         renderFilter: () => (
           <Input
             type="search"
-            placeholder="Искать по ФИО"
-            defaultValue={filter.name}
-            onChange={(evt) => setFilterKey('name', evt.target.value)}
+            placeholder="Искать по Email"
+            defaultValue={filter.email}
+            onChange={(evt) => setFilterKey('email', evt.target.value)}
           />
         ),
       },
     },
     {
       id: 'Дата рождения',
+      accessorKey: 'user.profile.birthDate',
       header: 'Дата рождения',
       size: 160,
+      cell: ({ row }) => row.original.profile?.birthDate ? dayjs(row.original.profile.birthDate).format('DD MMM YYYY') : '',
       sortingFn: (a, b) => (a.original.profile?.birthDate || '').localeCompare(b.original.profile?.birthDate || ''),
-      accessorFn: (row) => row.profile?.birthDate || '',
-      cell: ({ getValue }) =>
-        getValue()
-          ? dayjs(getValue() as string).format('DD MMM YYYY')
-          : '',
     },
     {
       id: 'Пол',
+      accessorKey: 'user.profile.sex',
       header: 'Пол',
       size: 100,
+      cell: ({ row }) => row.original.profile?.sex ? Sex[row.original.profile.sex] : '',
       sortingFn: (a, b) => (a.original.profile?.sex || '').localeCompare(b.original.profile?.sex || ''),
-      accessorFn: (row) => row.profile?.sex || '',
-      cell: ({ getValue }) =>
-        getValue() ? Sex[getValue() as keyof typeof Sex] : '',
       enableColumnFilter: filter.sex ? true : false,
       meta: {
         renderFilter: () => (
@@ -338,10 +329,11 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Национальность',
+      accessorKey: 'user.profile.nationality',
       header: 'Национальность',
       size: 170,
+      cell: ({ row }) => row.original.profile?.nationality,
       sortingFn: (a, b) => (a.original.profile?.nationality || '').localeCompare(b.original.profile?.nationality || ''),
-      accessorFn: (row) => row.profile?.nationality || '',
       enableColumnFilter: filter.nationality ? true : false,
       meta: {
         renderFilter: () => (
@@ -356,9 +348,10 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Гражданство',
+      accessorKey: 'user.profile.citizenship',
       header: 'Гражданство',
+      cell: ({ row }) => row.original.profile?.citizenship,
       sortingFn: (a, b) => (a.original.profile?.citizenship || '').localeCompare(b.original.profile?.citizenship || ''),
-      accessorFn: (row) => row.profile?.citizenship || '',
       enableColumnFilter: filter.citizenship ? true : false,
       meta: {
         renderFilter: () => (
@@ -373,10 +366,11 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Адрес',
+      accessorKey: 'user.profile.address',
       header: 'Адрес',
       size: 260,
+      cell: ({ row }) => row.original.profile?.address,
       sortingFn: (a, b) => (a.original.profile?.address || '').localeCompare(b.original.profile?.address || ''),
-      accessorFn: (row) => row.profile?.address || '',
       enableColumnFilter: filter.address ? true : false,
       meta: {
         renderFilter: () => (
@@ -391,6 +385,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Телефон',
+      accessorKey: 'user.profile.tel',
       header: () => <div className="px-3">Телефон</div>,
       size: 140,
       cell: PhoneCell,
@@ -408,14 +403,11 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Семейное положение',
+      accessorKey: 'user.profile.familyStatus',
       header: 'Семейное положение',
       size: 210,
       sortingFn: (a, b) => (a.original.profile?.familyStatus || '').localeCompare(b.original.profile?.familyStatus || ''),
-      accessorFn: (row) => row.profile?.familyStatus || '',
-      cell: ({ getValue }) =>
-        getValue()
-          ? FamilyStatus[getValue() as keyof typeof FamilyStatus]
-          : '',
+      cell: ({ row }) => row.original.profile?.familyStatus ? FamilyStatus[row.original.profile.familyStatus] : '',
       enableColumnFilter: filter.familyStatus ? true : false,
       meta: {
         renderFilter: () => (
@@ -440,23 +432,20 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Дети',
+      accessorKey: 'user.profile.children',
       header: 'Дети',
       size: 120,
       sortingFn: (a, b) => (a.original.profile?.children?.length.toString() || '').localeCompare(b.original.profile?.children?.length.toString() || ''),
-      accessorFn: (row) => row.profile?.children || [],
-      cell: ({ getValue }) =>
-        (getValue() as number[])?.join(', ') || '',
+      cell: ({ row }) => row.original.profile?.children?.join(', '),
     },
     {
       id: 'Начало работы',
+      accessorKey: 'user.profile.startedWorkAt',
       header: 'Начало работы',
       size: 160,
       sortingFn: (a, b) => (a.original.profile?.startedWorkAt || '').localeCompare(b.original.profile?.startedWorkAt || ''),
-      accessorFn: (row) => row.profile?.startedWorkAt || '',
-      cell: ({ getValue }) =>
-        getValue()
-          ? dayjs(getValue() as string).format('DD MMM YYYY')
-          : '',
+      cell: ({ row }) =>
+        row.original.profile?.startedWorkAt ? dayjs(row.original.profile.startedWorkAt).format('DD MMM YYYY') : '',
     },
   ], [filter, setFilterKey, renderRolesFilter, renderPositionsFilter, renderDepartmentsFilter]);
 
@@ -464,6 +453,5 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
 };
 
 export {
-  type Row,
   useUserColumns,
 };

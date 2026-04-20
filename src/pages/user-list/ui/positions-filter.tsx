@@ -1,7 +1,7 @@
 import { cn } from '@/shared/lib';
-import { useAppSelector } from '@/shared/store';
+import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { ChevronsUpDown, X } from 'lucide-react';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import {
   Badge,
   Button,
@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/shared/ui';
-import { getPositions } from '@/entities/position';
+import { fetchPositionsAction, getPositions, getPositionsStatus } from '@/entities/position';
 
 type PositionsFilterProps = {
   selected: string[];
@@ -23,7 +23,13 @@ type PositionsFilterProps = {
 };
 
 const PositionsFilter = memo(({ selected, toggle }: PositionsFilterProps) => {
+  const dispatch = useAppDispatch();
+  const positionsStatus = useAppSelector(getPositionsStatus);
   const positions = useAppSelector(getPositions);
+
+  useEffect(() => {
+    if (positionsStatus === AsyncStatus.IDLE) dispatch(fetchPositionsAction());
+  }, [dispatch, positionsStatus]);
 
   return (
     <Popover>

@@ -56,10 +56,13 @@ const userUpdateSchema = z.object({
   id: z.string('ID пользователя обязателен.'),
   name: z
     .string('Имя должен быть строкой.')
+    .trim()
+    .min(1, 'Имя обязательно.')
     .max(255, 'Имя должно быть не больше 255 символов.')
     .optional(),
   surname: z
     .string('Фамилия должен быть строкой.')
+    .min(1, 'Фамилия обязательно.')
     .max(255, 'Фамилия должно быть не больше 255 символов.')
     .optional(),
   patronymic: z
@@ -83,6 +86,8 @@ const userUpdateSchema = z.object({
     .optional(),
   email: z
     .string('Email должен быть строкой.')
+    .trim()
+    .min(1, 'Email обязателен.')
     .email('Неверный адрес электронной почты.')
     .max(255, 'Email не должен превышать 255 символов.')
     .optional(),
