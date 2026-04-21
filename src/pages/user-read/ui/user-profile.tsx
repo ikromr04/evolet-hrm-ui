@@ -1,4 +1,5 @@
 import { getDepartments } from '@/entities/department';
+import { getLanguages, LanguageLevel } from '@/entities/language';
 import { getPositions } from '@/entities/position';
 import { FamilyStatus, getProfiles, Sex } from '@/entities/profile';
 import { getRoles } from '@/entities/role';
@@ -21,11 +22,13 @@ function UserProfile({
   const positions = useAppSelector(getPositions);
   const roles = useAppSelector(getRoles);
   const profiles = useAppSelector(getProfiles);
+  const languages = useAppSelector(getLanguages);
 
   const userDepartments = departments?.filter(({ id }) => user.departments.includes(id)) || [];
   const userPositions = positions?.filter(({ id }) => user.positions.includes(id)) || [];
   const userRoles = roles?.filter(({ id }) => user.roles.includes(id)) || [];
   const userProfile = profiles?.find(({ userId }) => user.id === userId);
+  const userLanguages = languages?.filter(({ id }) => user.languages.includes(id)) || [];
 
   return (
     <div className="flex flex-col gap-4">
@@ -36,6 +39,7 @@ function UserProfile({
               Сотрудник
             </h3>
             <UserUpdateDialog
+              key={JSON.stringify(user)}
               user={user}
               trigger={
                 <Button
@@ -52,7 +56,7 @@ function UserProfile({
             <CollapsibleTrigger asChild>
               <Button variant="ghost" size="icon-sm">
                 <ChevronsUpDown size={16} />
-                <span className="sr-only">Toggle details</span>
+                <span className="sr-only">Показать подробности</span>
               </Button>
             </CollapsibleTrigger>
           </header>
@@ -79,7 +83,11 @@ function UserProfile({
                 <dt className="text-xs text-muted-foreground">Позиция</dt>
                 <dd className="text-[16px] font-light">
                   {userRoles.length
-                    ? userRoles.map((role) => role.displayName).join(', ')
+                    ? userRoles.map((role) => (
+                      <div key={role.id}>
+                        {role.displayName}
+                      </div>
+                    ))
                     : 'Не указано'}
                 </dd>
               </div>
@@ -87,7 +95,11 @@ function UserProfile({
                 <dt className="text-xs text-muted-foreground">Должность</dt>
                 <dd className="text-[16px] font-light">
                   {userPositions.length
-                    ? userPositions.map((position) => position.name).join(', ')
+                    ? userPositions.map((position) => (
+                      <div key={position.id}>
+                        {position.name}
+                      </div>
+                    ))
                     : 'Не указано'}
                 </dd>
               </div>
@@ -95,7 +107,23 @@ function UserProfile({
                 <dt className="text-xs text-muted-foreground">Отдел/Департамент</dt>
                 <dd className="text-[16px] font-light">
                   {userDepartments.length
-                    ? userDepartments.map((department) => department.name).join(', ')
+                    ? userDepartments.map((department) => (
+                      <div key={department.id}>
+                        {department.name}
+                      </div>
+                    ))
+                    : 'Не указано'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-muted-foreground">Знание языков</dt>
+                <dd className="text-[16px] font-light">
+                  {userLanguages.length
+                    ? userLanguages.map((language) => (
+                      <div key={language.id}>
+                        {language.name} {LanguageLevel[language.level]}
+                      </div>
+                    ))
                     : 'Не указано'}
                 </dd>
               </div>
@@ -122,7 +150,7 @@ function UserProfile({
             <CollapsibleTrigger asChild>
               <Button variant="ghost" size="icon-sm">
                 <ChevronsUpDown size={16} />
-                <span className="sr-only">Toggle details</span>
+                <span className="sr-only">Показать подробности</span>
               </Button>
             </CollapsibleTrigger>
           </header>

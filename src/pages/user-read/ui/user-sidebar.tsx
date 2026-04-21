@@ -2,7 +2,7 @@ import { fetchLanguagesAction, getLanguages, getLanguagesStatus, LanguageLevel }
 import { User, Users } from '@/entities/user';
 import { Button, ButtonGroup } from '@/shared/ui';
 import dayjs from 'dayjs';
-import { ArrowLeft, ArrowRight, Edit, Mail, Phone } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Mail, Phone } from 'lucide-react';
 import { JSX, useEffect } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 import { getWorkDuration } from '../lib/utils';
@@ -115,15 +115,6 @@ function UserSidebar({
           <h3 className="text-[16px]">
             Знание языков
           </h3>
-          <Button
-            className="ml-auto"
-            type="button"
-            size="sm"
-            variant="outline"
-          >
-            <Edit size={16} />
-            <span className="sr-only">Редактировать</span>
-          </Button>
         </header>
 
         <dl className="flex flex-col gap-2 p-4 pt-2 text-[14px]">

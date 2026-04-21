@@ -23,6 +23,7 @@ import { UserProfile } from './user-profile';
 import { fetchPositionsAction, getPositionsStatus } from '@/entities/position';
 import { fetchDepartmentsAction, getDepartmentsStatus } from '@/entities/department';
 import { UserSidebar } from './user-sidebar';
+import { fetchLanguagesAction, getLanguagesStatus } from '@/entities/language';
 
 function UserReadPage(): JSX.Element {
   const { setTitle } = useHeader();
@@ -34,6 +35,7 @@ function UserReadPage(): JSX.Element {
   const rolesStatus = useAppSelector(getRolesStatus);
   const positionsStatus = useAppSelector(getPositionsStatus);
   const departmentsStatus = useAppSelector(getDepartmentsStatus);
+  const languagesStatus = useAppSelector(getLanguagesStatus);
 
   const users = useAppSelector(getUsers);
 
@@ -48,7 +50,8 @@ function UserReadPage(): JSX.Element {
     if (rolesStatus === AsyncStatus.IDLE) dispatch(fetchRolesAction());
     if (positionsStatus === AsyncStatus.IDLE) dispatch(fetchPositionsAction());
     if (departmentsStatus === AsyncStatus.IDLE) dispatch(fetchDepartmentsAction());
-  }, [departmentsStatus, dispatch, positionsStatus, profilesStatus, rolesStatus, setTitle, user, usersStatus]);
+    if (languagesStatus === AsyncStatus.IDLE) dispatch(fetchLanguagesAction());
+  }, [departmentsStatus, dispatch, languagesStatus, positionsStatus, profilesStatus, rolesStatus, setTitle, user, usersStatus]);
 
   if (!user || !users) {
     return <></>;
@@ -81,7 +84,7 @@ function UserReadPage(): JSX.Element {
           <TabsList variant="line">
             <TabsTrigger value="profile">Профиль</TabsTrigger>
             <TabsTrigger value="educations">Образование</TabsTrigger>
-            <TabsTrigger value="experiences">Работа</TabsTrigger>
+            <TabsTrigger value="experiences">Опыт</TabsTrigger>
             <TabsTrigger value="equipments">Оборудование</TabsTrigger>
             <TabsTrigger value="vacations">Отпуск</TabsTrigger>
             <TabsTrigger value="pir">ПИР</TabsTrigger>

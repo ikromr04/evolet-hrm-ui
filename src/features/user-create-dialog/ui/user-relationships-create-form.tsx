@@ -436,7 +436,7 @@ function UserRelationshipsCreateForm({
                             data-checked={field.value?.includes(language.id)}
                             onSelect={() => toggleValue(language.id)}
                           >
-                            {language.name} ({language.level}) - {LanguageLevel[language.level]}
+                            {language.name} {LanguageLevel[language.level]}
                           </CommandItem>
                         ))}
                       </CommandGroup>

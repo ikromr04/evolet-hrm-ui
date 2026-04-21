@@ -21,7 +21,7 @@ function UserAvatar({
   const handleInputChange = async (evt: BaseSyntheticEvent) => {
     setIsSubmitting(true);
     await dispatch(updateAvatarAction({
-      payload: {
+      data: {
         id: user.id,
         avatar: evt.target.files[0],
       }
@@ -35,7 +35,7 @@ function UserAvatar({
   const handleDeleteButtonClick = async () => {
     setIsDeleting(true);
     await dispatch(updateAvatarAction({
-      payload: {
+      data: {
         id: user.id,
         avatar: null,
       }
