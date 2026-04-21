@@ -4,7 +4,7 @@ import { getPositions } from '@/entities/position';
 import { FamilyStatus, getProfiles, Sex } from '@/entities/profile';
 import { getRoles } from '@/entities/role';
 import { User } from '@/entities/user';
-import { UserUpdateDialog } from '@/features/user-update-dialog';
+import { UserEditDialog } from '@/features/user-edit-dialog';
 import { useAppSelector } from '@/shared/store';
 import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
 import dayjs from 'dayjs';
@@ -38,7 +38,7 @@ function UserProfile({
             <h3 className="text-[16px]">
               Сотрудник
             </h3>
-            <UserUpdateDialog
+            <UserEditDialog
               key={JSON.stringify(user)}
               user={user}
               trigger={
@@ -138,15 +138,21 @@ function UserProfile({
             <h3 className="text-[16px]">
               Данные сотрудника
             </h3>
-            <Button
-              className="ml-auto"
-              type="button"
-              size="sm"
-              variant="outline"
-            >
-              <Edit size={16} />
-              Редактировать
-            </Button>
+            {/* <ProfileUpdateDialog
+              key={JSON.stringify(user)}
+              user={user}
+              trigger={
+                <Button
+                  className="ml-auto"
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                >
+                  <Edit size={16} />
+                  Редактировать
+                </Button>
+              }
+            /> */}
             <CollapsibleTrigger asChild>
               <Button variant="ghost" size="icon-sm">
                 <ChevronsUpDown size={16} />

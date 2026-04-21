@@ -39,15 +39,15 @@ import { BaseSyntheticEvent, JSX, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-type UserUpdateDialogProps = {
+type UserEditDialogProps = {
   trigger: JSX.Element;
   user: User;
 };
 
-function UserUpdateDialog({
+function UserEditDialog({
   trigger,
   user,
-}: UserUpdateDialogProps): JSX.Element {
+}: UserEditDialogProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
 
@@ -563,4 +563,4 @@ function UserUpdateDialog({
   );
 }
 
-export { UserUpdateDialog };
+export { UserEditDialog };
