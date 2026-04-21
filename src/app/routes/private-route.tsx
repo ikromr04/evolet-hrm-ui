@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAppSelector } from '@/shared/store';
-import { AuthStatus, getAuthStatus } from '@/entities/user';
 import { ROUTES } from '@/shared/config';
 import { JSX } from 'react';
+import { AuthStatus, getAuthStatus } from '@/features/auth';
 
 function PrivateRoute(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);

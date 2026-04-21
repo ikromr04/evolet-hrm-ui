@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AsyncStatus } from '@/shared/store';
 import { Profile, Profiles } from './types';
-import { fetchProfilesAction, storeProfileAction } from './thunks';
+import { fetchProfilesAction, storeProfileAction, updateProfileAction } from './thunks';
 
 type ProfileSlice = {
   profiles: {
@@ -32,6 +32,16 @@ const profileSlice = createSlice({
       .addCase(storeProfileAction.fulfilled, (state, action: PayloadAction<Profile>) => {
         if (state.profiles.data) {
           state.profiles.data = [action.payload, ...state.profiles.data];
+        }
+      })
+      .addCase(updateProfileAction.fulfilled, (state, action: PayloadAction<Profile>) => {
+        if (state.profiles.data) {
+          state.profiles.data = state.profiles.data.map((profile) => {
+            if (profile.id === action.payload.id) {
+              return action.payload;
+            }
+            return profile;
+          });
         }
       });
   }

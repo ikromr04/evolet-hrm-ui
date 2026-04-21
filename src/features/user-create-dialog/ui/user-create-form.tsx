@@ -1,9 +1,6 @@
 import { BaseSyntheticEvent, Dispatch, JSX, SetStateAction } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Button,
   DialogClose,
   DialogDescription,
@@ -13,8 +10,8 @@ import {
   Field,
   FieldError,
   FieldGroup,
+  FieldLabel,
   Input,
-  Label,
   Spinner
 } from '@/shared/ui';
 import { useAppDispatch } from '@/shared/store';
@@ -22,17 +19,17 @@ import { storeUserAction, User, userStoreSchema, UserStoreSchema } from '@/entit
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
-import { Step } from './employee-create-dialog';
+import { Step } from './user-create-dialog';
 
-type UserCreateProps = {
+type UserCreateFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
   setUser: Dispatch<SetStateAction<User | undefined>>;
 }
 
-function UserCreate({
+function UserCreateForm({
   setStep,
   setUser,
-}: UserCreateProps): JSX.Element {
+}: UserCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const form = useForm<UserStoreSchema>({
@@ -42,11 +39,11 @@ function UserCreate({
   const onSubmit = async (data: UserStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(storeUserAction({ payload: data }))
+    await dispatch(storeUserAction({ data }))
       .unwrap()
       .then((user) => {
         toast.success('Сотрудник успешно добавлен.');
-        setStep('profile');
+        setStep('user-avatar');
         setUser(user);
       })
       .catch((errors: ApiErrors) => {
@@ -84,9 +81,9 @@ function UserCreate({
           defaultValue=""
           render={({ field, fieldState }) => (
             <Field>
-              <Label htmlFor="surname">
+              <FieldLabel htmlFor="surname">
                 Фамилия <span className="text-destructive">*</span>
-              </Label>
+              </FieldLabel>
               <Input
                 {...field}
                 id="surname"
@@ -105,9 +102,9 @@ function UserCreate({
           defaultValue=""
           render={({ field, fieldState }) => (
             <Field>
-              <Label htmlFor="name">
+              <FieldLabel htmlFor="name">
                 Имя <span className="text-destructive">*</span>
-              </Label>
+              </FieldLabel>
               <Input
                 {...field}
                 id="name"
@@ -126,9 +123,9 @@ function UserCreate({
           defaultValue=""
           render={({ field, fieldState }) => (
             <Field>
-              <Label htmlFor="patronymic">
+              <FieldLabel htmlFor="patronymic">
                 Отчество
-              </Label>
+              </FieldLabel>
               <Input
                 {...field}
                 id="patronymic"
@@ -146,9 +143,9 @@ function UserCreate({
           defaultValue=""
           render={({ field, fieldState }) => (
             <Field>
-              <Label htmlFor="email">
+              <FieldLabel htmlFor="email">
                 Email <span className="text-destructive">*</span>
-              </Label>
+              </FieldLabel>
               <Input
                 {...field}
                 id="email"
@@ -158,56 +155,6 @@ function UserCreate({
                 required
               />
               <FieldError errors={[fieldState.error]} />
-            </Field>
-          )}
-        />
-        <Controller
-          name="avatar"
-          control={form.control}
-          defaultValue={null}
-          render={({ field, fieldState }) => (
-            <Field>
-              <Label asChild>
-                <span>
-                  Фото профиля
-                </span>
-              </Label>
-
-              <div className="flex gap-x-4 items-end">
-                {field.value && (
-                  <Avatar className="size-24 max-w-24">
-                    <AvatarImage src={field.value && URL.createObjectURL(field.value)} />
-                    <AvatarFallback>ФП</AvatarFallback>
-                  </Avatar>
-                )}
-
-                <div className="flex flex-col gap-2 grow">
-                  {field.value && (
-                    <span className="col-span-2 text-muted-foreground">
-                      {field.value.name}
-                    </span>
-                  )}
-                  <Button variant="outline" asChild>
-                    <label>
-                      <input
-                        type="file"
-                        accept=".jpg, .jpeg, .png, .webp"
-                        className="hidden"
-                        onChange={(e) => field.onChange(e.target.files?.[0] || null)}
-                      />
-                      {field.value ? 'Выбрать другой файл' : 'Выбрать файл'}
-                    </label>
-                  </Button>
-
-                  <FieldError errors={[fieldState.error]} />
-
-                  {field.value && (
-                    <Button variant="secondary" onClick={() => field.onChange(null)}>
-                      Удалить
-                    </Button>
-                  )}
-                </div>
-              </div>
             </Field>
           )}
         />
@@ -228,4 +175,4 @@ function UserCreate({
   );
 }
 
-export { UserCreate };
+export { UserCreateForm };

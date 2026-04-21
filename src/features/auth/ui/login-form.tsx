@@ -1,7 +1,6 @@
 import { BaseSyntheticEvent, ComponentProps } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginAction, loginSchema, LoginSchema } from '@/entities/user';
 import { cn } from '@/shared/lib';
 import { useAppDispatch } from '@/shared/store';
 import { ApiErrors } from '@/shared/api';
@@ -16,6 +15,8 @@ import {
   Logo,
   Spinner
 } from '@/shared/ui';
+import { loginSchema, LoginSchema } from '../model/schemas';
+import { loginAction } from '../model/thunks';
 
 function LoginForm({
   className,

@@ -23,6 +23,30 @@ type ProfileStoreRequest = {
   };
 };
 
+type ProfileUpdateRequest = {
+  data: {
+    type: 'profiles';
+    id: string;
+    attributes: {
+      birthDate?: string | null;
+      sex?: keyof typeof Sex | null;
+      nationality?: string | null;
+      citizenship?: string | null;
+      address?: string | null;
+      tel1?: string | null;
+      tel2?: string | null;
+      familyStatus?: keyof typeof FamilyStatus | null;
+      children?: number[] | null;
+      startedWorkAt?: string | null;
+    };
+    relationships: {
+      user: {
+        data: { type: 'users', id: string };
+      }
+    }
+  };
+};
+
 type ProfileResponse = {
   data: {
     type: 'profiles';
@@ -36,7 +60,7 @@ type ProfileResponse = {
       tel1: string | null;
       tel2: string | null;
       familyStatus: keyof typeof FamilyStatus | null;
-      children: number[] | null;
+      children: string | null;
       startedWorkAt: string | null;
       createdAt: string;
       updatedAt: string;
@@ -62,7 +86,7 @@ type ProfilesResponse = {
       tel1: string | null;
       tel2: string | null;
       familyStatus: keyof typeof FamilyStatus | null;
-      children: number[] | null;
+      children: string | null;
       startedWorkAt: string | null;
       createdAt: string;
       updatedAt: string;
@@ -79,4 +103,5 @@ export type {
   ProfilesResponse,
   ProfileStoreRequest,
   ProfileResponse,
+  ProfileUpdateRequest,
 };

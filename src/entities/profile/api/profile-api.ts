@@ -1,21 +1,29 @@
 import { AxiosInstance } from 'axios';
-import { ProfileResponse, ProfilesResponse, ProfileStoreRequest } from './types';
+import { ProfileResponse, ProfilesResponse } from './types';
 import { Profile, Profiles } from '../model/types';
-import { mapProfile, mapProfiles } from './mappers';
+import { mapProfileResponse, mapProfilesResponse, mapProfileStoreRequest, mapProfileUpdateRequest } from './mappers';
+import { ProfileStoreSchema, ProfileUpdateSchema } from '../model/schemas';
 
 const fetchProfiles = async (api: AxiosInstance): Promise<Profiles> => {
   const { data } = await api.get<ProfilesResponse>('/profiles?include=user');
-
-  return mapProfiles(data);
+  
+  return mapProfilesResponse(data);
 };
 
-const storeProfile = async (api: AxiosInstance, payload: ProfileStoreRequest): Promise<Profile> => {
-  const { data } = await api.post<ProfileResponse>('/profiles', payload);
+const storeProfile = async (api: AxiosInstance, payload: ProfileStoreSchema): Promise<Profile> => {
+  const { data } = await api.post<ProfileResponse>('/profiles?include=user', mapProfileStoreRequest(payload));
 
-  return mapProfile(data);
+  return mapProfileResponse(data);
+};
+
+const updateProfile = async (api: AxiosInstance, payload: ProfileUpdateSchema): Promise<Profile> => {
+  const { data } = await api.patch<ProfileResponse>('/profiles?include=user', mapProfileUpdateRequest(payload));
+
+  return mapProfileResponse(data);
 };
 
 export {
   fetchProfiles,
   storeProfile,
+  updateProfile,
 };

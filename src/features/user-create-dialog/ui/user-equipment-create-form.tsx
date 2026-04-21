@@ -15,19 +15,19 @@ import { equipmentStoreSchema, EquipmentStoreSchema, storeEquipmentAction } from
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
 
-type EquipmentCreateFormProps = {
+type UserEquipmentCreateFormProps = {
   onRemove?: () => void;
   removable?: boolean;
   onSave: () => void;
   user: User;
 }
 
-function EquipmentCreateForm({
+function UserEquipmentCreateForm({
   onRemove,
   removable,
   onSave,
   user,
-}: EquipmentCreateFormProps): JSX.Element {
+}: UserEquipmentCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [isSaved, setIsSaved] = useState(false);
 
@@ -41,7 +41,7 @@ function EquipmentCreateForm({
   const onSubmit = async (data: EquipmentStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(storeEquipmentAction({ payload: data }))
+    await dispatch(storeEquipmentAction({ data }))
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
@@ -130,4 +130,4 @@ function EquipmentCreateForm({
   );
 }
 
-export { EquipmentCreateForm };
+export { UserEquipmentCreateForm };

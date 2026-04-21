@@ -1,12 +1,31 @@
+import { EquipmentStoreSchema } from '../model/schemas';
 import { Equipment } from '../model/types';
-import { EquipmentResponse } from './types';
+import { EquipmentResponse, EquipmentStoreRequest } from './types';
 
-const mapEquipment = (resource: EquipmentResponse): Equipment => ({
+const mapEquipmentResponse = (resource: EquipmentResponse): Equipment => ({
   id: resource.data.id,
   userId: resource.data.relationships.user.data.id,
   ...resource.data.attributes
 });
 
+const mapEquipmentStoreRequest = (data: EquipmentStoreSchema): EquipmentStoreRequest => ({
+  data: {
+    type: 'equipments',
+    attributes: {
+      ...data
+    },
+    relationships: {
+      user: {
+        data: {
+          type: 'users',
+          id: data.userId
+        }
+      }
+    }
+  }
+});
+
 export {
-  mapEquipment,
+  mapEquipmentResponse,
+  mapEquipmentStoreRequest,
 };

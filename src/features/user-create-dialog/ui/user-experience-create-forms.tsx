@@ -1,5 +1,5 @@
 import { Dispatch, JSX, SetStateAction, useState } from 'react';
-import { Step } from './employee-create-dialog';
+import { Step } from './user-create-dialog';
 import { ArrowRight, Plus } from 'lucide-react';
 import { User } from '@/entities/user';
 import {
@@ -9,17 +9,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui';
-import { ExperienceCreateForm } from './experience-create-form';
+import { UserExperienceCreateForm } from './user-experience-create-form';
 
-type ExperiencesCreateProps = {
+type UserExperienceCreateFormsProps = {
   setStep: Dispatch<SetStateAction<Step>>;
   user: User;
 }
 
-function ExperiencesCreate({
+function UserExperienceCreateForms({
   setStep,
   user,
-}: ExperiencesCreateProps): JSX.Element {
+}: UserExperienceCreateFormsProps): JSX.Element {
   const [formIds, setFormIds] = useState([1]);
   const [hasSaved, setHasSaved] = useState(false);
 
@@ -38,7 +38,7 @@ function ExperiencesCreate({
         <div key={formId}>
           <div className="ml-1">Работа {index + 1}</div>
           <div className="border rounded-xl p-2 -m-2 mt-1">
-            <ExperienceCreateForm
+            <UserExperienceCreateForm
               user={user}
               removable={formIds.length !== 1 ? true : false}
               onRemove={() => setFormIds((prev) => prev.filter((id) => id !== formId))}
@@ -62,7 +62,7 @@ function ExperiencesCreate({
         <Button
           type="button"
           variant="outline"
-          onClick={() => setStep('educations')}
+          onClick={() => setStep('user-educations')}
         >
           {!hasSaved ? 'Пропустить' : 'Далее'}
           <ArrowRight size={16} />
@@ -73,5 +73,5 @@ function ExperiencesCreate({
 }
 
 export {
-  ExperiencesCreate,
+  UserExperienceCreateForms,
 };

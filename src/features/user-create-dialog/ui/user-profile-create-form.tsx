@@ -2,7 +2,7 @@ import { BaseSyntheticEvent, Dispatch, JSX, SetStateAction } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAppDispatch } from '@/shared/store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Step } from './employee-create-dialog';
+import { Step } from './user-create-dialog';
 import { storeProfileAction, profileStoreSchema, ProfileStoreSchema, FamilyStatus, Sex } from '@/entities/profile';
 import { cn } from '@/shared/lib';
 import { ArrowRight, Calendar, ChevronsUpDown, X } from 'lucide-react';
@@ -41,15 +41,15 @@ import {
   Calendar as UiCalendar,
 } from '@/shared/ui';
 
-type ProfileCreateProps = {
+type UserProfileCreateFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
   user: User;
 }
 
-function ProfileCreate({
+function UserProfileCreateForm({
   setStep,
   user,
-}: ProfileCreateProps): JSX.Element {
+}: UserProfileCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const form = useForm<ProfileStoreSchema>({
@@ -62,11 +62,11 @@ function ProfileCreate({
   const onSubmit = async (data: ProfileStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(storeProfileAction({ payload: data }))
+    await dispatch(storeProfileAction({ data }))
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
-        setStep('relationships');
+        setStep('user-relationships');
       })
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
@@ -138,7 +138,7 @@ function ProfileCreate({
           <Controller
             name="sex"
             control={form.control}
-            defaultValue=""
+            defaultValue={undefined}
             render={({ field, fieldState }) => (
               <Field>
                 <FieldLabel>
@@ -309,7 +309,7 @@ function ProfileCreate({
           <Controller
             name="familyStatus"
             control={form.control}
-            defaultValue=""
+            defaultValue={undefined}
             render={({ field, fieldState }) => (
               <Field>
                 <FieldLabel>
@@ -375,6 +375,7 @@ function ProfileCreate({
                         {values && values.length === 0 && 'Нет детей'}
                         {values && values.length > 0 && values.map((year) => (
                           <Badge
+                            key={year}
                             variant="outline"
                             onClick={(evt) => {
                               toggleValue(year);
@@ -436,7 +437,7 @@ function ProfileCreate({
         <Button
           type="button"
           variant="outline"
-          onClick={() => setStep('relationships')}
+          onClick={() => setStep('user-relationships')}
         >
           Пропустить
           <ArrowRight size={16} />
@@ -450,4 +451,4 @@ function ProfileCreate({
   );
 }
 
-export { ProfileCreate };
+export { UserProfileCreateForm };

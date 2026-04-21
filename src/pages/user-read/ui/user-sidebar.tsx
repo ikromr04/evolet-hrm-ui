@@ -1,27 +1,42 @@
-import { LanguageLevel } from '@/entities/language';
+import { fetchLanguagesAction, getLanguages, getLanguagesStatus, LanguageLevel } from '@/entities/language';
 import { User, Users } from '@/entities/user';
 import { Button, ButtonGroup } from '@/shared/ui';
 import dayjs from 'dayjs';
 import { ArrowLeft, ArrowRight, Edit, Mail, Phone } from 'lucide-react';
-import { JSX } from 'react';
+import { JSX, useEffect } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 import { getWorkDuration } from '../lib/utils';
 import { ROUTES } from '@/shared/config';
+import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
+import { getProfiles } from '@/entities/profile';
 
-type SidebarProps = {
+type UserSidebarProps = {
   user: User;
   users: Users;
 };
 
-function Sidebar({
+function UserSidebar({
   user,
   users,
-}: SidebarProps): JSX.Element {
-  const phoneNumbers = user.profile?.tel1 || user.profile?.tel2 || null;
+}: UserSidebarProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const languagesStatus = useAppSelector(getLanguagesStatus);
+
+  const profiles = useAppSelector(getProfiles);
+  const languages = useAppSelector(getLanguages);
+
+  const userProfile = profiles?.find(({ userId }) => user.id === userId);
+  const userLanguages = languages?.filter(({ id }) => user.languages.includes(id)) || [];
+
+  const phoneNumbers = userProfile?.tel1 || userProfile?.tel2 || null;
 
   const userIndex = users.findIndex(({ id }) => id === user.id);
   const prevUserId = users[userIndex - 1]?.id || '';
   const nextUserId = users[userIndex + 1]?.id || '';
+
+  useEffect(() => {
+    if (languagesStatus === AsyncStatus.IDLE) dispatch(fetchLanguagesAction());
+  }, [dispatch, languagesStatus]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -63,33 +78,33 @@ function Sidebar({
             </Button>
           </dd>
         </div>
-        <div>
-          <dt className="text-xs text-muted-foreground">
-            Позвонить
-          </dt>
-          <dd>
-            {phoneNumbers && (
+        {phoneNumbers && ( 
+          <div>
+            <dt className="text-xs text-muted-foreground">
+              Позвонить
+            </dt>
+            <dd>
               <Button variant="link" asChild>
                 <Link className="p-0!" to={`tel:${phoneNumbers}`}>
                   <Phone size={16} /> {phoneNumbers}
                 </Link>
               </Button>
-            )}
-          </dd>
-        </div>
+            </dd>
+          </div>
+        )}
         <div>
           <dt className="text-xs text-muted-foreground">Начало работы</dt>
           <dd className="text-[14px]">
-            {user.profile?.startedWorkAt
-              ? dayjs(user.profile.startedWorkAt).format('DD MMMM YYYY')
+            {userProfile?.startedWorkAt
+              ? dayjs(userProfile.startedWorkAt).format('DD MMMM YYYY')
               : 'Не указано'}
           </dd>
         </div>
         <div>
           <dt className="text-xs text-muted-foreground">Стаж</dt>
           <dd className="text-[14px]">
-            {user.profile?.startedWorkAt
-              ? getWorkDuration(user.profile.startedWorkAt)
+            {userProfile?.startedWorkAt
+              ? getWorkDuration(userProfile.startedWorkAt)
               : 'Не указано'}
           </dd>
         </div>
@@ -112,7 +127,7 @@ function Sidebar({
         </header>
 
         <dl className="flex flex-col gap-2 p-4 pt-2 text-[14px]">
-          {user.languages.length ? user.languages.map((lang) => (
+          {userLanguages.length ? userLanguages.map((lang) => (
             <div key={lang.id}>
               <dt className="text-[14px]">{lang.name}</dt>
               <dd className="text-xs text-muted-foreground">{LanguageLevel[lang.level]}</dd>
@@ -124,4 +139,4 @@ function Sidebar({
   );
 }
 
-export default Sidebar;
+export { UserSidebar };

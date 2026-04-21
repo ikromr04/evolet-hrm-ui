@@ -1,10 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { fetchProfiles, storeProfile } from '../api/profile-api';
+import { fetchProfiles, storeProfile, updateProfile } from '../api/profile-api';
 import { ApiErrors, ErrorResponse } from '@/shared/api';
-import { ProfileStoreSchema } from './schemas';
+import { ProfileStoreSchema, ProfileUpdateSchema } from './schemas';
 import { Profile, Profiles } from './types';
-import { mapProfileStore } from './mappers';
 
 const fetchProfilesAction = createAsyncThunk<Profiles, undefined, {
   extra: AxiosInstance;
@@ -16,17 +15,33 @@ const fetchProfilesAction = createAsyncThunk<Profiles, undefined, {
 );
 
 const storeProfileAction = createAsyncThunk<Profile, {
-  payload: ProfileStoreSchema;
+  data: ProfileStoreSchema;
 }, {
   extra: AxiosInstance;
   rejectWithValue: ApiErrors;
 }>(
   'profiles/store',
-  async ({ payload }, { extra: api, rejectWithValue }) => {
+  async ({ data }, { extra: api, rejectWithValue }) => {
     try {
-      const profile = await storeProfile(api, mapProfileStore(payload));
+      return await storeProfile(api, data);
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
 
-      return profile;
+      return rejectWithValue(error.response?.data.errors);
+    }
+  }
+);
+
+const updateProfileAction = createAsyncThunk<Profile, {
+  data: ProfileUpdateSchema;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ApiErrors;
+}>(
+  'profiles/update',
+  async ({ data }, { extra: api, rejectWithValue }) => {
+    try {
+      return await updateProfile(api, data);
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
 
@@ -38,4 +53,5 @@ const storeProfileAction = createAsyncThunk<Profile, {
 export {
   fetchProfilesAction,
   storeProfileAction,
+  updateProfileAction,
 };

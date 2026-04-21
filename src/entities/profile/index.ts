@@ -1,6 +1,8 @@
 export {
   profileStoreSchema,
   type ProfileStoreSchema,
+  profileUpdateSchema,
+  type ProfileUpdateSchema,
 } from './model/schemas';
 
 export {

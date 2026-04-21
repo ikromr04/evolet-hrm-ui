@@ -1,73 +1,50 @@
 import { AxiosInstance } from 'axios';
-import { LoginRequest, TokenResponse, UserResponse, UsersResponse, UserStoreRequest, UserUpdateRequest } from './types';
-import { Token } from '@/shared/lib';
+import { UserResponse, UsersResponse } from './types';
 import { User, Users } from '../model/types';
-import { mapUser, mapUsers } from './mappers';
-
-const fetchAuthUser = async (api: AxiosInstance): Promise<User> => {
-  const { data } = await api.get<UserResponse>('/me?include=profile,roles,positions,departments,languages,equipments,experiences,educations');
-
-  return mapUser(data);
-};
-
-const loginUser = async (api: AxiosInstance, payload: LoginRequest): Promise<Token> => {
-  const { data } = await api.post<TokenResponse>('/login', payload);
-
-  return data.data.attributes.token;
-};
-
-const logoutUser = async (api: AxiosInstance): Promise<void> => {
-  await api.delete('/logout');
-};
-
-const storeUser = async (api: AxiosInstance, payload: UserStoreRequest): Promise<User> => {
-  const formData = new FormData();
-  formData.append('data[type]', payload.data.type);
-  formData.append('data[attributes][name]', payload.data.attributes.name);
-  formData.append('data[attributes][surname]', payload.data.attributes.surname);
-  formData.append('data[attributes][email]', payload.data.attributes.email);
-
-  if (payload.data.attributes.patronymic) {
-    formData.append('data[attributes][patronymic]', payload.data.attributes.patronymic);
-  }
-
-  if (payload.data.attributes.avatar) {
-    formData.append('data[attributes][avatar]', payload.data.attributes.avatar);
-  }
-
-  const { data } = await api.post<UserResponse>('/users', formData);
-
-  return mapUser(data);
-};
-
-const updateUser = async (api: AxiosInstance, payload: UserUpdateRequest): Promise<User> => {
-  const { data } = await api.patch<UserResponse>(`/users/${payload.data.id}?include=profile,roles,positions,departments,languages,equipments,experiences,educations`, payload);
-
-  return mapUser(data);
-};
-
-const updateAvatar = async (api: AxiosInstance, payload: UserUpdateRequest): Promise<User> => {
-  const formData = new FormData();
-
-  formData.append('data[attributes][avatar]', payload.data.attributes?.avatar || '');
-  formData.append('data[type]', payload.data.type);
-  formData.append('data[id]', payload.data.id);
-
-  const { data } = await api.patch<UserResponse>(`/users/${payload.data.id}?include=profile,roles,positions,departments,languages,equipments,experiences,educations`, formData);
-
-  return mapUser(data);
-};
+import { mapUserResponse, mapUsersResponse, mapUserStoreRequest, mapUserUpdateRequest } from './mappers';
+import { UserStoreSchema, UserUpdateSchema } from '../model/schemas';
 
 const fetchUsers = async (api: AxiosInstance): Promise<Users> => {
-  const { data } = await api.get<UsersResponse>('/users?include=profile,roles,positions,departments,languages,equipments,experiences,educations&sort=surname');
+  const { data } = await api.get<UsersResponse>(
+    '/users?include=profile,roles,positions,departments,languages,equipments,experiences,educations&sort=surname'
+  );
 
-  return mapUsers(data);
+  return mapUsersResponse(data);
+};
+
+const storeUser = async (api: AxiosInstance, payload: UserStoreSchema): Promise<User> => {
+  const { data } = await api.post<UserResponse>(
+    '/users?include=profile,roles,positions,departments,languages,equipments,experiences,educations',
+    mapUserStoreRequest(payload)
+  );
+
+  return mapUserResponse(data);
+};
+
+const updateUser = async (api: AxiosInstance, payload: UserUpdateSchema): Promise<User> => {
+  const { data } = await api.patch<UserResponse>(
+    `/users/${payload.id}?include=profile,roles,positions,departments,languages,equipments,experiences,educations`,
+    mapUserUpdateRequest(payload)
+  );
+
+  return mapUserResponse(data);
+};
+
+const updateAvatar = async (api: AxiosInstance, payload: UserUpdateSchema): Promise<User> => {
+  const formData = new FormData();
+  formData.append('data[attributes][avatar]', payload.avatar || '');
+  formData.append('data[type]', 'users');
+  formData.append('data[id]', payload.id);
+
+  const { data } = await api.patch<UserResponse>(
+    `/users/${payload.id}?include=profile,roles,positions,departments,languages,equipments,experiences,educations`,
+    formData
+  );
+
+  return mapUserResponse(data);
 };
 
 export {
-  fetchAuthUser,
-  loginUser,
-  logoutUser,
   storeUser,
   updateUser,
   fetchUsers,

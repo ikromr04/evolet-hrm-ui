@@ -18,17 +18,23 @@ import {
 } from '@/shared/ui';
 import { JSX, useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Header } from './header';
-import { ProfileContent } from './profile-content';
-import Sidebar from './sidebar';
+import { UserHeader } from './user-header';
+import { UserProfile } from './user-profile';
+import { fetchPositionsAction, getPositionsStatus } from '@/entities/position';
+import { fetchDepartmentsAction, getDepartmentsStatus } from '@/entities/department';
+import { UserSidebar } from './user-sidebar';
 
 function UserReadPage(): JSX.Element {
   const { setTitle } = useHeader();
   const params = useParams();
   const dispatch = useAppDispatch();
+
   const usersStatus = useAppSelector(getUsersStatus);
-  const rolesStatus = useAppSelector(getRolesStatus);
   const profilesStatus = useAppSelector(getProfilesStatus);
+  const rolesStatus = useAppSelector(getRolesStatus);
+  const positionsStatus = useAppSelector(getPositionsStatus);
+  const departmentsStatus = useAppSelector(getDepartmentsStatus);
+
   const users = useAppSelector(getUsers);
 
   const user = useMemo(() => {
@@ -38,9 +44,11 @@ function UserReadPage(): JSX.Element {
   useEffect(() => {
     if (user) setTitle(`${user.surname} ${user.name}`);
     if (usersStatus === AsyncStatus.IDLE) dispatch(fetchUsersAction());
-    if (rolesStatus === AsyncStatus.IDLE) dispatch(fetchRolesAction());
     if (profilesStatus === AsyncStatus.IDLE) dispatch(fetchProfilesAction());
-  }, [dispatch, profilesStatus, rolesStatus, setTitle, user, usersStatus]);
+    if (rolesStatus === AsyncStatus.IDLE) dispatch(fetchRolesAction());
+    if (positionsStatus === AsyncStatus.IDLE) dispatch(fetchPositionsAction());
+    if (departmentsStatus === AsyncStatus.IDLE) dispatch(fetchDepartmentsAction());
+  }, [departmentsStatus, dispatch, positionsStatus, profilesStatus, rolesStatus, setTitle, user, usersStatus]);
 
   if (!user || !users) {
     return <></>;
@@ -66,7 +74,7 @@ function UserReadPage(): JSX.Element {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Header user={user} />
+      <UserHeader user={user} />
 
       <div className="grid grid-cols-[3fr_1fr] gap-4">
         <Tabs className="gap-4" defaultValue="profile">
@@ -82,7 +90,7 @@ function UserReadPage(): JSX.Element {
           </TabsList>
 
           <TabsContent value="profile">
-            <ProfileContent user={user} />
+            <UserProfile user={user} />
           </TabsContent>
           <TabsContent value="educations">
             Образование
@@ -107,7 +115,7 @@ function UserReadPage(): JSX.Element {
           </TabsContent>
         </Tabs>
 
-        <Sidebar user={user} users={users} />
+        <UserSidebar user={user} users={users} />
       </div>
     </main>
   );

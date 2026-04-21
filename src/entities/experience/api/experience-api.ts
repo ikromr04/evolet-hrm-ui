@@ -1,12 +1,13 @@
 import { AxiosInstance } from 'axios';
-import { ExperienceResponse, ExperienceStoreRequest } from './types';
+import { ExperienceResponse } from './types';
 import { Experience } from '../model/types';
-import { mapExperience } from './mappers';
+import { mapExperienceResponse, mapExperienceStoreRequest } from './mappers';
+import { ExperienceStoreSchema } from '../model/schemas';
 
-const storeExperience = async (api: AxiosInstance, payload: ExperienceStoreRequest): Promise<Experience> => {
-  const { data } = await api.post<ExperienceResponse>('/experiences', payload);
+const storeExperience = async (api: AxiosInstance, payload: ExperienceStoreSchema): Promise<Experience> => {
+  const { data } = await api.post<ExperienceResponse>('/experiences?include=user', mapExperienceStoreRequest(payload));
 
-  return mapExperience(data);
+  return mapExperienceResponse(data);
 };
 
 export {

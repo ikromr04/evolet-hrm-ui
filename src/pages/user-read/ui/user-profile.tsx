@@ -1,18 +1,32 @@
-import { FamilyStatus, Sex } from '@/entities/profile';
+import { getDepartments } from '@/entities/department';
+import { getPositions } from '@/entities/position';
+import { FamilyStatus, getProfiles, Sex } from '@/entities/profile';
+import { getRoles } from '@/entities/role';
 import { User } from '@/entities/user';
 import { UserUpdateDialog } from '@/features/user-update-dialog';
+import { useAppSelector } from '@/shared/store';
 import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
 import dayjs from 'dayjs';
 import { ChevronsUpDown, Edit } from 'lucide-react';
 import { JSX } from 'react';
 
-type ProfileContentProps = {
+type UserProfileProps = {
   user: User;
 };
 
-function ProfileContent({
+function UserProfile({
   user,
-}: ProfileContentProps): JSX.Element {
+}: UserProfileProps): JSX.Element {
+  const departments = useAppSelector(getDepartments);
+  const positions = useAppSelector(getPositions);
+  const roles = useAppSelector(getRoles);
+  const profiles = useAppSelector(getProfiles);
+
+  const userDepartments = departments?.filter(({ id }) => user.departments.includes(id)) || [];
+  const userPositions = positions?.filter(({ id }) => user.positions.includes(id)) || [];
+  const userRoles = roles?.filter(({ id }) => user.roles.includes(id)) || [];
+  const userProfile = profiles?.find(({ userId }) => user.id === userId);
+
   return (
     <div className="flex flex-col gap-4">
       <Collapsible defaultOpen>
@@ -64,24 +78,24 @@ function ProfileContent({
               <div>
                 <dt className="text-xs text-muted-foreground">Позиция</dt>
                 <dd className="text-[16px] font-light">
-                  {user.roles.length
-                    ? user.roles.map((role) => role.displayName).join(', ')
+                  {userRoles.length
+                    ? userRoles.map((role) => role.displayName).join(', ')
                     : 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Должность</dt>
                 <dd className="text-[16px] font-light">
-                  {user.positions.length
-                    ? user.positions.map((position) => position.name).join(', ')
+                  {userPositions.length
+                    ? userPositions.map((position) => position.name).join(', ')
                     : 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Отдел/Департамент</dt>
                 <dd className="text-[16px] font-light">
-                  {user.departments.length
-                    ? user.departments.map((department) => department.name).join(', ')
+                  {userDepartments.length
+                    ? userDepartments.map((department) => department.name).join(', ')
                     : 'Не указано'}
                 </dd>
               </div>
@@ -118,78 +132,78 @@ function ProfileContent({
               <div>
                 <dt className="text-xs text-muted-foreground">Дата рождения</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.birthDate
-                    ? dayjs(user.profile.birthDate).format('DD MMMM YYYY')
+                  {userProfile?.birthDate
+                    ? dayjs(userProfile.birthDate).format('DD MMMM YYYY')
                     : 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Пол</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.sex
-                    ? Sex[user.profile.sex]
+                  {userProfile?.sex
+                    ? Sex[userProfile.sex]
                     : 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Национальность</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.nationality || 'Не указано'}
+                  {userProfile?.nationality || 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Гражданство</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.citizenship || 'Не указано'}
+                  {userProfile?.citizenship || 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Адрес</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.address || 'Не указано'}
+                  {userProfile?.address || 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Телефон 1</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.tel1 || 'Не указано'}
+                  {userProfile?.tel1 || 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Телефон 2</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.tel2 || 'Не указано'}
+                  {userProfile?.tel2 || 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Семейное положение</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.familyStatus
-                    ? FamilyStatus[user.profile.familyStatus]
+                  {userProfile?.familyStatus
+                    ? FamilyStatus[userProfile.familyStatus]
                     : 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Семейное положение</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.familyStatus
-                    ? FamilyStatus[user.profile.familyStatus]
+                  {userProfile?.familyStatus
+                    ? FamilyStatus[userProfile.familyStatus]
                     : 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Дети</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.children
-                    ? (user.profile.children.length === 0 ? 'Нет детей' : user.profile.children.map((year) => year).join(', '))
+                  {userProfile?.children
+                    ? (userProfile.children.length === 0 ? 'Нет детей' : userProfile.children.map((year) => year).join(', '))
                     : 'Не указано'}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-muted-foreground">Начало работы в Эволет</dt>
                 <dd className="text-[16px] font-light">
-                  {user.profile?.startedWorkAt
-                    ? dayjs(user.profile.startedWorkAt).format('DD MMMM YYYY')
+                  {userProfile?.startedWorkAt
+                    ? dayjs(userProfile.startedWorkAt).format('DD MMMM YYYY')
                     : 'Не указано'}
                 </dd>
               </div>
@@ -201,4 +215,4 @@ function ProfileContent({
   );
 }
 
-export { ProfileContent };
+export { UserProfile };

@@ -1,4 +1,4 @@
-import { logoutAction } from '@/entities/user';
+import { logoutAction } from '@/features/auth';
 import { useAppDispatch } from '@/shared/store';
 import { LogOut } from 'lucide-react';
 import { BaseSyntheticEvent, JSX } from 'react';

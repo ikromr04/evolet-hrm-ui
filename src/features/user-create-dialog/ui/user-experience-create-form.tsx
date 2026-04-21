@@ -23,19 +23,19 @@ import {
 } from '@/shared/ui';
 import { Calendar } from 'lucide-react';
 
-type ExperienceCreateFormProps = {
+type UserExperienceCreateFormProps = {
   onRemove?: () => void;
   removable?: boolean;
   onSave: () => void;
   user: User;
 }
 
-function ExperienceCreateForm({
+function UserExperienceCreateForm({
   onRemove,
   removable,
   onSave,
   user,
-}: ExperienceCreateFormProps): JSX.Element {
+}: UserExperienceCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [isSaved, setIsSaved] = useState(false);
 
@@ -49,7 +49,7 @@ function ExperienceCreateForm({
   const onSubmit = async (data: ExperienceStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(storeExperienceAction({ payload: data }))
+    await dispatch(storeExperienceAction({ data }))
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
@@ -216,4 +216,4 @@ function ExperienceCreateForm({
   );
 }
 
-export { ExperienceCreateForm };
+export { UserExperienceCreateForm };

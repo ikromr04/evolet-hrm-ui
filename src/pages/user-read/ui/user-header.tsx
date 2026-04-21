@@ -3,14 +3,26 @@ import { Badge } from '@/shared/ui';
 import { IdCard, MapPin } from 'lucide-react';
 import { JSX } from 'react';
 import { UserAvatar } from './user-avatar';
+import { useAppSelector } from '@/shared/store';
+import { getDepartments } from '@/entities/department';
+import { getPositions } from '@/entities/position';
+import { getRoles } from '@/entities/role';
 
-type HeaderProps = {
+type UserHeaderProps = {
   user: User;
 }
 
-function Header({
+function UserHeader({
   user,
-}: HeaderProps): JSX.Element {
+}: UserHeaderProps): JSX.Element {
+  const departments = useAppSelector(getDepartments);
+  const positions = useAppSelector(getPositions);
+  const roles = useAppSelector(getRoles);
+
+  const userDepartments = departments?.filter(({ id }) => user.departments.includes(id)) || [];
+  const userPositions = positions?.filter(({ id }) => user.positions.includes(id)) || [];
+  const userRoles = roles?.filter(({ id }) => user.roles.includes(id)) || [];
+
   return (
     <header className="flex items-end gap-4">
       <UserAvatar user={user} />
@@ -22,7 +34,7 @@ function Header({
 
         <div className="flex items-center text-muted-foreground gap-2 font-light text-sm">
           <MapPin size={16} />
-          {user.departments.map(({ name }) => (
+          {userDepartments.map(({ name }) => (
             <Badge key={name} variant="outline">
               {name}
             </Badge>
@@ -31,7 +43,7 @@ function Header({
         <div className="flex items-center gap-2">
           <IdCard className="text-muted-foreground" size={16} />
           <div className="flex flex-wrap gap-1">
-            {user.positions.map((position) => (
+            {userPositions.map((position) => (
               <Badge key={position.id} variant="secondary">
                 {position.name}
               </Badge>
@@ -40,7 +52,7 @@ function Header({
         </div>
 
         <div className="flex flex-wrap gap-1">
-          {user.roles.map((role) => (
+          {userRoles.map((role) => (
             <Badge key={role.id}>
               {role.displayName}
             </Badge>
@@ -51,4 +63,4 @@ function Header({
   );
 }
 
-export { Header };
+export { UserHeader };

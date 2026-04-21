@@ -25,7 +25,7 @@ import {
 import { cn } from '@/shared/lib';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Step } from './employee-create-dialog';
+import { Step } from './user-create-dialog';
 import { ArrowRight, ChevronsUpDown, X } from 'lucide-react';
 import { updateUserAction, User, userUpdateSchema, UserUpdateSchema } from '@/entities/user';
 import { getRoles, getRolesStatus } from '@/entities/role';
@@ -36,15 +36,15 @@ import { fetchLanguagesAction, getLanguages, getLanguagesStatus, LanguageLevel }
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
 
-type RelationshipsCreateProps = {
+type UserRelationshipsCreateFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
   user: User;
 }
 
-function RelationshipsCreate({
+function UserRelationshipsCreateForm({
   setStep,
   user,
-}: RelationshipsCreateProps): JSX.Element {
+}: UserRelationshipsCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const rolesStatus = useAppSelector(getRolesStatus);
@@ -74,11 +74,11 @@ function RelationshipsCreate({
   const onSubmit = async (data: UserUpdateSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(updateUserAction({ payload: data }))
+    await dispatch(updateUserAction({ data }))
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
-        setStep('equipments');
+        setStep('user-equipments');
       })
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
@@ -453,7 +453,7 @@ function RelationshipsCreate({
         <Button
           type="button"
           variant="outline"
-          onClick={() => setStep('equipments')}
+          onClick={() => setStep('user-equipments')}
         >
           Пропустить
           <ArrowRight size={16} />
@@ -470,4 +470,4 @@ function RelationshipsCreate({
   );
 }
 
-export { RelationshipsCreate };
+export { UserRelationshipsCreateForm };

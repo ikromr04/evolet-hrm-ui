@@ -4,20 +4,17 @@ import { ApiErrors, ErrorResponse } from '@/shared/api';
 import { ExperienceStoreSchema } from './schemas';
 import { Experience } from './types';
 import { storeExperience } from '../api/experience-api';
-import { mapExperienceStore } from './mappers';
 
 const storeExperienceAction = createAsyncThunk<Experience, {
-  payload: ExperienceStoreSchema;
+  data: ExperienceStoreSchema;
 }, {
   extra: AxiosInstance;
   rejectWithValue: ApiErrors;
 }>(
   'experiences/store',
-  async ({ payload }, { extra: api, rejectWithValue }) => {
+  async ({ data }, { extra: api, rejectWithValue }) => {
     try {
-      const profile = await storeExperience(api, mapExperienceStore(payload));
-      
-      return profile;
+      return await storeExperience(api, data);
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
 

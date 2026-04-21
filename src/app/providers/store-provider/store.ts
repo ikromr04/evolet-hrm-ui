@@ -9,11 +9,13 @@ import { languageSlice } from '@/entities/language';
 import { equipmentSlice } from '@/entities/equipment';
 import { experienceSlice } from '@/entities/experience';
 import { educationSlice } from '@/entities/education';
+import { authSlice } from '@/features/auth';
 
 const api = createAPI();
 
 const store = configureStore({
   reducer: {
+    auth: authSlice.reducer,
     user: userSlice.reducer,
     profile: profileSlice.reducer,
     role: roleSlice.reducer,

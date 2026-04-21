@@ -1,7 +1,8 @@
 import { Dispatch, JSX, SetStateAction, useState } from 'react';
-import { Step } from './employee-create-dialog';
+import { Step } from './user-create-dialog';
 import { ArrowRight, Plus } from 'lucide-react';
 import { User } from '@/entities/user';
+import { UserEquipmentCreateForm } from './user-equipment-create-form';
 import {
   Button,
   DialogDescription,
@@ -9,17 +10,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui';
-import { EducationCreateForm } from './education-create-form';
 
-type EducationsCreateProps = {
+type UserEquipmentCreateFormsProps = {
   setStep: Dispatch<SetStateAction<Step>>;
   user: User;
 }
 
-function EducationsCreate({
+function UserEquipmentCreateForms({
   setStep,
   user,
-}: EducationsCreateProps): JSX.Element {
+}: UserEquipmentCreateFormsProps): JSX.Element {
   const [formIds, setFormIds] = useState([1]);
   const [hasSaved, setHasSaved] = useState(false);
 
@@ -27,18 +27,18 @@ function EducationsCreate({
     <div className="flex flex-col gap-6">
       <DialogHeader>
         <DialogTitle className="pr-10 leading-[1.2]">
-          Образование ({user.surname} {user.name})
+          Оборудование ({user.surname} {user.name})
         </DialogTitle>
         <DialogDescription>
-          Добавьте информацию об образовании сотрудника
+          Укажите выданное сотруднику оборудование
         </DialogDescription>
       </DialogHeader>
 
       {formIds.map((formId, index) => (
         <div key={formId}>
-          <div className="ml-1">Образование {index + 1}</div>
+          <div className="ml-1">Оборудование {index + 1}</div>
           <div className="border rounded-xl p-2 -m-2 mt-1">
-            <EducationCreateForm
+            <UserEquipmentCreateForm
               user={user}
               removable={formIds.length !== 1 ? true : false}
               onRemove={() => setFormIds((prev) => prev.filter((id) => id !== formId))}
@@ -62,7 +62,7 @@ function EducationsCreate({
         <Button
           type="button"
           variant="outline"
-          onClick={() => setStep('success')}
+          onClick={() => setStep('user-experiences')}
         >
           {!hasSaved ? 'Пропустить' : 'Далее'}
           <ArrowRight size={16} />
@@ -73,5 +73,5 @@ function EducationsCreate({
 }
 
 export {
-  EducationsCreate,
+  UserEquipmentCreateForms,
 };

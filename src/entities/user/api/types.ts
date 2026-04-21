@@ -1,12 +1,3 @@
-import { Department } from '@/entities/department';
-import { Education } from '@/entities/education';
-import { Equipment } from '@/entities/equipment';
-import { Experience } from '@/entities/experience';
-import { Language } from '@/entities/language';
-import { Position } from '@/entities/position';
-import { Profile } from '@/entities/profile';
-import { Role } from '@/entities/role';
-
 type Data = {
   type: 'users';
   id: string;
@@ -20,97 +11,42 @@ type Data = {
     emailVerifiedAt: string | null;
     createdAt: string;
     updatedAt: string;
+    deletedAt: string | null;
   };
   relationships: {
     profile: {
-      data: {
-        type: 'profiles';
-        id: string;
-      };
+      data: { type: 'profiles'; id: string; } | null;
     };
     roles: {
-      data: {
-        type: 'roles';
-        id: string;
-      }[];
+      data: { type: 'roles'; id: string; }[];
     };
     positions: {
-      data: {
-        type: 'positions';
-        id: string;
-      }[];
+      data: { type: 'positions'; id: string; }[];
     };
     departments: {
-      data: {
-        type: 'departments';
-        id: string;
-      }[];
+      data: { type: 'departments'; id: string; }[];
     };
     languages: {
-      data: {
-        type: 'languages';
-        id: string;
-      }[];
+      data: { type: 'languages'; id: string; }[];
     };
     equipments: {
-      data: {
-        type: 'equipments';
-        id: string;
-      }[];
+      data: { type: 'equipments'; id: string; }[];
     };
     experiences: {
-      data: {
-        type: 'experiences';
-        id: string;
-      }[];
+      data: { type: 'experiences'; id: string; }[];
     };
     educations: {
-      data: {
-        type: 'educations';
-        id: string;
-      }[];
+      data: { type: 'educations'; id: string; }[];
     };
   };
 };
 
-type Included =
-  | { type: 'profile'; id: string; attributes: Omit<Profile, 'id'> }
-  | { type: 'roles'; id: string; attributes: Omit<Role, 'id'> }
-  | { type: 'positions'; id: string; attributes: Omit<Position, 'id'> }
-  | { type: 'departments'; id: string; attributes: Omit<Department, 'id'> }
-  | { type: 'languages'; id: string; attributes: Omit<Language, 'id'> }
-  | { type: 'equipments'; id: string; attributes: Omit<Equipment, 'id'> }
-  | { type: 'experiences'; id: string; attributes: Omit<Experience, 'id'> }
-  | { type: 'educations'; id: string; attributes: Omit<Education, 'id'> }
-
 type UserResponse = {
   data: Data;
-  included: Included[];
 };
 
 type UsersResponse = {
   data: Data[];
-  included: Included[];
-};
-
-type TokenResponse = {
-  data: {
-    type: 'tokens';
-    id: string;
-    attributes: {
-      token: string;
-    }
-  };
-};
-
-type LoginRequest = {
-  data: {
-    type: 'tokens';
-    attributes: {
-      email: string;
-      password: string;
-    }
-  };
 };
 
 type UserStoreRequest = {
@@ -119,11 +55,37 @@ type UserStoreRequest = {
     attributes: {
       name: string;
       surname: string;
-      patronymic?: string;
+      patronymic?: string | null;
       email: string;
-      avatar?: File;
+      avatar?: File | null;
       password?: string;
       password_confirmation?: string;
+    };
+    relationships?: {
+      profile?: {
+        data: { type: 'profiles'; id: string; } | null;
+      };
+      roles?: {
+        data: { type: 'roles'; id: string; }[];
+      };
+      positions?: {
+        data: { type: 'positions'; id: string; }[];
+      };
+      departments?: {
+        data: { type: 'departments'; id: string; }[];
+      };
+      languages?: {
+        data: { type: 'languages'; id: string; }[];
+      };
+      equipments?: {
+        data: { type: 'equipments'; id: string; }[];
+      };
+      experiences?: {
+        data: { type: 'experiences'; id: string; }[];
+      };
+      educations?: {
+        data: { type: 'educations'; id: string; }[];
+      };
     };
   };
 };
@@ -161,8 +123,6 @@ type UserUpdateRequest = {
 export type {
   UserResponse,
   UsersResponse,
-  TokenResponse,
-  LoginRequest,
   UserStoreRequest,
   UserUpdateRequest,
 };

@@ -26,7 +26,7 @@ export default defineConfig([
       'no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0 }],
       'eol-last': ['error', 'always'],
       'semi': ['error', 'always'],
-      'no-console': 'warn'
+      'no-console': 'warn',
     },
   },
 ])

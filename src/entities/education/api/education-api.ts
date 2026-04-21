@@ -1,12 +1,13 @@
 import { AxiosInstance } from 'axios';
-import { EducationResponse, EducationStoreRequest } from './types';
+import { EducationResponse } from './types';
 import { Education } from '../model/types';
-import { mapEducation } from './mappers';
+import { mapEducationResponse, mapEducationStoreRequest } from './mappers';
+import { EducationStoreSchema } from '../model/schemas';
 
-const storeEducation = async (api: AxiosInstance, payload: EducationStoreRequest): Promise<Education> => {
-  const { data } = await api.post<EducationResponse>('/educations', payload);
+const storeEducation = async (api: AxiosInstance, payload: EducationStoreSchema): Promise<Education> => {
+  const { data } = await api.post<EducationResponse>('/educations?include=user', mapEducationStoreRequest(payload));
 
-  return mapEducation(data);
+  return mapEducationResponse(data);
 };
 
 export {

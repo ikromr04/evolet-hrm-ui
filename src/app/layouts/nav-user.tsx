@@ -23,11 +23,11 @@ import {
 } from '@/shared/ui';
 import { ReactNode, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/store';
-import { checkAuthAction, getAuthUser } from '@/entities/user';
-import { LogoutButton } from '@/features/logout-button';
+import { LogoutButton } from '@/features/auth';
+import { checkAuthAction, getMe } from '@/features/auth';
 
 function NavUser(): ReactNode {
-  const user = useAppSelector(getAuthUser);
+  const user = useAppSelector(getMe);
   const dispatch = useAppDispatch();
   const { isMobile } = useSidebar();
 

@@ -1,4 +1,3 @@
-import { AuthStatus, checkAuthAction, getAuthStatus } from '@/entities/user';
 import { ROUTES } from '@/shared/config';
 import { useAppDispatch, useAppSelector } from '@/shared/store';
 import { JSX, lazy, Suspense, useEffect } from 'react';
@@ -7,6 +6,7 @@ import { PrivateRoute } from './private-route';
 import { GuestRoute } from './guest-route';
 import { PageLoader } from '@/shared/ui';
 import { AppLayout } from '../layouts';
+import { AuthStatus, checkAuthAction, getAuthStatus } from '@/features/auth';
 
 const LoginPage = lazy(() => import('@/pages/login').then((m) => ({ default: m.LoginPage })));
 const HomePage = lazy(() => import('@/pages/home').then((m) => ({ default: m.HomePage })));

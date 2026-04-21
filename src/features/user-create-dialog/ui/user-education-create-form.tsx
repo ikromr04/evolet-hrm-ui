@@ -29,19 +29,19 @@ import {
 import { Calendar } from 'lucide-react';
 import { educationStoreSchema, EducationStoreSchema, storeEducationAction } from '@/entities/education';
 
-type EducationCreateFormProps = {
+type UserEducationCreateFormProps = {
   onRemove?: () => void;
   removable?: boolean;
   onSave: () => void;
   user: User;
 }
 
-function EducationCreateForm({
+function UserEducationCreateForm({
   onRemove,
   removable,
   onSave,
   user,
-}: EducationCreateFormProps): JSX.Element {
+}: UserEducationCreateFormProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [isSaved, setIsSaved] = useState(false);
 
@@ -55,7 +55,7 @@ function EducationCreateForm({
   const onSubmit = async (data: EducationStoreSchema, evt?: BaseSyntheticEvent) => {
     evt?.preventDefault();
 
-    await dispatch(storeEducationAction({ payload: data }))
+    await dispatch(storeEducationAction({ data }))
       .unwrap()
       .then(() => {
         toast.success('Данные успешно сохранены.');
@@ -274,4 +274,4 @@ function EducationCreateForm({
   );
 }
 
-export { EducationCreateForm };
+export { UserEducationCreateForm };

@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { JSX } from 'react';
 import { useAppSelector } from '@/shared/store';
-import { AuthStatus, getAuthStatus } from '@/entities/user';
 import { ROUTES } from '@/shared/config';
+import { AuthStatus, getAuthStatus } from '@/features/auth';
 
 function GuestRoute(): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);

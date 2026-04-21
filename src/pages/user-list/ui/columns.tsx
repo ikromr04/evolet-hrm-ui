@@ -1,5 +1,4 @@
 import { FamilyStatus, Sex } from '@/entities/profile';
-import { User } from '@/entities/user';
 import { ROUTES } from '@/shared/config';
 import {
   Avatar,
@@ -21,7 +20,7 @@ import {
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { generatePath, Link } from 'react-router-dom';
-import { type Filter } from '../model/types';
+import { Row, type Filter } from '../model/types';
 import { Dispatch, memo, SetStateAction, useCallback, useMemo } from 'react';
 import { debounce } from '@/shared/lib';
 import { RolesFilter } from './roles-filter';
@@ -33,117 +32,89 @@ type Props = {
   setFilter: Dispatch<SetStateAction<Filter>>;
 };
 
-const AvatarCell = memo(({ row }: CellContext<User, unknown>) => {
-  const user = row.original as User;
+const AvatarCell = memo(({ row }: CellContext<Row, unknown>) => (
+  <Avatar className="size-12">
+    <AvatarImage
+      src={row.original.avatarThumb || undefined}
+      alt={`${row.original.surname} ${row.original.name}`}
+    />
+    <AvatarFallback>
+      {row.original.surname.charAt(0)}
+      {row.original.name.charAt(0)}
+    </AvatarFallback>
+  </Avatar>
+));
 
-  return (
-    <Avatar className="size-12">
-      <AvatarImage
-        src={user.avatarThumb || undefined}
-        alt={`${user.surname} ${user.name}`}
-      />
-      <AvatarFallback>
-        {user.surname.charAt(0)}
-        {user.name.charAt(0)}
-      </AvatarFallback>
-    </Avatar>
-  );
-});
+const NameCell = memo(({ row }: CellContext<Row, unknown>) => (
+  <Button variant="link" asChild>
+    <Link
+      className="max-w-full whitespace-normal! h-auto"
+      to={generatePath(ROUTES.USER_READ, { id: row.original.id })}
+    >
+      {row.original.surname} {row.original.name} {row.original.patronymic}
+    </Link>
+  </Button>
+));
 
-const NameCell = memo(({ row }: CellContext<User, unknown>) => {
-  const user = row.original as User;
+const RolesCell = memo(({ row }: CellContext<Row, unknown>) => (
+  <div className="flex flex-wrap gap-1">
+    {row.original.roles.map((role) => (
+      <Badge key={role.name}>
+        {role.displayName}
+      </Badge>
+    ))}
+  </div>
+));
 
-  return (
-    <Button variant="link" asChild>
-      <Link
-        className="max-w-full whitespace-normal! h-auto"
-        to={generatePath(ROUTES.USER_READ, { id: user.id })}
-      >
-        {user.surname} {user.name} {user.patronymic}
-      </Link>
-    </Button>
-  );
-});
+const PositionsCell = memo(({ row }: CellContext<Row, unknown>) => (
+  <div className="flex flex-wrap gap-1">
+    {row.original.positions.map((position) => (
+      <Badge key={position.name} variant="secondary">
+        {position.name}
+      </Badge>
+    ))}
+  </div>
+));
 
-const RolesCell = memo(({ row }: CellContext<User, unknown>) => {
-  const user = row.original as User;
+const DepartmentsCell = memo(({ row }: CellContext<Row, unknown>) => (
+  <div className="flex flex-wrap gap-1">
+    {row.original.departments.map((department) => (
+      <Badge key={department.name} variant="outline">
+        {department.name}
+      </Badge>
+    ))}
+  </div>
+));
 
-  return (
-    <div className="flex flex-wrap gap-1">
-      {user.roles.map((role) => (
-        <Badge key={role.name}>
-          {role.displayName}
-        </Badge>
-      ))}
-    </div>
-  );
-});
+const EmailCell = memo(({ row }: CellContext<Row, unknown>) => (
+  <Button variant="link" asChild>
+    <Link
+      className="block max-w-full h-auto whitespace-normal! wrap-anywhere"
+      to={`mailto:${row.original.email}`}
+    >
+      {row.original.email}
+    </Link>
+  </Button>
+));
 
-const PositionsCell = memo(({ row }: CellContext<User, unknown>) => {
-  const user = row.original as User;
-
-  return (
-    <div className="flex flex-wrap gap-1">
-      {user.positions.map((position) => (
-        <Badge key={position.name} variant="secondary">
-          {position.name}
-        </Badge>
-      ))}
-    </div>
-  );
-});
-
-const DepartmentsCell = memo(({ row }: CellContext<User, unknown>) => {
-  const user = row.original as User;
-
-  return (
-    <div className="flex flex-wrap gap-1">
-      {user.departments.map((department) => (
-        <Badge key={department.name} variant="outline">
-          {department.name}
-        </Badge>
-      ))}
-    </div>
-  );
-});
-
-const EmailCell = memo(({ row }: CellContext<User, unknown>) => {
-  const user = row.original as User;
-
-  return (
-    <Button variant="link" asChild>
-      <Link
-        className="block max-w-full h-auto whitespace-normal! wrap-anywhere"
-        to={`mailto:${user.email}`}
-      >
-        {user.email}
-      </Link>
-    </Button>
-  );
-});
-
-const PhoneCell = memo(({ row }: CellContext<User, unknown>) => {
-  const user = row.original as User;
-
-  return (
-    <div className="flex flex-col">
-      {user.profile?.tel1 && (
-        <Button variant="link" asChild>
-          <Link className="w-max p-0 h-auto" to={`tel:${user.profile.tel1}`}>
-            {user.profile.tel1}
-          </Link>
-        </Button>
-      )}
-      {user.profile?.tel2 && (
-        <Button variant="link" asChild>
-          <Link className="w-max p-0 h-auto" to={`tel:${user.profile.tel2}`}>
-            {user.profile.tel2}
-          </Link>
-        </Button>
-      )}
-    </div>
-  );
-});
+const PhoneCell = memo(({ row }: CellContext<Row, unknown>) => (
+  <div className="flex flex-col">
+    {row.original.profile?.tel1 && (
+      <Button variant="link" asChild>
+        <Link className="w-max p-0 h-auto" to={`tel:${row.original.profile.tel1}`}>
+          {row.original.profile.tel1}
+        </Link>
+      </Button>
+    )}
+    {row.original.profile?.tel2 && (
+      <Button variant="link" asChild>
+        <Link className="w-max p-0 h-auto" to={`tel:${row.original.profile.tel2}`}>
+          {row.original.profile.tel2}
+        </Link>
+      </Button>
+    )}
+  </div>
+));
 
 const useUserColumns = ({ filter, setFilter }: Props) => {
   const setFilterKey = useMemo(
@@ -211,7 +182,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     />
   ), [filter.departments, toggleDepartments]);
 
-  const columns = useMemo<ColumnDef<User>[]>(() => [
+  const columns = useMemo<ColumnDef<Row>[]>(() => [
     {
       id: 'Фото',
       accessorKey: 'user.avatarThumb',
@@ -221,7 +192,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'ФИО',
-      accessorKey: 'user.name',
+      accessorKey: 'ФИО',
       header: () => <div className="px-3">ФИО</div>,
       size: 220,
       cell: NameCell,
@@ -240,7 +211,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Позиция',
-      accessorKey: 'user.roles',
+      accessorKey: 'Позиция',
       header: 'Позиция',
       size: 220,
       cell: RolesCell,
@@ -251,7 +222,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Отдел/Департамент',
-      accessorKey: 'user.departments',
+      accessorKey: 'Отдел/Департамент',
       header: 'Отдел/Департамент',
       size: 220,
       cell: DepartmentsCell,
@@ -262,7 +233,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Должность',
-      accessorKey: 'user.positions',
+      accessorKey: 'Должность',
       header: 'Должность',
       size: 220,
       cell: PositionsCell,
@@ -273,7 +244,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Email',
-      accessorKey: 'user.email',
+      accessorKey: 'Email',
       header: () => <div className="px-3">Email</div>,
       size: 240,
       cell: EmailCell,
@@ -292,7 +263,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Дата рождения',
-      accessorKey: 'user.profile.birthDate',
+      accessorKey: 'Дата рождения',
       header: 'Дата рождения',
       size: 160,
       cell: ({ row }) => row.original.profile?.birthDate ? dayjs(row.original.profile.birthDate).format('DD MMM YYYY') : '',
@@ -300,7 +271,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Пол',
-      accessorKey: 'user.profile.sex',
+      accessorKey: 'Пол',
       header: 'Пол',
       size: 100,
       cell: ({ row }) => row.original.profile?.sex ? Sex[row.original.profile.sex] : '',
@@ -329,7 +300,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Национальность',
-      accessorKey: 'user.profile.nationality',
+      accessorKey: 'Национальность',
       header: 'Национальность',
       size: 170,
       cell: ({ row }) => row.original.profile?.nationality,
@@ -348,7 +319,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Гражданство',
-      accessorKey: 'user.profile.citizenship',
+      accessorKey: 'Гражданство',
       header: 'Гражданство',
       cell: ({ row }) => row.original.profile?.citizenship,
       sortingFn: (a, b) => (a.original.profile?.citizenship || '').localeCompare(b.original.profile?.citizenship || ''),
@@ -366,7 +337,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Адрес',
-      accessorKey: 'user.profile.address',
+      accessorKey: 'Адрес',
       header: 'Адрес',
       size: 260,
       cell: ({ row }) => row.original.profile?.address,
@@ -385,7 +356,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Телефон',
-      accessorKey: 'user.profile.tel',
+      accessorKey: 'Телефон',
       header: () => <div className="px-3">Телефон</div>,
       size: 140,
       cell: PhoneCell,
@@ -403,7 +374,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Семейное положение',
-      accessorKey: 'user.profile.familyStatus',
+      accessorKey: 'Семейное положение',
       header: 'Семейное положение',
       size: 210,
       sortingFn: (a, b) => (a.original.profile?.familyStatus || '').localeCompare(b.original.profile?.familyStatus || ''),
@@ -432,15 +403,26 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     },
     {
       id: 'Дети',
-      accessorKey: 'user.profile.children',
+      accessorKey: 'Дети',
       header: 'Дети',
       size: 120,
-      sortingFn: (a, b) => (a.original.profile?.children?.length.toString() || '').localeCompare(b.original.profile?.children?.length.toString() || ''),
-      cell: ({ row }) => row.original.profile?.children?.join(', '),
+      sortingFn: (a, b) => {
+        const aLen = a.original.profile?.children ? (
+          a.original.profile.children.length ?? 0
+        ) : -1;
+        const bLen = b.original.profile?.children ? (
+          b.original.profile?.children?.length ?? 0
+        ) : -1;
+
+        return aLen - bLen;
+      },
+      cell: ({ row }) => row.original.profile?.children ? (
+        row.original.profile.children.length ? row.original.profile.children.join(', ') : 'Нет детей'
+      ) : '',
     },
     {
       id: 'Начало работы',
-      accessorKey: 'user.profile.startedWorkAt',
+      accessorKey: 'Начало работы',
       header: 'Начало работы',
       size: 160,
       sortingFn: (a, b) => (a.original.profile?.startedWorkAt || '').localeCompare(b.original.profile?.startedWorkAt || ''),

@@ -4,20 +4,17 @@ import { ApiErrors, ErrorResponse } from '@/shared/api';
 import { EducationStoreSchema } from './schemas';
 import { Education } from './types';
 import { storeEducation } from '../api/education-api';
-import { mapEducationStore } from './mappers';
 
 const storeEducationAction = createAsyncThunk<Education, {
-  payload: EducationStoreSchema;
+  data: EducationStoreSchema;
 }, {
   extra: AxiosInstance;
   rejectWithValue: ApiErrors;
 }>(
   'educations/store',
-  async ({ payload }, { extra: api, rejectWithValue }) => {
+  async ({ data }, { extra: api, rejectWithValue }) => {
     try {
-      const profile = await storeEducation(api, mapEducationStore(payload));
-      
-      return profile;
+      return await storeEducation(api, data);
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
 
