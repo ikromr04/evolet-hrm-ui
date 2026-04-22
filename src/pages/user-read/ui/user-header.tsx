@@ -32,7 +32,7 @@ function UserHeader({
           {user.surname} {user.name} {user.patronymic}
         </h2>
 
-        <div className="flex items-center text-muted-foreground gap-2 font-light text-sm">
+        <div className="flex items-center text-muted-foreground gap-2 font-light text-sm flex-wrap">
           <MapPin size={16} />
           {userDepartments.map(({ name }) => (
             <Badge key={name} variant="outline">
