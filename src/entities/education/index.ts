@@ -9,6 +9,7 @@ export {
   fetchEducationsAction,
   storeEducationAction,
   updateEducationAction,
+  deleteEducationAction,
 } from './model/thunks';
 
 export type {

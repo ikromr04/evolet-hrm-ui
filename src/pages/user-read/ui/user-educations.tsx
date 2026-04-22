@@ -1,8 +1,10 @@
 import { fetchEducationsAction, getEducations, getEducationsStatus } from '@/entities/education';
 import { User } from '@/entities/user';
 import { EducationCreateDialog } from '@/features/education-create-dialog';
+import { EducationDeleteDialog } from '@/features/education-delete-dialog';
+import { EducationEditDialog } from '@/features/education-edit-dialog';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
-import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
+import { Button, ButtonGroup, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import { JSX, useEffect } from 'react';
 
@@ -18,8 +20,6 @@ function UserEducations({
   const educations = useAppSelector(getEducations);
 
   const userEducations = educations?.filter(({ id }) => user.educations.includes(id));
-  console.log(userEducations);
-  console.log(user);
 
   useEffect(() => {
     if (educationsStatus === AsyncStatus.IDLE) dispatch(fetchEducationsAction());
@@ -58,7 +58,7 @@ function UserEducations({
 
           <CollapsibleContent>
             {userEducations?.map((education) => (
-              <div key={education.id}>
+              <div className="relative z-0" key={education.id}>
                 <dl className="flex flex-col gap-3 p-4 pt-2 border-t">
                   <div>
                     <dt className="text-xs text-muted-foreground">Учебное заведение</dt>
@@ -85,6 +85,26 @@ function UserEducations({
                     <dd className="text-[16px] font-light">{education.endedAt}</dd>
                   </div>
                 </dl>
+                <ButtonGroup className="absolute top-2 right-4">
+                  <EducationDeleteDialog
+                    key={education.id}
+                    education={education}
+                    trigger={
+                      <Button type="button" variant="destructive" size="sm">
+                        Удалить
+                      </Button>
+                    }
+                  />
+                  <EducationEditDialog
+                    key={JSON.stringify(education)}
+                    education={education}
+                    trigger={
+                      <Button type="button" variant="secondary" size="sm">
+                        Редактировать
+                      </Button>
+                    }
+                  />
+                </ButtonGroup>
               </div>
             ))}
           </CollapsibleContent>

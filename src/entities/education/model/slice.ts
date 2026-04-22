@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AsyncStatus } from '@/shared/store';
 import { Education, Educations } from './types';
-import { fetchEducationsAction, storeEducationAction, updateEducationAction } from './thunks';
+import { deleteEducationAction, fetchEducationsAction, storeEducationAction, updateEducationAction } from './thunks';
 
 type EducationSlice = {
   educations: {
@@ -42,6 +42,11 @@ const educationSlice = createSlice({
             }
             return education;
           });
+        }
+      })
+      .addCase(deleteEducationAction.fulfilled, (state, action: PayloadAction<Education>) => {
+        if (state.educations.data) {
+          state.educations.data = state.educations.data.filter((education) => education.id !== action.payload.id);
         }
       });
   }

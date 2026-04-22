@@ -6,7 +6,7 @@ import { EducationStoreSchema, EducationUpdateSchema } from '../model/schemas';
 
 const fetchEducations = async (api: AxiosInstance): Promise<Educations> => {
   const { data } = await api.get<EducationsResponse>('/educations?include=user');
-  
+
   return mapEducationsResponse(data);
 };
 
@@ -25,8 +25,13 @@ const updateEducation = async (api: AxiosInstance, payload: EducationUpdateSchem
   return mapEducationResponse(data);
 };
 
+const deleteEducation = async (api: AxiosInstance, id: string): Promise<void> => {
+  await api.delete<EducationResponse>(`/educations/${id}`);
+};
+
 export {
   fetchEducations,
   storeEducation,
   updateEducation,
+  deleteEducation,
 };

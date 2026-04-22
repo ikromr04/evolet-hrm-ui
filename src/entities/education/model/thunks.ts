@@ -3,7 +3,7 @@ import { AxiosError, AxiosInstance } from 'axios';
 import { ApiErrors, ErrorResponse } from '@/shared/api';
 import { EducationStoreSchema, EducationUpdateSchema } from './schemas';
 import { Education, Educations } from './types';
-import { fetchEducations, storeEducation, updateEducation } from '../api/education-api';
+import { deleteEducation, fetchEducations, storeEducation, updateEducation } from '../api/education-api';
 
 const fetchEducationsAction = createAsyncThunk<Educations, undefined, {
   extra: AxiosInstance;
@@ -50,8 +50,21 @@ const updateEducationAction = createAsyncThunk<Education, {
   }
 );
 
+const deleteEducationAction = createAsyncThunk<Education, {
+  data: Education;
+}, {
+  extra: AxiosInstance;
+}>(
+  'educations/delete',
+  async ({ data }, { extra: api }) => {
+    await deleteEducation(api, data.id);
+    return data;
+  }
+);
+
 export {
   fetchEducationsAction,
   storeEducationAction,
   updateEducationAction,
+  deleteEducationAction,
 };
