@@ -1,4 +1,4 @@
-export { cn, debounce } from './utils';
+export { cn, debounce, getYearsRange } from './utils';
 
 export { type Theme, useTheme, ThemeProviderContext } from './theme';  
 

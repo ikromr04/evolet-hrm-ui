@@ -19,3 +19,14 @@ export const debounce = <F extends (...args: any) => any>(
 
   return debounced as (...args: Parameters<F>) => ReturnType<F>;
 };
+
+export const getYearsRange = (from: number): number[] => {
+  const currentYear = new Date().getFullYear();
+
+  if (from > currentYear) return [];
+
+  return Array.from(
+    { length: currentYear - from + 1 },
+    (_, i) => from + i
+  );
+};

@@ -4,6 +4,8 @@ import { getPositions } from '@/entities/position';
 import { FamilyStatus, getProfiles, Sex } from '@/entities/profile';
 import { getRoles } from '@/entities/role';
 import { User } from '@/entities/user';
+import { ProfileCreateDialog } from '@/features/profile-create-dialog';
+import { ProfileEditDialog } from '@/features/profile-edit-dialog';
 import { UserEditDialog } from '@/features/user-edit-dialog';
 import { useAppSelector } from '@/shared/store';
 import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
@@ -138,21 +140,41 @@ function UserProfile({
             <h3 className="text-[16px]">
               Данные сотрудника
             </h3>
-            {/* <ProfileUpdateDialog
-              key={JSON.stringify(user)}
-              user={user}
-              trigger={
-                <Button
-                  className="ml-auto"
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                >
-                  <Edit size={16} />
-                  Редактировать
-                </Button>
-              }
-            /> */}
+            {userProfile ? (
+              <ProfileEditDialog
+                key={JSON.stringify(userProfile)}
+                profile={userProfile}
+                trigger={
+                  <Button
+                    className="ml-auto"
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                  >
+                    <Edit size={16} />
+                    Редактировать
+                  </Button>
+                }
+              />
+            ) : (
+              (
+                <ProfileCreateDialog
+                  key={JSON.stringify(user)}
+                  user={user}
+                  trigger={
+                    <Button
+                      className="ml-auto"
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                    >
+                      <Edit size={16} />
+                      Редактировать
+                    </Button>
+                  }
+                />
+              )
+            )}
             <CollapsibleTrigger asChild>
               <Button variant="ghost" size="icon-sm">
                 <ChevronsUpDown size={16} />
@@ -207,14 +229,6 @@ function UserProfile({
                 <dt className="text-xs text-muted-foreground">Телефон 2</dt>
                 <dd className="text-[16px] font-light">
                   {userProfile?.tel2 || 'Не указано'}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs text-muted-foreground">Семейное положение</dt>
-                <dd className="text-[16px] font-light">
-                  {userProfile?.familyStatus
-                    ? FamilyStatus[userProfile.familyStatus]
-                    : 'Не указано'}
                 </dd>
               </div>
               <div>

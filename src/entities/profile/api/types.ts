@@ -39,11 +39,6 @@ type ProfileUpdateRequest = {
       children?: number[] | null;
       startedWorkAt?: string | null;
     };
-    relationships: {
-      user: {
-        data: { type: 'users', id: string };
-      }
-    }
   };
 };
 

@@ -17,7 +17,7 @@ const storeProfile = async (api: AxiosInstance, payload: ProfileStoreSchema): Pr
 };
 
 const updateProfile = async (api: AxiosInstance, payload: ProfileUpdateSchema): Promise<Profile> => {
-  const { data } = await api.patch<ProfileResponse>('/profiles?include=user', mapProfileUpdateRequest(payload));
+  const { data } = await api.patch<ProfileResponse>(`/profiles/${payload.id}?include=user`, mapProfileUpdateRequest(payload));
 
   return mapProfileResponse(data);
 };

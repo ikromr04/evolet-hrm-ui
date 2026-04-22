@@ -48,8 +48,8 @@ function UserEditDialog({
   trigger,
   user,
 }: UserEditDialogProps): JSX.Element {
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const [open, setOpen] = useState(false);
 
   const rolesStatus = useAppSelector(getRolesStatus);
   const positionsStatus = useAppSelector(getPositionsStatus);
@@ -97,7 +97,7 @@ function UserEditDialog({
       .then(() => {
         toast.success('Данные успешно обновлены.');
         form.reset(values);
-        setOpen(false);
+        setIsOpen(false);
       })
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
@@ -113,7 +113,7 @@ function UserEditDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {trigger}
       </DialogTrigger>
@@ -122,7 +122,6 @@ function UserEditDialog({
         <form
           className="flex flex-col gap-6"
           onSubmit={form.handleSubmit(onSubmit)}
-          id="user-update-form"
           noValidate
         >
           <DialogHeader>
@@ -551,7 +550,6 @@ function UserEditDialog({
             <Button
               type="submit"
               disabled={form.formState.isSubmitting || !form.formState.isDirty}
-              form="user-update-form"
             >
               {form.formState.isSubmitting && <Spinner />}
               Сохранить

@@ -59,18 +59,10 @@ const mapProfileStoreRequest = (data: ProfileStoreSchema): ProfileStoreRequest =
 const mapProfileUpdateRequest = (data: ProfileUpdateSchema): ProfileUpdateRequest => ({
   data: {
     type: 'profiles',
-    id: data.userId,
+    id: data.id,
     attributes: {
       ...data
     },
-    relationships: {
-      user: {
-        data: {
-          type: 'users',
-          id: data.userId
-        }
-      }
-    }
   }
 });
 

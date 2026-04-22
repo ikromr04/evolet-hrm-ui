@@ -60,7 +60,6 @@ type ProfileStoreSchema = z.infer<typeof profileStoreSchema>;
 
 const profileUpdateSchema = z.object({
   id: z.string('ID профиля обязателен.'),
-  userId: z.string('ID пользователя обязателен.'),
   birthDate: z
     .string('Дата рождения работы должна быть строкой.')
     .optional()
@@ -103,7 +102,6 @@ const profileUpdateSchema = z.object({
         .lte(dayjs().year(), 'Год рождения ребенка не может быть в будущем.')
     )
     .optional(),
-
   startedWorkAt: z
     .string('Дата начало работы должна быть строкой.')
     .optional()

@@ -9,7 +9,6 @@ import { ArrowRight, Calendar, ChevronsUpDown, X } from 'lucide-react';
 import { User } from '@/entities/user';
 import dayjs from 'dayjs';
 import { ru } from 'date-fns/locale';
-import { getChildrenYears } from '../lib/utils';
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
 import {
@@ -40,6 +39,7 @@ import {
   Spinner,
   Calendar as UiCalendar,
 } from '@/shared/ui';
+import { getYearsRange } from '@/shared/lib';
 
 type UserProfileCreateFormProps = {
   setStep: Dispatch<SetStateAction<Step>>;
@@ -414,7 +414,7 @@ function UserProfileCreateForm({
                         >
                           Нет детей
                         </CommandItem>
-                        {getChildrenYears().map((year) => (
+                        {getYearsRange(1960).map((year) => (
                           <CommandItem
                             key={year}
                             data-checked={values?.includes(year)}
