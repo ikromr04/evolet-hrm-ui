@@ -37,7 +37,51 @@ const educationStoreSchema = z.object({
 
 type EducationStoreSchema = z.infer<typeof educationStoreSchema>;
 
+const educationUpdateSchema = z.object({
+  id: z.string('ID профиля обязателен.'),
+  institution: z
+    .string('Учебное заведение должно быть строкой.')
+    .nonempty('Учебное заведение обязателен.')
+    .max(255, 'Учебное заведение должно быть не больше 255 символов.')
+    .optional(),
+  faculty: z
+    .string('Факультет должен быть строкой.')
+    .nonempty('Факультет обязателен.')
+    .max(255, 'Факультет должен быть не больше 255 символов.')
+    .optional(),
+  speciality: z
+    .string('Поле должен быть строкой.')
+    .nonempty('Специальность обязателен.')
+    .max(255, 'Специальность должен быть не больше 255 символов.')
+    .optional(),
+  form: z
+    .string('Поле должен быть строкой.')
+    .nonempty('Форма обучения обязателен.')
+    .max(255, 'Форма обучения должен быть не больше 255 символов.')
+    .optional(),
+  startedAt: z
+    .string('Дата поступления должно быть строкой.')
+    .nonempty('Дата поступления обязателен.')
+    .refine(
+      (date) => !date || dayjs(date).isBefore(dayjs(), 'day'),
+      'Дата поступления должна быть в прошлом.',
+    )
+    .optional(),
+  endedAt: z
+    .string('Дата окончания должна быть строкой.')
+    .nonempty('Дата окончания обязателен.')
+    .refine(
+      (date) => !date || dayjs(date).isBefore(dayjs(), 'day'),
+      'Дата окончания должна быть в прошлом.',
+    )
+    .optional(),
+});
+
+type EducationUpdateSchema = z.infer<typeof educationUpdateSchema>;
+
 export {
   educationStoreSchema,
+  educationUpdateSchema,
   type EducationStoreSchema,
+  type EducationUpdateSchema,
 };

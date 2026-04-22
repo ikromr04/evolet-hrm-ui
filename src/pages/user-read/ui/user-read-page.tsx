@@ -24,6 +24,7 @@ import { fetchPositionsAction, getPositionsStatus } from '@/entities/position';
 import { fetchDepartmentsAction, getDepartmentsStatus } from '@/entities/department';
 import { UserSidebar } from './user-sidebar';
 import { fetchLanguagesAction, getLanguagesStatus } from '@/entities/language';
+import { UserEducations } from './user-educations';
 
 function UserReadPage(): JSX.Element {
   const { setTitle } = useHeader();
@@ -96,7 +97,7 @@ function UserReadPage(): JSX.Element {
             <UserProfile user={user} />
           </TabsContent>
           <TabsContent value="educations">
-            Образование
+            <UserEducations user={user} />
           </TabsContent>
           <TabsContent value="experiences">
             Работа

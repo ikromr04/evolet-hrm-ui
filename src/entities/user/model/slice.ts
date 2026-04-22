@@ -19,9 +19,27 @@ const initialState: UserSlice = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    updateUser: (state, action: PayloadAction<User>) => {
+      if (state.users.data) {
+        state.users.data = state.users.data.map((user) => {
+          if (user.id === action.payload.id) {
+            return action.payload;
+          }
+          return user;
+        });
+      }
+    }
+  },
   extraReducers(builder) {
     builder
+      .addCase(fetchUsersAction.pending, (state) => {
+        state.users.status = AsyncStatus.LOADING;
+      })
+      .addCase(fetchUsersAction.fulfilled, (state, action: PayloadAction<Users>) => {
+        state.users.data = action.payload;
+        state.users.status = AsyncStatus.SUCCEEDED;
+      })
       .addCase(storeUserAction.fulfilled, (state, action: PayloadAction<User>) => {
         if (state.users.data) {
           state.users.data = [action.payload, ...state.users.data];
@@ -46,15 +64,9 @@ const userSlice = createSlice({
             return user;
           });
         }
-      })
-      .addCase(fetchUsersAction.pending, (state) => {
-        state.users.status = AsyncStatus.LOADING;
-      })
-      .addCase(fetchUsersAction.fulfilled, (state, action: PayloadAction<Users>) => {
-        state.users.data = action.payload;
-        state.users.status = AsyncStatus.SUCCEEDED;
       });
   }
 });
 
 export { userSlice };
+export const { updateUser } = userSlice.actions;

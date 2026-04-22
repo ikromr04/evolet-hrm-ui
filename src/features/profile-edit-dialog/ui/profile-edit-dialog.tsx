@@ -2,7 +2,7 @@ import { BaseSyntheticEvent, JSX, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAppDispatch } from '@/shared/store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FamilyStatus, Sex, Profile, ProfileUpdateSchema, profileUpdateSchema } from '@/entities/profile';
+import { FamilyStatus, Sex, Profile, ProfileUpdateSchema, profileUpdateSchema, updateProfileAction } from '@/entities/profile';
 import { cn, getYearsRange } from '@/shared/lib';
 import { ArrowRight, Calendar, ChevronsUpDown, X } from 'lucide-react';
 import dayjs from 'dayjs';
@@ -41,7 +41,6 @@ import {
   Spinner,
   Calendar as UiCalendar,
 } from '@/shared/ui';
-import { updateProfileAction } from '@/entities/profile/model/thunks';
 
 type ProfileEditDialogProps = {
   trigger: JSX.Element;

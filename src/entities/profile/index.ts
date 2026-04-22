@@ -8,6 +8,7 @@ export {
 export {
   fetchProfilesAction,
   storeProfileAction,
+  updateProfileAction,
 } from './model/thunks';
 
 export {

@@ -1,9 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
 import { ApiErrors, ErrorResponse } from '@/shared/api';
-import { EducationStoreSchema } from './schemas';
-import { Education } from './types';
-import { storeEducation } from '../api/education-api';
+import { EducationStoreSchema, EducationUpdateSchema } from './schemas';
+import { Education, Educations } from './types';
+import { fetchEducations, storeEducation, updateEducation } from '../api/education-api';
+
+const fetchEducationsAction = createAsyncThunk<Educations, undefined, {
+  extra: AxiosInstance;
+}>(
+  'educations/fetch',
+  async (_arg, { extra: api }) => {
+    return await fetchEducations(api);
+  }
+);
 
 const storeEducationAction = createAsyncThunk<Education, {
   data: EducationStoreSchema;
@@ -23,6 +32,26 @@ const storeEducationAction = createAsyncThunk<Education, {
   }
 );
 
+const updateEducationAction = createAsyncThunk<Education, {
+  data: EducationUpdateSchema;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ApiErrors;
+}>(
+  'educations/update',
+  async ({ data }, { extra: api, rejectWithValue }) => {
+    try {
+      return await updateEducation(api, data);
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+
+      return rejectWithValue(error.response?.data.errors);
+    }
+  }
+);
+
 export {
+  fetchEducationsAction,
   storeEducationAction,
+  updateEducationAction,
 };

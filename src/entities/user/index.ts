@@ -3,7 +3,10 @@ export {
   type Users,
 } from './model/types';
 
-export { userSlice } from './model/slice';
+export {
+  userSlice,
+  updateUser,
+} from './model/slice';
 
 export {
   getUsersStatus,
