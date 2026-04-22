@@ -1,10 +1,15 @@
 export {
   experienceStoreSchema,
+  experienceUpdateSchema,
   type ExperienceStoreSchema,
+  type ExperienceUpdateSchema,
 } from './model/schemas';
 
 export {
+  fetchExperiencesAction,
   storeExperienceAction,
+  updateExperienceAction,
+  deleteExperienceAction,
 } from './model/thunks';
 
 export type {

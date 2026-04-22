@@ -25,6 +25,7 @@ import { fetchDepartmentsAction, getDepartmentsStatus } from '@/entities/departm
 import { UserSidebar } from './user-sidebar';
 import { fetchLanguagesAction, getLanguagesStatus } from '@/entities/language';
 import { UserEducations } from './user-educations';
+import { UserExperiences } from './user-experiences';
 
 function UserReadPage(): JSX.Element {
   const { setTitle } = useHeader();
@@ -100,7 +101,7 @@ function UserReadPage(): JSX.Element {
             <UserEducations user={user} />
           </TabsContent>
           <TabsContent value="experiences">
-            Работа
+            <UserExperiences user={user} />
           </TabsContent>
           <TabsContent value="equipments">
             Оборудование

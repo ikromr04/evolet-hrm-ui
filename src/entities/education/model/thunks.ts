@@ -58,6 +58,7 @@ const deleteEducationAction = createAsyncThunk<Education, {
   'educations/delete',
   async ({ data }, { extra: api }) => {
     await deleteEducation(api, data.id);
+    
     return data;
   }
 );
