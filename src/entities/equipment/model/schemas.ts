@@ -14,7 +14,24 @@ const equipmentStoreSchema = z.object({
 
 type EquipmentStoreSchema = z.infer<typeof equipmentStoreSchema>;
 
+const equipmentUpdateSchema = z.object({
+  id: z.string('ID обязателен.'),
+  name: z
+    .string('Название должно быть строкой.')
+    .nonempty('Название обязателен.')
+    .max(255, 'Название должно быть не больше 255 символов.')
+    .optional(),
+  description: z
+    .string('Описание должен быть строкой.')
+    .max(255, 'Описание должно быть не больше 255 символов.')
+    .optional(),
+});
+
+type EquipmentUpdateSchema = z.infer<typeof equipmentUpdateSchema>;
+
 export {
   equipmentStoreSchema,
+  equipmentUpdateSchema,
   type EquipmentStoreSchema,
+  type EquipmentUpdateSchema,
 };

@@ -1,10 +1,15 @@
 export {
   equipmentStoreSchema,
+  equipmentUpdateSchema,
   type EquipmentStoreSchema,
+  type EquipmentUpdateSchema,
 } from './model/schemas';
 
 export {
+  fetchEquipmentsAction,
   storeEquipmentAction,
+  updateEquipmentAction,
+  deleteEquipmentAction,
 } from './model/thunks';
 
 export type {
