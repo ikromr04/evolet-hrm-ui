@@ -2,7 +2,6 @@ import { BaseSyntheticEvent, JSX, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useAppDispatch } from '@/shared/store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { ApiErrors } from '@/shared/api';
 import {
@@ -113,7 +112,6 @@ function UserTransferDialog({
                 variant="outline"
               >
                 Отмена
-                <ArrowRight size={16} />
               </Button>
             </DialogClose>
             <Button
