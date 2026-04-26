@@ -6,6 +6,11 @@ import {
   AvatarImage,
   Badge,
   Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
   Input,
   Select,
   SelectContent,
@@ -26,6 +31,9 @@ import { debounce } from '@/shared/lib';
 import { RolesFilter } from './roles-filter';
 import { PositionsFilter } from './positions-filter';
 import { DepartmentsFilter } from './departments-filter';
+import { IconDotsVertical } from '@tabler/icons-react';
+import { UserFireDialog } from '@/features/user-fire-dialog';
+import { UserTransferDialog } from '@/features/user-transfer-dialog';
 
 type Props = {
   filter: Filter;
@@ -114,6 +122,46 @@ const PhoneCell = memo(({ row }: CellContext<Row, unknown>) => (
       </Button>
     )}
   </div>
+));
+
+const ActionsCell = memo(({ row }: CellContext<Row, unknown>) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button
+        variant="ghost"
+        className="flex size-8 text-muted-foreground data-[state=open]:bg-muted"
+        size="icon"
+      >
+        <IconDotsVertical size={16} />
+        <span className="sr-only">Открыть меню</span>
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent className="min-w-max" align="end">
+      <DropdownMenuItem>
+        <Link to={generatePath(ROUTES.USER_READ, { id: row.original.id })}>
+          Перейти к профилю
+        </Link>
+      </DropdownMenuItem>
+      <UserFireDialog
+        user={row.original}
+        trigger={
+          <DropdownMenuItem onSelect={(evt) => evt.preventDefault()}>
+            Уволить
+          </DropdownMenuItem>
+        }
+      />
+      <UserTransferDialog
+        user={row.original}
+        trigger={
+          <DropdownMenuItem onSelect={(evt) => evt.preventDefault()}>
+            Перевести
+          </DropdownMenuItem>
+        }
+      />
+      <DropdownMenuSeparator />
+      <DropdownMenuItem variant="destructive">Удалить</DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
 ));
 
 const useUserColumns = ({ filter, setFilter }: Props) => {
@@ -428,6 +476,12 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
       sortingFn: (a, b) => (a.original.profile?.startedWorkAt || '').localeCompare(b.original.profile?.startedWorkAt || ''),
       cell: ({ row }) =>
         row.original.profile?.startedWorkAt ? dayjs(row.original.profile.startedWorkAt).format('DD MMM YYYY') : '',
+    },
+    {
+      id: 'actions',
+      size: 48,
+      enableColumnFilter: false,
+      cell: ActionsCell,
     },
   ], [filter, setFilterKey, renderRolesFilter, renderPositionsFilter, renderDepartmentsFilter]);
 

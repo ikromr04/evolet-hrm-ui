@@ -120,9 +120,35 @@ type UserUpdateRequest = {
   };
 };
 
+type UserFireRequest = {
+  data: {
+    type: 'users';
+    id: string;
+    meta: {
+      payload: {
+        reason?: string;
+      };
+    };
+  };
+};
+
+type UserTransferRequest = {
+  data: {
+    type: 'users';
+    id: string;
+    meta: {
+      payload: {
+        to?: string;
+      };
+    };
+  };
+};
+
 export type {
   UserResponse,
   UsersResponse,
   UserStoreRequest,
   UserUpdateRequest,
+  UserFireRequest,
+  UserTransferRequest,
 };

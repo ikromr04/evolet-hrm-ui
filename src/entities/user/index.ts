@@ -16,8 +16,12 @@ export {
 export {
   userStoreSchema,
   userUpdateSchema,
+  userFireSchema,
+  userTransferSchema,
   type UserStoreSchema,
   type UserUpdateSchema,
+  type UserFireSchema,
+  type UserTransferSchema,
 } from './model/schemas';
 
 export {
@@ -25,4 +29,6 @@ export {
   updateUserAction,
   fetchUsersAction,
   updateAvatarAction,
+  fireUserAction,
+  transferUserAction,
 } from './model/thunks';

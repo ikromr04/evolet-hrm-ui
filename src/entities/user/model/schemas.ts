@@ -84,9 +84,31 @@ const userUpdateSchema = z.object({
 
 type UserUpdateSchema = z.infer<typeof userUpdateSchema>;
 
+const userFireSchema = z.object({
+  id: z.string('ID пользователя обязателен.'),
+  reason: z
+    .string('Поле должен быть строкой.')
+    .optional(),
+});
+
+type UserFireSchema = z.infer<typeof userFireSchema>;
+
+const userTransferSchema = z.object({
+  id: z.string('ID пользователя обязателен.'),
+  to: z
+    .string('Поле должен быть строкой.')
+    .optional(),
+});
+
+type UserTransferSchema = z.infer<typeof userTransferSchema>;
+
 export {
   userStoreSchema,
   userUpdateSchema,
+  userFireSchema,
+  userTransferSchema,
   type UserStoreSchema,
   type UserUpdateSchema,
+  type UserFireSchema,
+  type UserTransferSchema,
 };

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User, Users } from './types';
-import { fetchUsersAction, storeUserAction, updateAvatarAction, updateUserAction } from './thunks';
+import { fetchUsersAction, fireUserAction, storeUserAction, transferUserAction, updateAvatarAction, updateUserAction } from './thunks';
 import { AsyncStatus } from '@/shared/store';
 
 type UserSlice = {
@@ -63,6 +63,16 @@ const userSlice = createSlice({
             }
             return user;
           });
+        }
+      })
+      .addCase(fireUserAction.fulfilled, (state, action: PayloadAction<string>) => {
+        if (state.users.data) {
+          state.users.data = state.users.data.filter((user) => user.id !== action.payload);
+        }
+      })
+      .addCase(transferUserAction.fulfilled, (state, action: PayloadAction<string>) => {
+        if (state.users.data) {
+          state.users.data = state.users.data.filter((user) => user.id !== action.payload);
         }
       });
   }

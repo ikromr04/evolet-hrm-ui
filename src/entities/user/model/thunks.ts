@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { fetchUsers, storeUser, updateAvatar, updateUser } from '../api/user-api';
+import { fetchUsers, fireUser, storeUser, transferUser, updateAvatar, updateUser } from '../api/user-api';
 import { User, Users } from './types';
-import { UserStoreSchema, UserUpdateSchema } from './schemas';
+import { UserFireSchema, UserStoreSchema, UserTransferSchema, UserUpdateSchema } from './schemas';
 import { ApiErrors, ErrorResponse } from '@/shared/api';
 
 const fetchUsersAction = createAsyncThunk<Users, undefined, {
@@ -68,9 +68,51 @@ const updateAvatarAction = createAsyncThunk<User, {
   }
 );
 
+const fireUserAction = createAsyncThunk<string, {
+  data: UserFireSchema;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ApiErrors;
+}>(
+  'user/fire',
+  async ({ data }, { extra: api, rejectWithValue }) => {
+    try {
+      await fireUser(api, data);
+
+      return data.id;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+
+      return rejectWithValue(error.response?.data.errors);
+    }
+  }
+);
+
+const transferUserAction = createAsyncThunk<string, {
+  data: UserTransferSchema;
+}, {
+  extra: AxiosInstance;
+  rejectWithValue: ApiErrors;
+}>(
+  'user/transfer',
+  async ({ data }, { extra: api, rejectWithValue }) => {
+    try {
+      await transferUser(api, data);
+
+      return data.id;
+    } catch (err) {
+      const error = err as AxiosError<ErrorResponse>;
+
+      return rejectWithValue(error.response?.data.errors);
+    }
+  }
+);
+
 export {
   storeUserAction,
   updateUserAction,
   fetchUsersAction,
   updateAvatarAction,
+  fireUserAction,
+  transferUserAction,
 };

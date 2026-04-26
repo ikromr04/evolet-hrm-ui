@@ -1,6 +1,6 @@
-import { UserStoreSchema, UserUpdateSchema } from '../model/schemas';
+import { UserFireSchema, UserStoreSchema, UserTransferSchema, UserUpdateSchema } from '../model/schemas';
 import { User, Users } from '../model/types';
-import { UserResponse, UsersResponse, UserStoreRequest, UserUpdateRequest } from './types';
+import { UserFireRequest, UserResponse, UsersResponse, UserStoreRequest, UserTransferRequest, UserUpdateRequest } from './types';
 
 const mapUserResponse = (response: UserResponse): User => ({
   id: response.data.id,
@@ -69,9 +69,35 @@ const mapUserUpdateRequest = (data: UserUpdateSchema): UserUpdateRequest => ({
   }
 });
 
+const mapUserFireRequest = (data: UserFireSchema): UserFireRequest => ({
+  data: {
+    type: 'users',
+    id: data.id,
+    meta: {
+      payload: {
+        reason: data.reason,
+      },
+    }
+  }
+});
+
+const mapUserTransferRequest = (data: UserTransferSchema): UserTransferRequest => ({
+  data: {
+    type: 'users',
+    id: data.id,
+    meta: {
+      payload: {
+        to: data.to,
+      },
+    }
+  }
+});
+
 export {
   mapUsersResponse,
   mapUserStoreRequest,
   mapUserResponse,
   mapUserUpdateRequest,
+  mapUserFireRequest,
+  mapUserTransferRequest
 };

@@ -40,7 +40,7 @@ function UserListPage(): JSX.Element {
     if (positionsStatus === AsyncStatus.IDLE) dispatch(fetchPositionsAction());
     if (departmentsStatus === AsyncStatus.IDLE) dispatch(fetchDepartmentsAction());
   }, [departmentsStatus, dispatch, positionsStatus, profilesStatus, rolesStatus, setTitle, usersStatus]);
-
+  
   const rows: Row[] | null = useMemo(() => {
     if (users && profiles && roles && positions && departments) {
       const profilesByUserId = profiles.reduce((acc, profile) => {
@@ -73,7 +73,7 @@ function UserListPage(): JSX.Element {
     }
     return null;
   }, [departments, positions, profiles, roles, users]);
-
+  
   return (
     <main className="@container/main flex flex-1 flex-col gap-2">
       {rows ? (

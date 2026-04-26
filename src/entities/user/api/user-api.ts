@@ -1,8 +1,8 @@
 import { AxiosInstance } from 'axios';
 import { UserResponse, UsersResponse } from './types';
 import { User, Users } from '../model/types';
-import { mapUserResponse, mapUsersResponse, mapUserStoreRequest, mapUserUpdateRequest } from './mappers';
-import { UserStoreSchema, UserUpdateSchema } from '../model/schemas';
+import { mapUserFireRequest, mapUserResponse, mapUsersResponse, mapUserStoreRequest, mapUserTransferRequest, mapUserUpdateRequest } from './mappers';
+import { UserFireSchema, UserStoreSchema, UserTransferSchema, UserUpdateSchema } from '../model/schemas';
 
 const fetchUsers = async (api: AxiosInstance): Promise<Users> => {
   const { data } = await api.get<UsersResponse>(
@@ -44,9 +44,24 @@ const updateAvatar = async (api: AxiosInstance, payload: UserUpdateSchema): Prom
   return mapUserResponse(data);
 };
 
+const fireUser = async (api: AxiosInstance, payload: UserFireSchema): Promise<void> => {
+  await api.post(`/users/${payload.id}/fire`, mapUserFireRequest(payload));
+};
+
+const transferUser = async (api: AxiosInstance, payload: UserTransferSchema): Promise<void> => {
+  await api.post(`/users/${payload.id}/transfer`, mapUserTransferRequest(payload));
+};
+
+const deleteUser = async (api: AxiosInstance, id: string): Promise<void> => {
+  await api.delete(`/users/${id}`);
+};
+
 export {
   storeUser,
   updateUser,
   fetchUsers,
   updateAvatar,
+  deleteUser,
+  fireUser,
+  transferUser,
 };

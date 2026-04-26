@@ -31,7 +31,7 @@ const DEFAULT_SORTING_STATE: SortingState = [];
 const DEFAULT_VISIBILITY_STATE: VisibilityState = {};
 const DEFAULT_COLUMN_PINNING_STATE: ColumnPinningState = {
   left: [],
-  right: [],
+  right: ['actions'],
 };
 
 type ColumnFilterProps<TData, TValue> = {
@@ -318,6 +318,7 @@ function DataTable<T>({
                   </CommandItem>
                   {table
                     .getAllColumns()
+                    .filter((value) => value.id !== 'actions')
                     .map((column) => {
                       return (
                         <CommandItem
@@ -377,14 +378,16 @@ function DataTable<T>({
                       {(header.column.getIsSorted() === 'desc') ? <AArrowDown size={16} /> : <AArrowUp size={16} />}
                     </span>)}
 
-                  <div className="ml-auto" onClick={(evt) => evt.stopPropagation()}>
-                    <ColumnFilter
-                      header={header}
-                      columnPinning={columnPinning}
-                      setColumnPinning={setColumnPinning}
-                      setColumnVisibility={setColumnVisibility}
-                    />
-                  </div>
+                  {header.column.id !== 'actions' && (
+                    <div className="ml-auto" onClick={(evt) => evt.stopPropagation()}>
+                      <ColumnFilter
+                        header={header}
+                        columnPinning={columnPinning}
+                        setColumnPinning={setColumnPinning}
+                        setColumnVisibility={setColumnVisibility}
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
