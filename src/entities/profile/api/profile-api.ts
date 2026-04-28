@@ -6,7 +6,7 @@ import { ProfileStoreSchema, ProfileUpdateSchema } from '../model/schemas';
 
 const fetchProfiles = async (api: AxiosInstance): Promise<Profiles> => {
   const { data } = await api.get<ProfilesResponse>('/profiles?include=user');
-  
+    
   return mapProfilesResponse(data);
 };
 

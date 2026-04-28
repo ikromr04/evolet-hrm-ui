@@ -4,11 +4,14 @@ import { Button, ButtonGroup } from '@/shared/ui';
 import dayjs from 'dayjs';
 import { ArrowLeft, ArrowRight, Mail, Phone } from 'lucide-react';
 import { JSX, useEffect } from 'react';
-import { generatePath, Link } from 'react-router-dom';
+import { generatePath, Link, useNavigate } from 'react-router-dom';
 import { getWorkDuration } from '../lib/utils';
 import { ROUTES } from '@/shared/config';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { getProfiles } from '@/entities/profile';
+import { UserFireDialog } from '@/features/user-fire-dialog';
+import { UserTransferDialog } from '@/features/user-transfer-dialog';
+import { UserDeleteDialog } from '@/features/user-delete-dialog';
 
 type UserSidebarProps = {
   user: User;
@@ -20,6 +23,7 @@ function UserSidebar({
   users,
 }: UserSidebarProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const languagesStatus = useAppSelector(getLanguagesStatus);
 
   const profiles = useAppSelector(getProfiles);
@@ -78,7 +82,7 @@ function UserSidebar({
             </Button>
           </dd>
         </div>
-        {phoneNumbers && ( 
+        {phoneNumbers && (
           <div>
             <dt className="text-xs text-muted-foreground">
               Позвонить
@@ -126,6 +130,36 @@ function UserSidebar({
           )) : 'Не указано'}
         </dl>
       </section>
+
+      <ButtonGroup className="ml-auto">
+        <UserFireDialog
+          user={user}
+          onSuccess={() => navigate(generatePath(ROUTES.USER_READ, { id: nextUserId || prevUserId }))}
+          trigger={
+            <Button type="button" variant="outline">
+              Уволить
+            </Button>
+          }
+        />
+        <UserTransferDialog
+          user={user}
+          onSuccess={() => navigate(generatePath(ROUTES.USER_READ, { id: nextUserId || prevUserId }))}
+          trigger={
+            <Button type="button" variant="outline">
+              Перевести
+            </Button>
+          }
+        />
+        <UserDeleteDialog
+          user={user}
+          onSuccess={() => navigate(generatePath(ROUTES.USER_READ, { id: nextUserId || prevUserId }))}
+          trigger={
+            <Button className="border border-border" type="button" variant="destructive">
+              Удалить
+            </Button>
+          }
+        />
+      </ButtonGroup>
     </div>
   );
 }

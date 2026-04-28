@@ -31,4 +31,5 @@ export {
   updateAvatarAction,
   fireUserAction,
   transferUserAction,
+  deleteUserAction,
 } from './model/thunks';

@@ -26,11 +26,13 @@ import { transferUserAction, User, userTransferSchema, UserTransferSchema } from
 type UserTransferDialogProps = {
   trigger: JSX.Element;
   user: Pick<User, 'id' | 'name' | 'surname'>;
+  onSuccess?: () => void;
 }
 
 function UserTransferDialog({
   trigger,
   user,
+  onSuccess,
 }: UserTransferDialogProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -48,7 +50,11 @@ function UserTransferDialog({
 
     await dispatch(transferUserAction({ data }))
       .unwrap()
-      .then(() => toast.success('Сотрудник успешно переведен.'))
+      .then(() => {
+        toast.success('Сотрудник успешно переведен.');
+        setIsOpen(false);
+        onSuccess?.();
+      })
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
           if (error.source?.pointer) {

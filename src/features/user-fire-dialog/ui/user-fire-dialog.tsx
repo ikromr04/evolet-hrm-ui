@@ -26,11 +26,13 @@ import { fireUserAction, User, userFireSchema, UserFireSchema } from '@/entities
 type UserFireDialogProps = {
   trigger: JSX.Element;
   user: Pick<User, 'id' | 'name' | 'surname'>;
+  onSuccess?: () => void;
 }
 
 function UserFireDialog({
   trigger,
   user,
+  onSuccess,
 }: UserFireDialogProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
@@ -48,7 +50,11 @@ function UserFireDialog({
 
     await dispatch(fireUserAction({ data }))
       .unwrap()
-      .then(() => toast.success('Сотрудник успешно уволен.'))
+      .then(() => {
+        toast.success('Сотрудник успешно уволен.');
+        setIsOpen(false);
+        onSuccess?.();
+      })
       .catch((errors: ApiErrors) => {
         errors.forEach((error) => {
           if (error.source?.pointer) {

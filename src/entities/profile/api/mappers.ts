@@ -29,7 +29,7 @@ const mapProfilesResponse = (collection: ProfilesResponse): Profiles =>
     id: data.id,
     userId: data.relationships.user.data.id,
     ...data.attributes,
-    children: parseChildren(data.attributes.children),
+    children: data.attributes.children ? parseChildren(data.attributes.children) : null,
   }));
 
 const mapProfileResponse = (resource: ProfileResponse): Profile => ({

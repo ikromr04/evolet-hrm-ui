@@ -34,6 +34,7 @@ import { DepartmentsFilter } from './departments-filter';
 import { IconDotsVertical } from '@tabler/icons-react';
 import { UserFireDialog } from '@/features/user-fire-dialog';
 import { UserTransferDialog } from '@/features/user-transfer-dialog';
+import { UserDeleteDialog } from '@/features/user-delete-dialog';
 
 type Props = {
   filter: Filter;
@@ -159,7 +160,14 @@ const ActionsCell = memo(({ row }: CellContext<Row, unknown>) => (
         }
       />
       <DropdownMenuSeparator />
-      <DropdownMenuItem variant="destructive">Удалить</DropdownMenuItem>
+      <UserDeleteDialog
+        user={row.original}
+        trigger={
+          <DropdownMenuItem variant="destructive" onSelect={(evt) => evt.preventDefault()}>
+            Удалить
+          </DropdownMenuItem>
+        }
+      />
     </DropdownMenuContent>
   </DropdownMenu>
 ));
