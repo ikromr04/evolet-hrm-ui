@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { getToken } from '../lib/token';
 
-const BACKEND_URL = 'http://127.0.0.1:8000/api/v1';
-const REQUEST_TIMEOUT = 10000;
+const BACKEND_URL = import.meta.env.VITE_API_URL;
+const REQUEST_TIMEOUT = import.meta.env.VITE_API_TIMEOUT;
 
 const createAPI = (): AxiosInstance => {
   const api = axios.create({
@@ -11,7 +11,6 @@ const createAPI = (): AxiosInstance => {
   });
 
   api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    config.headers['Content-Type'] = 'application/vnd.api+json';
     config.headers['Accept'] = 'application/vnd.api+json';
 
     const token = getToken();

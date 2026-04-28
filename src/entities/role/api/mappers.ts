@@ -1,4 +1,4 @@
-import { Role, Roles } from '../../roles/model/types';
+import { Role, Roles } from '../model/types';
 import { RoleResponse, RolesResponse } from './types';
 
 const mapRole = (resource: RoleResponse): Role => ({

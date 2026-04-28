@@ -1,10 +1,12 @@
+import { LanguageLevel } from '../model/types';
+
 type LanguageResponse = {
   data: {
     type: 'languages';
     id: string;
     attributes: {
       name: string;
-      level: string;
+      level: keyof typeof LanguageLevel;
       createdAt: string;
       updatedAt: string;
     };
@@ -17,7 +19,7 @@ type LanguagesResponse = {
     id: string;
     attributes: {
       name: string;
-      level: string;
+      level: keyof typeof LanguageLevel;
       createdAt: string;
       updatedAt: string;
     };
