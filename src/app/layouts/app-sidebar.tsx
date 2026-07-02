@@ -19,15 +19,15 @@ import {
 } from '@/shared/ui';
 import { Favicon } from '@/shared/ui';
 import { ROUTES } from '@/shared/config';
-import { MAIN_NAV_ITEMS, REF_NAV_ITEMS } from './const';
-import { NavUser } from './nav-user';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, House, MonitorSmartphone, TentTree, Users } from 'lucide-react';
+import { JSX } from 'react';
+import UserMenu from '@/widgets/user-menu';
 
-function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+function AppSidebar(): JSX.Element {
   const location = useLocation();
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="offcanvas" variant="inset">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -43,59 +43,76 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupContent className="flex flex-col gap-2">
+          <SidebarGroupContent>
             <SidebarMenu>
-              {MAIN_NAV_ITEMS.map(({ label, icon, route, submenus }) => {
-                const Icon = icon;
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive={location.pathname === ROUTES.HOME} asChild>
+                  <Link className="group" to={ROUTES.HOME}>
+                    <House className="group-data-[active='true']:text-[#a8cf45]" />
+                    <span>Главная</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
 
-                if (submenus) {
-                  const isOpen = route.startsWith(location.pathname) && (location.pathname !== '/');
-
-                  return (
-                    <Collapsible
-                      className="group/collapsible"
-                      asChild
-                      defaultOpen={isOpen}
-                      key={label}
-                    >
-                      <SidebarMenuItem>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuButton tooltip={label}>
-                            <Icon />
-                            <span>{label}</span>
-                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                          </SidebarMenuButton>
-                        </CollapsibleTrigger>
-
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {submenus?.map(({ label, route }) => (
-                              <SidebarMenuSubItem key={route}>
-                                <SidebarMenuSubButton isActive={location.pathname.startsWith(route)} asChild>
-                                  <Link to={route}>
-                                    <span>{label}</span>
-                                  </Link>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      </SidebarMenuItem>
-                    </Collapsible>
-                  );
-                }
-
-                return (
-                  <SidebarMenuItem key={route}>
-                    <SidebarMenuButton isActive={location.pathname === route} asChild>
-                      <Link className="group" to={route}>
-                        <Icon className="group-data-[active='true']:text-[#a8cf45]" />
-                        <span>{label}</span>
-                      </Link>
+              <Collapsible
+                className="group/collapsible"
+                defaultOpen={ROUTES.USER_LIST.startsWith(location.pathname) && (location.pathname !== '/')}
+                asChild
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton>
+                      <Users />
+                      <span>Сотрудники</span>
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+                  </CollapsibleTrigger>
+
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton isActive={location.pathname === ROUTES.USER_LIST} asChild>
+                          <Link to={ROUTES.USER_LIST}>
+                            <span>Текущие</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton isActive={location.pathname === ROUTES.USER_FIRED_LIST} asChild>
+                          <Link to={ROUTES.USER_FIRED_LIST}>
+                            <span>Уволенные</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton isActive={location.pathname === ROUTES.USER_TRANSFERRED_LIST} asChild>
+                          <Link to={ROUTES.USER_TRANSFERRED_LIST}>
+                            <span>Переведённые</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive={location.pathname === ROUTES.EQUIPMENT_LIST} asChild>
+                  <Link className="group" to={ROUTES.EQUIPMENT_LIST}>
+                    <MonitorSmartphone className="group-data-[active='true']:text-[#a8cf45]" />
+                    <span>Оборудование</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive={location.pathname === ROUTES.VACATION_LIST} asChild>
+                  <Link className="group" to={ROUTES.VACATION_LIST}>
+                    <TentTree className="group-data-[active='true']:text-[#a8cf45]" />
+                    <span>Отпуски</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -106,21 +123,40 @@ function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupLabel>
 
           <SidebarMenu>
-            {REF_NAV_ITEMS.map(({ label, route }) => (
-              <SidebarMenuItem key={route}>
-                <SidebarMenuButton isActive={location.pathname === route} asChild>
-                  <Link className="group" to={route}>
-                    <span>{label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive={location.pathname === ROUTES.DEPARTMENT_LIST} asChild>
+                <Link className="group" to={ROUTES.DEPARTMENT_LIST}>
+                  <span>Отделы/Департаменты</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive={location.pathname === ROUTES.POSITION_LIST} asChild>
+                <Link className="group" to={ROUTES.POSITION_LIST}>
+                  <span>Должности</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive={location.pathname === ROUTES.ROLE_LIST} asChild>
+                <Link className="group" to={ROUTES.ROLE_LIST}>
+                  <span>Позиции</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton isActive={location.pathname === ROUTES.LANGUAGE_LIST} asChild>
+                <Link className="group" to={ROUTES.LANGUAGE_LIST}>
+                  <span>Языки</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser />
+        <UserMenu />
       </SidebarFooter>
     </Sidebar>
   );

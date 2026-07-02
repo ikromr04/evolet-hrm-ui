@@ -1,1 +1,1 @@
-export { UserReadPage } from '../user-read/ui/user-read-page';
+export { UserRead } from './ui/user-read';

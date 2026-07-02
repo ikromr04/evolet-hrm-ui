@@ -3,7 +3,7 @@ import { Positions } from '@/entities/position';
 import { Profile } from '@/entities/profile';
 import { Roles } from '@/entities/role';
 
-type Filter = {
+type UserFilter = {
   keyword: string;
   name: string;
   email: string;
@@ -20,7 +20,7 @@ type Filter = {
   departments: string[];
 };
 
-type Row = {
+type UserRow = {
   id: string;
   name: string;
   surname: string;
@@ -40,6 +40,6 @@ type Row = {
 };
 
 export type {
-  Filter,
-  Row,
+  UserFilter,
+  UserRow,
 };

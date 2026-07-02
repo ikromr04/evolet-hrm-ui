@@ -25,23 +25,23 @@ import {
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { generatePath, Link } from 'react-router-dom';
-import { Row, type Filter } from '../model/types';
 import { Dispatch, memo, SetStateAction, useCallback, useMemo } from 'react';
 import { debounce } from '@/shared/lib';
 import { RolesFilter } from './roles-filter';
-import { PositionsFilter } from './positions-filter';
 import { DepartmentsFilter } from './departments-filter';
 import { IconDotsVertical } from '@tabler/icons-react';
 import { UserFireDialog } from '@/features/user-fire-dialog';
 import { UserTransferDialog } from '@/features/user-transfer-dialog';
 import { UserDeleteDialog } from '@/features/user-delete-dialog';
+import { UserFilter, UserRow } from '../model/types';
+import { PositionsFilter } from './positions-filter';
 
 type Props = {
-  filter: Filter;
-  setFilter: Dispatch<SetStateAction<Filter>>;
+  filter: UserFilter;
+  setFilter: Dispatch<SetStateAction<UserFilter>>;
 };
 
-const AvatarCell = memo(({ row }: CellContext<Row, unknown>) => (
+const AvatarCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <Avatar className="size-12">
     <AvatarImage
       src={row.original.avatarThumb || undefined}
@@ -54,7 +54,7 @@ const AvatarCell = memo(({ row }: CellContext<Row, unknown>) => (
   </Avatar>
 ));
 
-const NameCell = memo(({ row }: CellContext<Row, unknown>) => (
+const NameCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <Button variant="link" asChild>
     <Link
       className="max-w-full whitespace-normal! h-auto"
@@ -65,7 +65,7 @@ const NameCell = memo(({ row }: CellContext<Row, unknown>) => (
   </Button>
 ));
 
-const RolesCell = memo(({ row }: CellContext<Row, unknown>) => (
+const RolesCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <div className="flex flex-wrap gap-1">
     {row.original.roles.map((role) => (
       <Badge key={role.name}>
@@ -75,7 +75,7 @@ const RolesCell = memo(({ row }: CellContext<Row, unknown>) => (
   </div>
 ));
 
-const PositionsCell = memo(({ row }: CellContext<Row, unknown>) => (
+const PositionsCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <div className="flex flex-wrap gap-1">
     {row.original.positions.map((position) => (
       <Badge key={position.name} variant="secondary">
@@ -85,7 +85,7 @@ const PositionsCell = memo(({ row }: CellContext<Row, unknown>) => (
   </div>
 ));
 
-const DepartmentsCell = memo(({ row }: CellContext<Row, unknown>) => (
+const DepartmentsCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <div className="flex flex-wrap gap-1">
     {row.original.departments.map((department) => (
       <Badge key={department.name} variant="outline">
@@ -95,7 +95,7 @@ const DepartmentsCell = memo(({ row }: CellContext<Row, unknown>) => (
   </div>
 ));
 
-const EmailCell = memo(({ row }: CellContext<Row, unknown>) => (
+const EmailCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <Button variant="link" asChild>
     <Link
       className="block max-w-full h-auto whitespace-normal! wrap-anywhere"
@@ -106,7 +106,7 @@ const EmailCell = memo(({ row }: CellContext<Row, unknown>) => (
   </Button>
 ));
 
-const PhoneCell = memo(({ row }: CellContext<Row, unknown>) => (
+const PhoneCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <div className="flex flex-col">
     {row.original.profile?.tel1 && (
       <Button variant="link" asChild>
@@ -125,7 +125,7 @@ const PhoneCell = memo(({ row }: CellContext<Row, unknown>) => (
   </div>
 ));
 
-const ActionsCell = memo(({ row }: CellContext<Row, unknown>) => (
+const ActionsCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
       <Button
@@ -175,7 +175,7 @@ const ActionsCell = memo(({ row }: CellContext<Row, unknown>) => (
 const useUserColumns = ({ filter, setFilter }: Props) => {
   const setFilterKey = useMemo(
     () =>
-      debounce((keyName: keyof Filter, value: string) => {
+      debounce((keyName: keyof UserFilter, value: string) => {
         setFilter((prev) => ({ ...prev, [keyName]: value }));
       }, 300),
     [setFilter]
@@ -238,7 +238,7 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     />
   ), [filter.departments, toggleDepartments]);
 
-  const columns = useMemo<ColumnDef<Row>[]>(() => [
+  const columns = useMemo<ColumnDef<UserRow>[]>(() => [
     {
       id: 'Фото',
       accessorKey: 'user.avatarThumb',

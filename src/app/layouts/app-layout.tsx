@@ -1,25 +1,18 @@
 import { SidebarInset, SidebarProvider } from '@/shared/ui';
-import React from 'react';
+import { JSX } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AppSidebar } from './app-sidebar';
 import { AppHeader } from './app-header';
 
-function AppLayout() {
+function AppLayout(): JSX.Element {
   return (
-    <SidebarProvider
-      style={
-        {
-          '--sidebar-width': 'calc(var(--spacing) * 64)',
-          '--header-height': 'calc(var(--spacing) * 12)',
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="inset" />
+    <SidebarProvider>
+      <AppSidebar />
 
       <SidebarInset>
         <AppHeader />
 
-        <div className="flex flex-col gap-4 p-4 lg:gap-6 lg:px-6">
+        <div className="@container/main flex flex-col p-2 md:py-3 md:px-4">
           <Outlet />
         </div>
       </SidebarInset>

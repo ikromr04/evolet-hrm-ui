@@ -1,6 +1,4 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import './app/styles/index.css';
 import { App } from './app';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
@@ -8,7 +6,5 @@ import 'dayjs/locale/ru';
 dayjs.locale('ru');
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
     <App />
-  </StrictMode>
 );

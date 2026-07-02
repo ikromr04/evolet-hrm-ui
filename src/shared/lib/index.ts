@@ -1,6 +1,6 @@
 export { cn, debounce, getYearsRange } from './utils';
 
-export { type Theme, useTheme, ThemeProviderContext } from './theme';  
+export { type Theme, ThemeToggler, ThemeProviderContext } from './theme';  
 
 export { getToken, saveToken, dropToken, type Token } from './token';
 

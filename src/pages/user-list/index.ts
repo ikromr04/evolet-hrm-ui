@@ -1,1 +1,1 @@
-export { UserListPage } from '../user-list/ui/user-list-page';
+export { UserList } from './ui/user-list';

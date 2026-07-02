@@ -1,12 +1,12 @@
 import { fetchEquipmentsAction, getEquipments, getEquipmentsStatus } from '@/entities/equipment';
 import { User } from '@/entities/user';
-import { EquipmentCreateDialog } from '@/features/equipment-create-dialog';
-import { EquipmentDeleteDialog } from '@/features/equipment-delete-dialog';
-import { EquipmentEditDialog } from '@/features/equipment-edit-dialog';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { Button, ButtonGroup, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import { JSX, useEffect } from 'react';
+import { EquipmentCreateDialog } from './equipment-create-dialog';
+import { EquipmentDeleteDialog } from './equipment-delete-dialog';
+import { EquipmentEditDialog } from './equipment-edit-dialog';
 
 type UserEquipmentsProps = {
   user: User;

@@ -1,12 +1,12 @@
 import { fetchExperiencesAction, getExperiences, getExperiencesStatus } from '@/entities/experience';
 import { User } from '@/entities/user';
-import { ExperienceCreateDialog } from '@/features/experience-create-dialog';
-import { ExperienceDeleteDialog } from '@/features/experience-delete-dialog';
-import { ExperienceEditDialog } from '@/features/experience-edit-dialog';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { Button, ButtonGroup, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import { JSX, useEffect } from 'react';
+import { ExperienceCreateDialog } from './experience-create-dialog';
+import { ExperienceDeleteDialog } from './experience-delete-dialog';
+import { ExperienceEditDialog } from './experience-edit-dialog';
 
 type UserExperiencesProps = {
   user: User;

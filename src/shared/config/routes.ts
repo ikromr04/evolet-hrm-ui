@@ -3,17 +3,16 @@ const ROUTES = {
   LOGIN: '/login',
 
   USER_LIST: '/employees',
+  USER_FIRED_LIST: '/employees/fired',
+  USER_TRANSFERRED_LIST: '/employees/transferred',
   USER_READ: '/employees/:id',
-  USER_FORMER: '/employees/former',
-  USER_TRANSFERRED: '/employees/transferred',
-  USER_STRUCTURE: '/employees/org-structure',
 
-  EQUIPMENTS: '/equipments',
-  VACATIONS: '/vacations',
-  DEPARTMENTS: '/departments',
-  JOBS: '/jobs',
-  POSITIONS: '/positions',
-  LANGUAGES: '/languages',
+  EQUIPMENT_LIST: '/equipments',
+  VACATION_LIST: '/vacations',
+  DEPARTMENT_LIST: '/departments',
+  POSITION_LIST: '/positions',
+  ROLE_LIST: '/roles',
+  LANGUAGE_LIST: '/languages',
 };
 
 export { ROUTES };

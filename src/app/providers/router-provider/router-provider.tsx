@@ -1,15 +1,23 @@
-import { JSX, PropsWithChildren } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '@/shared/store';
+import { JSX, useEffect } from 'react';
+import { PageLoader } from '@/shared/ui';
+import { AuthStatus, checkAuthAction, getAuthStatus } from '@/features/auth';
+import { RouterProvider as Provider } from 'react-router-dom';
+import { router } from './router';
 
-function RouterProvider({
-  children
-}: PropsWithChildren): JSX.Element {
+function RouterProvider(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const authStatus = useAppSelector(getAuthStatus);
 
-  return (
-    <BrowserRouter>
-      {children}
-    </BrowserRouter>
-  );
+  useEffect(() => {
+    dispatch(checkAuthAction());
+  }, [dispatch]);
+
+  if (authStatus === AuthStatus.UNKNOWN) {
+    return <PageLoader />;
+  }
+
+  return <Provider router={router} />;
 };
 
 export { RouterProvider };

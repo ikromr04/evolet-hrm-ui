@@ -177,6 +177,7 @@ function DataTable<T>({
   sortingState = DEFAULT_SORTING_STATE,
   visibilityState = DEFAULT_VISIBILITY_STATE,
   columnPinningState = DEFAULT_COLUMN_PINNING_STATE,
+  actions,
   searchValue,
   onSearch,
   className,
@@ -335,6 +336,8 @@ function DataTable<T>({
             </Command>
           </PopoverContent>
         </Popover>
+
+        {actions}
       </div>
 
       <div className={cn('flex flex-col overflow-scroll scrollbar text-sm rounded-md border', className)}>

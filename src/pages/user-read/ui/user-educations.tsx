@@ -1,12 +1,12 @@
 import { fetchEducationsAction, getEducations, getEducationsStatus } from '@/entities/education';
 import { User } from '@/entities/user';
-import { EducationCreateDialog } from '@/features/education-create-dialog';
-import { EducationDeleteDialog } from '@/features/education-delete-dialog';
-import { EducationEditDialog } from '@/features/education-edit-dialog';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { Button, ButtonGroup, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import { JSX, useEffect } from 'react';
+import { EducationCreateDialog } from './education-create-dialog';
+import { EducationDeleteDialog } from './education-delete-dialog';
+import { EducationEditDialog } from './education-edit-dialog';
 
 type UserEducationsProps = {
   user: User;

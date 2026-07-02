@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, Users } from './types';
-import { deleteUserAction, fetchUsersAction, fireUserAction, storeUserAction, transferUserAction, updateAvatarAction, updateUserAction } from './thunks';
+import { FiredUsers, User, Users } from './types';
+import { deleteUserAction, fetchFiredUsersAction, fetchUsersAction, fireUserAction, storeUserAction, transferUserAction, updateAvatarAction, updateUserAction } from './thunks';
 import { AsyncStatus } from '@/shared/store';
 
 type UserSlice = {
@@ -8,10 +8,18 @@ type UserSlice = {
     data?: Users;
     status: AsyncStatus;
   };
+  firedUsers: {
+    data?: FiredUsers;
+    status: AsyncStatus;
+  };
+
 }
 
 const initialState: UserSlice = {
   users: {
+    status: AsyncStatus.IDLE,
+  },
+  firedUsers: {
     status: AsyncStatus.IDLE,
   },
 };
@@ -39,6 +47,13 @@ const userSlice = createSlice({
       .addCase(fetchUsersAction.fulfilled, (state, action: PayloadAction<Users>) => {
         state.users.data = action.payload;
         state.users.status = AsyncStatus.SUCCEEDED;
+      })
+      .addCase(fetchFiredUsersAction.pending, (state) => {
+        state.firedUsers.status = AsyncStatus.LOADING;
+      })
+      .addCase(fetchFiredUsersAction.fulfilled, (state, action: PayloadAction<FiredUsers>) => {
+        state.firedUsers.data = action.payload;
+        state.firedUsers.status = AsyncStatus.SUCCEEDED;
       })
       .addCase(storeUserAction.fulfilled, (state, action: PayloadAction<User>) => {
         if (state.users.data) {
@@ -68,6 +83,10 @@ const userSlice = createSlice({
       .addCase(fireUserAction.fulfilled, (state, action: PayloadAction<string>) => {
         if (state.users.data) {
           state.users.data = state.users.data.filter((user) => user.id !== action.payload);
+
+          if (state.firedUsers.data) {
+            state.firedUsers.status = AsyncStatus.IDLE;
+          }
         }
       })
       .addCase(transferUserAction.fulfilled, (state, action: PayloadAction<string>) => {

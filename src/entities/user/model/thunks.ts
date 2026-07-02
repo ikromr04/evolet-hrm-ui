@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError, AxiosInstance } from 'axios';
-import { deleteUser, fetchUsers, fireUser, storeUser, transferUser, updateAvatar, updateUser } from '../api/user-api';
-import { User, Users } from './types';
+import { deleteUser, fetchFiredUsers, fetchUsers, fireUser, storeUser, transferUser, updateAvatar, updateUser } from '../api/user-api';
+import { FiredUsers, User, Users } from './types';
 import { UserFireSchema, UserStoreSchema, UserTransferSchema, UserUpdateSchema } from './schemas';
 import { ApiErrors, ErrorResponse } from '@/shared/api';
 
@@ -11,6 +11,15 @@ const fetchUsersAction = createAsyncThunk<Users, undefined, {
   'users/fetch',
   async (_arg, { extra: api }) => {
     return await fetchUsers(api);
+  },
+);
+
+const fetchFiredUsersAction = createAsyncThunk<FiredUsers, undefined, {
+  extra: AxiosInstance;
+}>(
+  'users/fetchFired',
+  async (_arg, { extra: api }) => {
+    return await fetchFiredUsers(api);
   },
 );
 
@@ -136,4 +145,5 @@ export {
   fireUserAction,
   transferUserAction,
   deleteUserAction,
+  fetchFiredUsersAction,
 };

@@ -93,15 +93,6 @@ export {
 } from './dropdown-menu';
 export { Badge, badgeVariants } from './badge';
 export {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
-  ChartStyle,
-  type ChartConfig
-} from './chart';
-export {
   Select,
   SelectContent,
   SelectGroup,
@@ -116,28 +107,6 @@ export {
 export { ToggleGroup, ToggleGroupItem } from './toggle-group';
 export { Toggle, toggleVariants } from './toggle';
 export { Checkbox } from './checkbox';
-export {
-  Drawer,
-  DrawerPortal,
-  DrawerOverlay,
-  DrawerTrigger,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerDescription,
-} from './drawer';
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
-} from './table';
 export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants } from './tabs';
 export { ScrollArea, ScrollBar } from './scroll-area';
 export { Collapsible, CollapsibleTrigger, CollapsibleContent } from './collapsible';
@@ -199,3 +168,5 @@ export {
   ButtonGroupText,
   buttonGroupVariants,
 } from './button-group';
+export { DeferredRender } from './deferred-render';
+export { TableSkeleton } from './table-skeleton';

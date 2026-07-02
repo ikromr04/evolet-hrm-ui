@@ -4,14 +4,14 @@ import { getPositions } from '@/entities/position';
 import { FamilyStatus, getProfiles, Sex } from '@/entities/profile';
 import { getRoles } from '@/entities/role';
 import { User } from '@/entities/user';
-import { ProfileCreateDialog } from '@/features/profile-create-dialog';
-import { ProfileEditDialog } from '@/features/profile-edit-dialog';
-import { UserEditDialog } from '@/features/user-edit-dialog';
 import { useAppSelector } from '@/shared/store';
 import { Button, Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/shared/ui';
 import dayjs from 'dayjs';
 import { ChevronsUpDown, Edit } from 'lucide-react';
 import { JSX } from 'react';
+import { ProfileEditDialog } from './profile-edit-dialog';
+import { ProfileCreateDialog } from './profile-create-dialog';
+import { UserEditDialog } from './user-edit-dialog';
 
 type UserProfileProps = {
   user: User;
