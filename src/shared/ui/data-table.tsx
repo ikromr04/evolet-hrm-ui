@@ -433,7 +433,7 @@ function DataTable<T>({
           ))}
         </div>
 
-        <div className="sticky bottom-0 z-10 left-0 p-2 border-t bg-muted">
+        <div className="sticky bottom-0 z-10 left-0 p-2 border-t bg-muted mt-auto">
           <div className="flex w-max mr-auto">
             Отображение 1 - {data.length} из {data.length}
           </div>

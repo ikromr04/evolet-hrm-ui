@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FiredUsers, User, Users } from './types';
+import { User, Users } from './types';
 import { deleteUserAction, fetchFiredUsersAction, fetchUsersAction, fireUserAction, storeUserAction, transferUserAction, updateAvatarAction, updateUserAction } from './thunks';
 import { AsyncStatus } from '@/shared/store';
 
@@ -9,7 +9,7 @@ type UserSlice = {
     status: AsyncStatus;
   };
   firedUsers: {
-    data?: FiredUsers;
+    data?: Users;
     status: AsyncStatus;
   };
 
@@ -51,7 +51,7 @@ const userSlice = createSlice({
       .addCase(fetchFiredUsersAction.pending, (state) => {
         state.firedUsers.status = AsyncStatus.LOADING;
       })
-      .addCase(fetchFiredUsersAction.fulfilled, (state, action: PayloadAction<FiredUsers>) => {
+      .addCase(fetchFiredUsersAction.fulfilled, (state, action: PayloadAction<Users>) => {
         state.firedUsers.data = action.payload;
         state.firedUsers.status = AsyncStatus.SUCCEEDED;
       })

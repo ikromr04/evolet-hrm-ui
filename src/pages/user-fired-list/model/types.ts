@@ -3,7 +3,7 @@ import { Positions } from '@/entities/position';
 import { Profile } from '@/entities/profile';
 import { Roles } from '@/entities/role';
 
-type Filter = {
+type UserFiredFilter = {
   keyword: string;
   name: string;
   email: string;
@@ -20,7 +20,7 @@ type Filter = {
   departments: string[];
 };
 
-type Row = {
+type UserFiredRow = {
   id: string;
   name: string;
   surname: string;
@@ -32,9 +32,9 @@ type Row = {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  firedBy: string;
+  firedBy?: string;
   firedReason?: string;
-  firedAt: string;
+  firedAt?: string;
 
   profile: Profile | null;
   roles: Roles;
@@ -43,6 +43,6 @@ type Row = {
 };
 
 export type {
-  Filter,
-  Row,
+  UserFiredFilter,
+  UserFiredRow,
 };

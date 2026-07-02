@@ -19,7 +19,7 @@ import {
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
-import { Row, type Filter } from '../model/types';
+import { type UserFiredRow, type UserFiredFilter } from '../model/types';
 import { Dispatch, memo, SetStateAction, useCallback, useMemo } from 'react';
 import { debounce } from '@/shared/lib';
 import { RolesFilter } from './roles-filter';
@@ -27,30 +27,27 @@ import { PositionsFilter } from './positions-filter';
 import { DepartmentsFilter } from './departments-filter';
 
 type Props = {
-  filter: Filter;
-  setFilter: Dispatch<SetStateAction<Filter>>;
+  filter: UserFiredFilter;
+  setFilter: Dispatch<SetStateAction<UserFiredFilter>>;
 };
 
-const AvatarCell = memo(({ row }: CellContext<Row, unknown>) => (
-  <Avatar className="size-12">
-    <AvatarImage
-      src={row.original.avatarThumb || undefined}
-      alt={`${row.original.surname} ${row.original.name}`}
-    />
-    <AvatarFallback>
-      {row.original.surname.charAt(0)}
-      {row.original.name.charAt(0)}
-    </AvatarFallback>
-  </Avatar>
-));
-
-const NameCell = memo(({ row }: CellContext<Row, unknown>) => (
-  <div>
+const NameCell = memo(({ row }: CellContext<UserFiredRow, unknown>) => (
+  <div className="flex items-center gap-4 max-w-full whitespace-normal! h-auto">
+    <Avatar className="size-12">
+      <AvatarImage
+        src={row.original.avatarThumb || undefined}
+        alt={`${row.original.surname} ${row.original.name}`}
+      />
+      <AvatarFallback>
+        {row.original.surname.charAt(0)}
+        {row.original.name.charAt(0)}
+      </AvatarFallback>
+    </Avatar>
     {row.original.surname} {row.original.name} {row.original.patronymic}
   </div>
 ));
 
-const RolesCell = memo(({ row }: CellContext<Row, unknown>) => (
+const RolesCell = memo(({ row }: CellContext<UserFiredRow, unknown>) => (
   <div className="flex flex-wrap gap-1">
     {row.original.roles.map((role) => (
       <Badge key={role.name}>
@@ -60,7 +57,7 @@ const RolesCell = memo(({ row }: CellContext<Row, unknown>) => (
   </div>
 ));
 
-const PositionsCell = memo(({ row }: CellContext<Row, unknown>) => (
+const PositionsCell = memo(({ row }: CellContext<UserFiredRow, unknown>) => (
   <div className="flex flex-wrap gap-1">
     {row.original.positions.map((position) => (
       <Badge key={position.name} variant="secondary">
@@ -70,7 +67,7 @@ const PositionsCell = memo(({ row }: CellContext<Row, unknown>) => (
   </div>
 ));
 
-const DepartmentsCell = memo(({ row }: CellContext<Row, unknown>) => (
+const DepartmentsCell = memo(({ row }: CellContext<UserFiredRow, unknown>) => (
   <div className="flex flex-wrap gap-1">
     {row.original.departments.map((department) => (
       <Badge key={department.name} variant="outline">
@@ -80,7 +77,7 @@ const DepartmentsCell = memo(({ row }: CellContext<Row, unknown>) => (
   </div>
 ));
 
-const EmailCell = memo(({ row }: CellContext<Row, unknown>) => (
+const EmailCell = memo(({ row }: CellContext<UserFiredRow, unknown>) => (
   <Button variant="link" asChild>
     <Link
       className="block max-w-full h-auto whitespace-normal! wrap-anywhere"
@@ -91,7 +88,7 @@ const EmailCell = memo(({ row }: CellContext<Row, unknown>) => (
   </Button>
 ));
 
-const PhoneCell = memo(({ row }: CellContext<Row, unknown>) => (
+const PhoneCell = memo(({ row }: CellContext<UserFiredRow, unknown>) => (
   <div className="flex flex-col">
     {row.original.profile?.tel1 && (
       <Button variant="link" asChild>
@@ -113,7 +110,7 @@ const PhoneCell = memo(({ row }: CellContext<Row, unknown>) => (
 const useUserColumns = ({ filter, setFilter }: Props) => {
   const setFilterKey = useMemo(
     () =>
-      debounce((keyName: keyof Filter, value: string) => {
+      debounce((keyName: keyof UserFiredFilter, value: string) => {
         setFilter((prev) => ({ ...prev, [keyName]: value }));
       }, 300),
     [setFilter]
@@ -176,19 +173,12 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
     />
   ), [filter.departments, toggleDepartments]);
 
-  const columns = useMemo<ColumnDef<Row>[]>(() => [
-    {
-      id: 'Фото',
-      accessorKey: 'user.avatarThumb',
-      header: 'Фото',
-      size: 83,
-      cell: AvatarCell,
-    },
+  const columns = useMemo<ColumnDef<UserFiredRow>[]>(() => [
     {
       id: 'ФИО',
       accessorKey: 'ФИО',
       header: () => <div className="px-3">ФИО</div>,
-      size: 220,
+      size: 240,
       cell: NameCell,
       sortingFn: (a, b) => a.original.surname.localeCompare(b.original.surname),
       enableColumnFilter: filter.name ? true : false,
@@ -204,11 +194,12 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
       },
     },
     {
-      id: 'Причина уволнения',
-      accessorKey: 'Причина уволнения',
-      header: 'Причина уволнения',
-      size: 220,
-      cell: ({ row }) => row.original.firedReason || '',
+      id: 'Дата уволнения',
+      accessorKey: 'Дата уволнения',
+      header: 'Дата уволнения',
+      size: 160,
+      cell: ({ row }) => row.original.firedAt ? dayjs(row.original.firedAt).format('DD MMM YYYY') : '',
+      sortingFn: (a, b) => (a.original.firedAt || '').localeCompare(b.original.firedAt || ''),
     },
     {
       id: 'Кто уволил',
@@ -216,6 +207,13 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
       header: 'Кто уволил',
       size: 220,
       cell: ({ row }) => row.original.firedBy,
+    },
+    {
+      id: 'Причина уволнения',
+      accessorKey: 'Причина уволнения',
+      header: 'Причина уволнения',
+      size: 220,
+      cell: ({ row }) => row.original.firedReason || '',
     },
     {
       id: 'Позиция',

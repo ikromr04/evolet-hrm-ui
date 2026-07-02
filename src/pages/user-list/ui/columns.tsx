@@ -41,25 +41,22 @@ type Props = {
   setFilter: Dispatch<SetStateAction<UserFilter>>;
 };
 
-const AvatarCell = memo(({ row }: CellContext<UserRow, unknown>) => (
-  <Avatar className="size-12">
-    <AvatarImage
-      src={row.original.avatarThumb || undefined}
-      alt={`${row.original.surname} ${row.original.name}`}
-    />
-    <AvatarFallback>
-      {row.original.surname.charAt(0)}
-      {row.original.name.charAt(0)}
-    </AvatarFallback>
-  </Avatar>
-));
-
 const NameCell = memo(({ row }: CellContext<UserRow, unknown>) => (
   <Button variant="link" asChild>
     <Link
-      className="max-w-full whitespace-normal! h-auto"
+      className="flex items-center gap-4 max-w-full whitespace-normal! h-auto"
       to={generatePath(ROUTES.USER_READ, { id: row.original.id })}
     >
+      <Avatar className="size-12">
+        <AvatarImage
+          src={row.original.avatarThumb || undefined}
+          alt={`${row.original.surname} ${row.original.name}`}
+        />
+        <AvatarFallback>
+          {row.original.surname.charAt(0)}
+          {row.original.name.charAt(0)}
+        </AvatarFallback>
+      </Avatar>
       {row.original.surname} {row.original.name} {row.original.patronymic}
     </Link>
   </Button>
@@ -240,17 +237,10 @@ const useUserColumns = ({ filter, setFilter }: Props) => {
 
   const columns = useMemo<ColumnDef<UserRow>[]>(() => [
     {
-      id: 'Фото',
-      accessorKey: 'user.avatarThumb',
-      header: 'Фото',
-      size: 83,
-      cell: AvatarCell,
-    },
-    {
       id: 'ФИО',
       accessorKey: 'ФИО',
       header: () => <div className="px-3">ФИО</div>,
-      size: 220,
+      size: 240,
       cell: NameCell,
       sortingFn: (a, b) => a.original.surname.localeCompare(b.original.surname),
       enableColumnFilter: filter.name ? true : false,

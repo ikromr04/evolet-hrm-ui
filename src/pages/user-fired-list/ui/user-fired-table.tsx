@@ -1,66 +1,65 @@
-import { fetchUsersAction, getUsers, getUsersStatus, User } from '@/entities/user';
+import { fetchFiredUsersAction, getFiredUsers, getFiredUsersStatus } from '@/entities/user';
 import { AsyncStatus, useAppDispatch, useAppSelector } from '@/shared/store';
 import { JSX, useEffect, useMemo, useState } from 'react';
-import { Button, DataTable, TableSkeleton } from '@/shared/ui';
-import { UserFilter, UserRow } from '../model/types';
-import { useUserColumns } from './columns';
+import { DataTable, TableSkeleton } from '@/shared/ui';
+import { UserFiredFilter, UserFiredRow } from '../model/types';
 import { filterRows } from '../lib/filter-rows';
 import { defaultFilter } from '../model/filter';
 import { fetchProfilesAction, getProfiles, getProfilesStatus, Profile } from '@/entities/profile';
 import { fetchRolesAction, getRoles, getRolesStatus, Role } from '@/entities/role';
 import { fetchPositionsAction, getPositions, getPositionsStatus, Position } from '@/entities/position';
 import { Department, fetchDepartmentsAction, getDepartments, getDepartmentsStatus } from '@/entities/department';
-import { UserCreateDialog } from '@/features/user-create-dialog';
+import { useUserColumns } from './columns';
 
-function UsersTable(): JSX.Element {
+function UserFiredTable(): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const usersStatus = useAppSelector(getUsersStatus);
+  const firedUsersStatus = useAppSelector(getFiredUsersStatus);
   const profilesStatus = useAppSelector(getProfilesStatus);
   const rolesStatus = useAppSelector(getRolesStatus);
   const positionsStatus = useAppSelector(getPositionsStatus);
   const departmentsStatus = useAppSelector(getDepartmentsStatus);
 
-  const users = useAppSelector(getUsers);
+  const firedUsers = useAppSelector(getFiredUsers);
   const profiles = useAppSelector(getProfiles);
   const roles = useAppSelector(getRoles);
   const positions = useAppSelector(getPositions);
   const departments = useAppSelector(getDepartments);
 
-  const [filter, setFilter] = useState<UserFilter>(defaultFilter);
+  const [filter, setFilter] = useState<UserFiredFilter>(defaultFilter);
   const { columns } = useUserColumns({ filter, setFilter });
 
   useEffect(() => {
-    if (usersStatus === AsyncStatus.IDLE) dispatch(fetchUsersAction());
+    if (firedUsersStatus === AsyncStatus.IDLE) dispatch(fetchFiredUsersAction());
     if (profilesStatus === AsyncStatus.IDLE) dispatch(fetchProfilesAction());
     if (rolesStatus === AsyncStatus.IDLE) dispatch(fetchRolesAction());
     if (positionsStatus === AsyncStatus.IDLE) dispatch(fetchPositionsAction());
     if (departmentsStatus === AsyncStatus.IDLE) dispatch(fetchDepartmentsAction());
-  }, [departmentsStatus, dispatch, positionsStatus, profilesStatus, rolesStatus, usersStatus]);
+  }, [departmentsStatus, dispatch, firedUsersStatus, positionsStatus, profilesStatus, rolesStatus]);
 
-  const rows: UserRow[] | undefined = useMemo(() => {
-    if (users && profiles && roles && positions && departments) {
-      const profilesByUserId = profiles.reduce((acc: Record<string, Profile>, profile: Profile) => {
+  const rows: UserFiredRow[] | undefined = useMemo(() => {
+    if (firedUsers && profiles && roles && positions && departments) {
+      const profilesByUserId = profiles.reduce((acc, profile) => {
         acc[profile.userId] = profile;
         return acc;
-      }, {});
+      }, {} as Record<string, Profile>);
 
-      const rolesById = roles.reduce((acc: Record<string, Role>, role: Role) => {
+      const rolesById = roles.reduce((acc, role) => {
         acc[role.id] = role;
         return acc;
-      }, {});
+      }, {} as Record<string, Role>);
 
-      const positionsById = positions.reduce((acc: Record<string, Position>, position: Position) => {
+      const positionsById = positions.reduce((acc, position) => {
         acc[position.id] = position;
         return acc;
-      }, {});
+      }, {} as Record<string, Position>);
 
-      const departmentsById = departments.reduce((acc: Record<string, Department>, department: Department) => {
+      const departmentsById = departments.reduce((acc, department) => {
         acc[department.id] = department;
         return acc;
-      }, {});
+      }, {} as Record<string, Department>);
 
-      return users.map((user: User) => ({
+      return firedUsers.map((user) => ({
         ...user,
         profile: profilesByUserId[user.id],
         roles: user.roles.map((id) => rolesById[id]),
@@ -68,7 +67,7 @@ function UsersTable(): JSX.Element {
         departments: user.departments.map((id) => departmentsById[id]),
       }));
     }
-  }, [departments, positions, profiles, roles, users]);
+  }, [departments, firedUsers, positions, profiles, roles]);
 
   if (!rows) return <TableSkeleton />;
 
@@ -81,13 +80,8 @@ function UsersTable(): JSX.Element {
       onSearch={(value) => setFilter((prev) => ({ ...prev, keyword: value }))}
       filterResetable={JSON.stringify(filter) !== JSON.stringify(defaultFilter)}
       onFilterReset={() => setFilter(defaultFilter)}
-      actions={<UserCreateDialog trigger={
-        <Button size="sm">
-          Добавить
-        </Button>
-      } />}
     />
   );
 }
 
-export { UsersTable };
+export { UserFiredTable };

@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { FiredUsersResponse, UserResponse, UsersResponse } from './types';
-import { FiredUsers, User, Users } from '../model/types';
+import { User, Users } from '../model/types';
 import { mapFiredUsersResponse, mapUserFireRequest, mapUserResponse, mapUsersResponse, mapUserStoreRequest, mapUserTransferRequest, mapUserUpdateRequest } from './mappers';
 import { UserFireSchema, UserStoreSchema, UserTransferSchema, UserUpdateSchema } from '../model/schemas';
 
@@ -12,7 +12,7 @@ const fetchUsers = async (api: AxiosInstance): Promise<Users> => {
   return mapUsersResponse(data);
 };
 
-const fetchFiredUsers = async (api: AxiosInstance): Promise<FiredUsers> => {
+const fetchFiredUsers = async (api: AxiosInstance): Promise<Users> => {
   const { data } = await api.get<FiredUsersResponse>(
     '/users/fired?include=events.performer,profile,roles,positions,departments,languages,equipments,experiences,educations&sort=surname'
   );

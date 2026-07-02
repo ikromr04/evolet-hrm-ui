@@ -19,21 +19,15 @@ type User = {
   equipments: string[];
   experiences: string[];
   educations: string[];
-};
 
-type FiredUser = User & {
-  firedBy: string;
+  firedBy?: string;
   firedReason?: string;
-  firedAt: string;
+  firedAt?: string;
 };
 
 type Users = User[];
 
-type FiredUsers = FiredUser[];
-
 export {
   type User,
   type Users,
-  type FiredUser,
-  type FiredUsers,
 };

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserFireSchema, UserStoreSchema, UserTransferSchema, UserUpdateSchema } from '../model/schemas';
-import { FiredUsers, User, Users } from '../model/types';
+import { User, Users } from '../model/types';
 import { FiredUsersResponse, UserFireRequest, UserResponse, UsersResponse, UserStoreRequest, UserTransferRequest, UserUpdateRequest } from './types';
 
 const mapUserResponse = (response: UserResponse): User => ({
@@ -30,7 +30,7 @@ const mapUsersResponse = (collection: UsersResponse): Users =>
     educations: resource.relationships.educations.data.map(({ id }) => id),
   }));
 
-const mapFiredUsersResponse = (collection: FiredUsersResponse): FiredUsers => {
+const mapFiredUsersResponse = (collection: FiredUsersResponse): Users => {
   const includedByTypeId = collection.included.reduce((acc, item) => {
     const includedItem = item as any;
     acc[`${includedItem.type}_${includedItem.id}`] = includedItem;

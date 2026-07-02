@@ -56,7 +56,7 @@ function AppSidebar(): JSX.Element {
 
               <Collapsible
                 className="group/collapsible"
-                defaultOpen={ROUTES.USER_LIST.startsWith(location.pathname) && (location.pathname !== '/')}
+                defaultOpen={location.pathname.startsWith(ROUTES.USER_LIST) && (location.pathname !== '/')}
                 asChild
               >
                 <SidebarMenuItem>
