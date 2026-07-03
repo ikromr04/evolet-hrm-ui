@@ -23,6 +23,10 @@ type User = {
   firedBy?: string;
   firedReason?: string;
   firedAt?: string;
+  
+  transferredBy?: string;
+  transferredTo?: string;
+  transferredAt?: string;
 };
 
 type Users = User[];

@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
-import { FiredUsersResponse, UserResponse, UsersResponse } from './types';
+import { FiredUsersResponse, TransferredUsersResponse, UserResponse, UsersResponse } from './types';
 import { User, Users } from '../model/types';
-import { mapFiredUsersResponse, mapUserFireRequest, mapUserResponse, mapUsersResponse, mapUserStoreRequest, mapUserTransferRequest, mapUserUpdateRequest } from './mappers';
+import { mapFiredUsersResponse, mapTransferredUsersResponse, mapUserFireRequest, mapUserResponse, mapUsersResponse, mapUserStoreRequest, mapUserTransferRequest, mapUserUpdateRequest } from './mappers';
 import { UserFireSchema, UserStoreSchema, UserTransferSchema, UserUpdateSchema } from '../model/schemas';
 
 const fetchUsers = async (api: AxiosInstance): Promise<Users> => {
@@ -18,6 +18,14 @@ const fetchFiredUsers = async (api: AxiosInstance): Promise<Users> => {
   );
 
   return mapFiredUsersResponse(data);
+};
+
+const fetchTransferredUsers = async (api: AxiosInstance): Promise<Users> => {
+  const { data } = await api.get<TransferredUsersResponse>(
+    '/users/transferred?include=events.performer,profile,roles,positions,departments,languages,equipments,experiences,educations&sort=surname'
+  );
+
+  return mapTransferredUsersResponse(data);
 };
 
 const storeUser = async (api: AxiosInstance, payload: UserStoreSchema): Promise<User> => {
@@ -73,4 +81,5 @@ export {
   fireUser,
   transferUser,
   fetchFiredUsers,
+  fetchTransferredUsers,
 };

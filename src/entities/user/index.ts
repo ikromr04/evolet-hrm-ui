@@ -13,6 +13,8 @@ export {
   getUsers,
   getFiredUsersStatus,
   getFiredUsers,
+  getTransferredUsersStatus,
+  getTransferredUsers,
 } from './model/selectors';
 
 export {
@@ -35,4 +37,5 @@ export {
   transferUserAction,
   deleteUserAction,
   fetchFiredUsersAction,
+  fetchTransferredUsersAction,
 } from './model/thunks';

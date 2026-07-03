@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User, Users } from './types';
-import { deleteUserAction, fetchFiredUsersAction, fetchUsersAction, fireUserAction, storeUserAction, transferUserAction, updateAvatarAction, updateUserAction } from './thunks';
+import { deleteUserAction, fetchFiredUsersAction, fetchTransferredUsersAction, fetchUsersAction, fireUserAction, storeUserAction, transferUserAction, updateAvatarAction, updateUserAction } from './thunks';
 import { AsyncStatus } from '@/shared/store';
 
 type UserSlice = {
@@ -12,7 +12,10 @@ type UserSlice = {
     data?: Users;
     status: AsyncStatus;
   };
-
+  transferredUsers: {
+    data?: Users;
+    status: AsyncStatus;
+  };
 }
 
 const initialState: UserSlice = {
@@ -20,6 +23,9 @@ const initialState: UserSlice = {
     status: AsyncStatus.IDLE,
   },
   firedUsers: {
+    status: AsyncStatus.IDLE,
+  },
+  transferredUsers: {
     status: AsyncStatus.IDLE,
   },
 };
@@ -54,6 +60,13 @@ const userSlice = createSlice({
       .addCase(fetchFiredUsersAction.fulfilled, (state, action: PayloadAction<Users>) => {
         state.firedUsers.data = action.payload;
         state.firedUsers.status = AsyncStatus.SUCCEEDED;
+      })
+      .addCase(fetchTransferredUsersAction.pending, (state) => {
+        state.transferredUsers.status = AsyncStatus.LOADING;
+      })
+      .addCase(fetchTransferredUsersAction.fulfilled, (state, action: PayloadAction<Users>) => {
+        state.transferredUsers.data = action.payload;
+        state.transferredUsers.status = AsyncStatus.SUCCEEDED;
       })
       .addCase(storeUserAction.fulfilled, (state, action: PayloadAction<User>) => {
         if (state.users.data) {
@@ -92,6 +105,10 @@ const userSlice = createSlice({
       .addCase(transferUserAction.fulfilled, (state, action: PayloadAction<string>) => {
         if (state.users.data) {
           state.users.data = state.users.data.filter((user) => user.id !== action.payload);
+
+          if (state.transferredUsers.data) {
+            state.transferredUsers.status = AsyncStatus.IDLE;
+          }
         }
       })
       .addCase(deleteUserAction.fulfilled, (state, action: PayloadAction<string>) => {

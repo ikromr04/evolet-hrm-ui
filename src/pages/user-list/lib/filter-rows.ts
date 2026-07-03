@@ -1,6 +1,6 @@
-import { Filter, Row } from '../model/types';
+import { UserFilter, UserRow } from '../model/types';
 
-const filterRows = (rows: Row[], filter: Filter): Row[] => {
+const filterRows = (rows: UserRow[], filter: UserFilter): UserRow[] => {
   rows = rows.filter((row) => {
     const roleIds = row.roles.map((role) => role.id);
     const positionIds = row.positions.map((position) => position.id);

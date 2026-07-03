@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { UserFireSchema, UserStoreSchema, UserTransferSchema, UserUpdateSchema } from '../model/schemas';
 import { User, Users } from '../model/types';
-import { FiredUsersResponse, UserFireRequest, UserResponse, UsersResponse, UserStoreRequest, UserTransferRequest, UserUpdateRequest } from './types';
+import { FiredUsersResponse, TransferredUsersResponse, UserFireRequest, UserResponse, UsersResponse, UserStoreRequest, UserTransferRequest, UserUpdateRequest } from './types';
 
 const mapUserResponse = (response: UserResponse): User => ({
   id: response.data.id,
@@ -57,6 +57,37 @@ const mapFiredUsersResponse = (collection: FiredUsersResponse): Users => {
       firedBy: performer ? `${performer.attributes.surname} ${performer.attributes.name} ${performer.attributes.patronymic || ''}` : 'Система',
       firedReason: event.attributes.payload.reason,
       firedAt: event.attributes.createdAt,
+    };
+  });
+};
+
+const mapTransferredUsersResponse = (collection: TransferredUsersResponse): Users => {
+  const includedByTypeId = collection.included.reduce((acc, item) => {
+    const includedItem = item as any;
+    acc[`${includedItem.type}_${includedItem.id}`] = includedItem;
+    return acc;
+  }, {} as Record<string, unknown>);
+
+  return collection.data.map((resource) => {
+    const eventIdentifier = resource.relationships.events.data[0];
+    const event = includedByTypeId[`${eventIdentifier.type}_${eventIdentifier.id}`] as any;
+
+    const performer = includedByTypeId[`${event.relationships.performer.data.type}_${event.relationships.performer.data.id}`] as any;
+
+    return {
+      id: resource.id,
+      ...resource.attributes,
+      profile: resource.relationships.profile.data?.id || null,
+      roles: resource.relationships.roles.data.map(({ id }) => id),
+      positions: resource.relationships.positions.data.map(({ id }) => id),
+      departments: resource.relationships.departments.data.map(({ id }) => id),
+      languages: resource.relationships.languages.data.map(({ id }) => id),
+      equipments: resource.relationships.equipments.data.map(({ id }) => id),
+      experiences: resource.relationships.experiences.data.map(({ id }) => id),
+      educations: resource.relationships.educations.data.map(({ id }) => id),
+      transferredBy: performer ? `${performer.attributes.surname} ${performer.attributes.name} ${performer.attributes.patronymic || ''}` : 'Система',
+      transferredTo: event.attributes.payload.to,
+      transferredAt: event.attributes.createdAt,
     };
   });
 };
@@ -128,6 +159,7 @@ const mapUserTransferRequest = (data: UserTransferSchema): UserTransferRequest =
 export {
   mapUsersResponse,
   mapFiredUsersResponse,
+  mapTransferredUsersResponse,
   mapUserStoreRequest,
   mapUserResponse,
   mapUserUpdateRequest,
