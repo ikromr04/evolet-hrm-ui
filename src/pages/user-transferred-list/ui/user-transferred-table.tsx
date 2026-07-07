@@ -68,6 +68,7 @@ function UserTransferredTable(): JSX.Element {
       }));
     }
   }, [departments, transferredUsers, positions, profiles, roles]);
+// console.log(transferredUsers);
 
   if (!rows) return <TableSkeleton />;
 

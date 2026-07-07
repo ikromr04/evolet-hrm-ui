@@ -34,11 +34,6 @@ const router = createBrowserRouter([
             handle: { title: 'Текущие сотрудники' },
           },
           {
-            path: ROUTES.USER_READ,
-            Component: UserRead,
-            handle: { title: 'Сотрудник' },
-          },
-          {
             path: ROUTES.USER_FIRED_LIST,
             Component: UserFiredList,
             handle: { title: 'Уволенные сотрудники' },
@@ -47,6 +42,11 @@ const router = createBrowserRouter([
             path: ROUTES.USER_TRANSFERRED_LIST,
             Component: UserTransferredList,
             handle: { title: 'Переведенные сотрудники' },
+          },
+          {
+            path: ROUTES.USER_READ,
+            Component: UserRead,
+            handle: { title: 'Сотрудник' },
           },
           {
             path: ROUTES.EQUIPMENT_LIST,

@@ -3,19 +3,19 @@ import { ROUTES } from '@/shared/config';
 const REF_NAV_ITEMS = [
   {
     label: 'Отделы/Департаменты',
-    route: ROUTES.DEPARTMENTS
+    route: ROUTES.DEPARTMENT_LIST
   },
   {
     label: 'Должности',
-    route: ROUTES.JOBS
+    route: ROUTES.POSITION_LIST
   },
   {
     label: 'Позиции',
-    route: ROUTES.POSITIONS
+    route: ROUTES.ROLE_LIST
   },
   {
     label: 'Языки',
-    route: ROUTES.LANGUAGES
+    route: ROUTES.LANGUAGE_LIST
   },
 ];
 

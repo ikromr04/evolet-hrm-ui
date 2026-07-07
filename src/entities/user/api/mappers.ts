@@ -31,6 +31,8 @@ const mapUsersResponse = (collection: UsersResponse): Users =>
   }));
 
 const mapFiredUsersResponse = (collection: FiredUsersResponse): Users => {
+  if (collection.data.length === 0) return [];
+
   const includedByTypeId = collection.included.reduce((acc, item) => {
     const includedItem = item as any;
     acc[`${includedItem.type}_${includedItem.id}`] = includedItem;
@@ -62,6 +64,8 @@ const mapFiredUsersResponse = (collection: FiredUsersResponse): Users => {
 };
 
 const mapTransferredUsersResponse = (collection: TransferredUsersResponse): Users => {
+  if (collection.data.length === 0) return [];
+
   const includedByTypeId = collection.included.reduce((acc, item) => {
     const includedItem = item as any;
     acc[`${includedItem.type}_${includedItem.id}`] = includedItem;
